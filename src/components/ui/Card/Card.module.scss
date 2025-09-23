@@ -1,0 +1,60 @@
+/**
+ * Card component styles
+ */
+
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+
+.card {
+  @include card-base;
+  transition: all transition(normal);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  // Variants - Futuristic
+  &--default {
+    background: map-get($gradients, card);
+    border: 1px solid color(border-light);
+    box-shadow: map-get($shadows, glow-white);
+  }
+
+  &--outlined {
+    background: map-get($gradients, card);
+    border: 2px solid color(primary);
+    box-shadow: map-get($shadows, glow-primary);
+  }
+
+  &--elevated {
+    background: map-get($gradients, card);
+    box-shadow: map-get($shadows, glow-white), map-get($shadows, lg);
+    border: 1px solid color(border-medium);
+  }
+
+  // Padding variants
+  &--none {
+    padding: 0;
+  }
+
+  &--sm {
+    padding: spacing(4);
+  }
+
+  &--md {
+    padding: spacing(6);
+  }
+
+  &--lg {
+    padding: spacing(8);
+  }
+
+  // Hover effect - Futuristic
+  &--hover {
+    @include card-hover;
+
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: map-get($shadows, glow-primary), map-get($shadows, xl);
+      border-color: color(primary);
+    }
+  }
+}

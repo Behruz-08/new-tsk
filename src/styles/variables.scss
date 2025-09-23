@@ -1,0 +1,349 @@
+/**
+ * SCSS Variables and Configuration
+ */
+
+// Colors - Futuristic Dark Theme
+$colors: (
+  // Primary colors - Cyber Blue
+  primary: #00d4ff,
+  primary-dark: #00b8e6,
+  primary-light: #33ddff,
+
+  // Secondary colors - Electric Purple
+  secondary: #8b5cf6,
+  secondary-dark: #7c3aed,
+  secondary-light: #a78bfa,
+
+  // Accent colors - Neon Green
+  accent: #00ff88,
+  accent-dark: #00e676,
+  accent-light: #33ff9a,
+
+  // Status colors - Neon variants
+  success: #00ff88,
+  success-dark: #00e676,
+  warning: #ffb800,
+  warning-dark: #e6a600,
+  error: #ff4757,
+  error-dark: #e63e4e,
+  info: #00d4ff,
+  info-dark: #00b8e6,
+
+  // Neutral colors - Dark theme
+  white: #ffffff,
+  black: #000000,
+  gray-50: #0f172a,
+  gray-100: #1e293b,
+  gray-200: #334155,
+  gray-300: #475569,
+  gray-400: #64748b,
+  gray-500: #94a3b8,
+  gray-600: #cbd5e1,
+  gray-700: #e2e8f0,
+  gray-800: #f1f5f9,
+  gray-900: #f8fafc,
+
+  // Background colors
+  background: #0a0e27,
+  background-secondary: #1a1f3a,
+  background-tertiary: #252b4d,
+  background-glass: rgba(255, 255, 255, 0.05),
+  // Text colors
+  text-primary: #ffffff,
+  text-secondary: #cbd5e1,
+  text-tertiary: #94a3b8,
+  text-inverse: #0f172a,
+
+  // Border colors
+  border-light: rgba(255, 255, 255, 0.1),
+  border-medium: rgba(255, 255, 255, 0.2),
+  border-dark: rgba(255, 255, 255, 0.3)
+);
+
+// Typography
+$font-family-sans:
+  "Inter",
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  Roboto,
+  "Helvetica Neue",
+  Arial,
+  sans-serif;
+$font-family-mono:
+  "JetBrains Mono", "Fira Code", Consolas, "Liberation Mono", Menlo, Courier,
+  monospace;
+
+$font-sizes: (
+  xs: 0.75rem,
+  // 12px
+  sm: 0.875rem,
+  // 14px
+  base: 1rem,
+  // 16px
+  lg: 1.125rem,
+  // 18px
+  xl: 1.25rem,
+  // 20px
+  2xl: 1.5rem,
+  // 24px
+  3xl: 1.875rem,
+  // 30px
+  4xl: 2.25rem,
+  // 36px
+  5xl: 3rem,
+  // 48px
+  6xl: 3.75rem, // 60px
+);
+
+$font-weights: (
+  thin: 100,
+  light: 300,
+  normal: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700,
+  extrabold: 800,
+  black: 900,
+);
+
+$line-heights: (
+  none: 1,
+  tight: 1.25,
+  snug: 1.375,
+  normal: 1.5,
+  relaxed: 1.625,
+  loose: 2,
+);
+
+// Spacing
+$spacing: (
+  0: 0,
+  1: 0.25rem,
+  // 4px
+  2: 0.5rem,
+  // 8px
+  3: 0.75rem,
+  // 12px
+  4: 1rem,
+  // 16px
+  5: 1.25rem,
+  // 20px
+  6: 1.5rem,
+  // 24px
+  8: 2rem,
+  // 32px
+  10: 2.5rem,
+  // 40px
+  12: 3rem,
+  // 48px
+  16: 4rem,
+  // 64px
+  20: 5rem,
+  // 80px
+  24: 6rem,
+  // 96px
+  32: 8rem,
+  // 128px
+  40: 10rem,
+  // 160px
+  48: 12rem,
+  // 192px
+  56: 14rem,
+  // 224px
+  64: 16rem, // 256px
+);
+
+// Breakpoints
+$breakpoints: (
+  xs: 475px,
+  sm: 640px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px,
+  2xl: 1536px,
+);
+
+// Border radius
+$border-radius: (
+  none: 0,
+  sm: 0.125rem,
+  // 2px
+  base: 0.25rem,
+  // 4px
+  md: 0.375rem,
+  // 6px
+  lg: 0.5rem,
+  // 8px
+  xl: 0.75rem,
+  // 12px
+  2xl: 1rem,
+  // 16px
+  3xl: 1.5rem,
+  // 24px
+  full: 9999px,
+);
+
+// Shadows - Futuristic Glow Effects
+$shadows: (
+  sm: (
+    0 1px 2px 0 rgba(0, 0, 0, 0.3),
+  ),
+  base: (
+    0 1px 3px 0 rgba(0, 0, 0, 0.4),
+    0 1px 2px -1px rgba(0, 0, 0, 0.4),
+  ),
+  md: (
+    0 4px 6px -1px rgba(0, 0, 0, 0.4),
+    0 2px 4px -2px rgba(0, 0, 0, 0.4),
+  ),
+  lg: (
+    0 10px 15px -3px rgba(0, 0, 0, 0.4),
+    0 4px 6px -4px rgba(0, 0, 0, 0.4),
+  ),
+  xl: (
+    0 20px 25px -5px rgba(0, 0, 0, 0.4),
+    0 8px 10px -6px rgba(0, 0, 0, 0.4),
+  ),
+  2xl: (
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+  ),
+  inner: (
+    inset 0 2px 4px 0 rgba(0, 0, 0, 0.3),
+  ),
+  none: none,
+
+  // Glow effects
+  glow-primary: (
+      0 0 20px rgba(0, 212, 255, 0.3),
+      0 0 40px rgba(0, 212, 255, 0.2),
+    ),
+  glow-secondary: (
+    0 0 20px rgba(139, 92, 246, 0.3),
+    0 0 40px rgba(139, 92, 246, 0.2),
+  ),
+  glow-accent: (
+    0 0 20px rgba(0, 255, 136, 0.3),
+    0 0 40px rgba(0, 255, 136, 0.2),
+  ),
+  glow-white: (
+    0 0 20px rgba(255, 255, 255, 0.2),
+    0 0 40px rgba(255, 255, 255, 0.1),
+  ),
+);
+
+// Gradients - Futuristic
+$gradients: (
+  primary: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%),
+  secondary: linear-gradient(135deg, #8b5cf6 0%, #00ff88 100%),
+  accent: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%),
+  dark: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%),
+  glass: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    ),
+  hero: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #252b4d 100%),
+  card: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    ),
+  button: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%),
+  button-hover: linear-gradient(135deg, #33ddff 0%, #a78bfa 100%),
+);
+
+// Transitions - Enhanced for animations
+$transitions: (
+  fast: 150ms cubic-bezier(0.4, 0, 0.2, 1),
+  normal: 250ms cubic-bezier(0.4, 0, 0.2, 1),
+  slow: 350ms cubic-bezier(0.4, 0, 0.2, 1),
+  bounce: 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55),
+  elastic: 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275),
+  glow: 300ms ease-out,
+);
+
+// Animations - Futuristic keyframes
+$animations: (
+  // Fade animations
+  fade-in: fadeIn 0.6s ease-out,
+  fade-in-up: fadeInUp 0.8s ease-out,
+  fade-in-down: fadeInDown 0.8s ease-out,
+  fade-in-left: fadeInLeft 0.8s ease-out,
+  fade-in-right: fadeInRight 0.8s ease-out,
+
+  // Scale animations
+  scale-in: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+  scale-out: scaleOut 0.3s ease-in,
+  pulse: pulse 2s infinite,
+
+  // Slide animations
+  slide-in-up: slideInUp 0.6s ease-out,
+  slide-in-down: slideInDown 0.6s ease-out,
+  slide-in-left: slideInLeft 0.6s ease-out,
+  slide-in-right: slideInRight 0.6s ease-out,
+
+  // Glow animations
+  glow-pulse: glowPulse 2s ease-in-out infinite,
+  glow-rotate: glowRotate 4s linear infinite,
+
+  // Special effects
+  float: float 3s ease-in-out infinite,
+  shimmer: shimmer 2s infinite,
+  matrix-rain: matrixRain 20s linear infinite,
+  cyber-scan: cyberScan 3s ease-in-out infinite
+);
+
+// Z-index layers
+$z-index: (
+  hide: -1,
+  auto: auto,
+  base: 0,
+  docked: 10,
+  dropdown: 1000,
+  sticky: 1100,
+  banner: 1200,
+  overlay: 1300,
+  modal: 1400,
+  popover: 1500,
+  skipLink: 1600,
+  toast: 1700,
+  tooltip: 1800,
+);
+
+// Helper functions
+@function color($name) {
+  @return map-get($colors, $name);
+}
+
+@function spacing($size) {
+  @return map-get($spacing, $size);
+}
+
+@function font-size($size) {
+  @return map-get($font-sizes, $size);
+}
+
+@function font-weight($weight) {
+  @return map-get($font-weights, $weight);
+}
+
+@function line-height($height) {
+  @return map-get($line-heights, $height);
+}
+
+@function border-radius($radius) {
+  @return map-get($border-radius, $radius);
+}
+
+@function shadow($shadow) {
+  @return map-get($shadows, $shadow);
+}
+
+@function transition($transition) {
+  @return map-get($transitions, $transition);
+}
+
+@function z-index($index) {
+  @return map-get($z-index, $index);
+}

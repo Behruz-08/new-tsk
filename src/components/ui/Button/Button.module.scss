@@ -1,0 +1,153 @@
+/**
+ * Button component styles
+ */
+
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+
+.button {
+  @include button-base;
+  position: relative;
+  overflow: hidden;
+
+  &--primary {
+    @include button-primary;
+  }
+
+  &--secondary {
+    @include button-secondary;
+  }
+
+  &--outline {
+    @include button-outline;
+  }
+
+  &--ghost {
+    @include button-base;
+    background-color: transparent;
+    color: color(gray-700);
+
+    &:hover:not(:disabled) {
+      background-color: color(gray-100);
+    }
+  }
+
+  &--danger {
+    @include button-base;
+    background-color: color(error);
+    color: color(white);
+
+    &:hover:not(:disabled) {
+      background-color: color(error-dark);
+    }
+  }
+
+  // Sizes
+  &--sm {
+    padding: spacing(2) spacing(4);
+    font-size: font-size(xs);
+    gap: spacing(1);
+  }
+
+  &--md {
+    padding: spacing(3) spacing(6);
+    font-size: font-size(sm);
+    gap: spacing(2);
+  }
+
+  &--lg {
+    padding: spacing(4) spacing(8);
+    font-size: font-size(base);
+    gap: spacing(2);
+  }
+
+  // States
+  &--loading {
+    pointer-events: none;
+
+    .content {
+      opacity: 0;
+    }
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  // Ripple effect
+  &::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background-color: rgba(color(white), 0.3);
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.6s,
+      height 0.6s;
+  }
+
+  &:active:not(:disabled)::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+// Loading spinner
+.loadingSpinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+.spinnerCircle {
+  opacity: 0.25;
+}
+
+.spinnerPath {
+  opacity: 0.75;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Icons
+.leftIcon,
+.rightIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.leftIcon {
+  margin-right: spacing(1);
+}
+
+.rightIcon {
+  margin-left: spacing(1);
+}
+
+// Content
+.content {
+  transition: opacity transition(fast);
+}

@@ -1,0 +1,366 @@
+/**
+ * Card component styles
+ * Улучшенные стили карточек с футуристическим дизайном
+ */
+
+// Base card styles
+.card {
+  @include card-base;
+
+  // Size variants
+  &--sm {
+    padding: spacing(4);
+  }
+
+  &--md {
+    padding: spacing(6);
+  }
+
+  &--lg {
+    padding: spacing(8);
+  }
+
+  &--xl {
+    padding: spacing(10);
+  }
+
+  // Variant styles
+  &--default {
+    background: map-get($gradients, card);
+    border: 1px solid color(border-light);
+    box-shadow: map-get($shadows, glow-white);
+  }
+
+  &--outlined {
+    background: transparent;
+    border: 2px solid color(primary);
+    box-shadow: map-get($shadows, glow-primary);
+  }
+
+  &--elevated {
+    background: map-get($gradients, card);
+    box-shadow: map-get($shadows, glow-white), map-get($shadows, lg);
+    border: 1px solid color(border-medium);
+  }
+
+  &--glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid color(border-light);
+    box-shadow: map-get($shadows, glow-white);
+  }
+
+  &--gradient {
+    background: map-get($gradients, primary);
+    border: none;
+    color: color(white);
+
+    .card-title,
+    .card-subtitle {
+      color: color(white);
+    }
+  }
+
+  // Interactive states
+  &--hover {
+    @include card-hover;
+
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: map-get($shadows, glow-primary), map-get($shadows, xl);
+      border-color: color(primary);
+    }
+  }
+
+  &--clickable {
+    cursor: pointer;
+    transition: all transition(normal);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: map-get($shadows, glow-primary), map-get($shadows, lg);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
+  }
+
+  // Card sections
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: spacing(4);
+    padding-bottom: spacing(4);
+    border-bottom: 1px solid color(border-light);
+  }
+
+  .card-title {
+    font-size: font-size(lg);
+    font-weight: font-weight(semibold);
+    color: color(text-primary);
+    margin: 0;
+
+    &--sm {
+      font-size: font-size(base);
+    }
+
+    &--lg {
+      font-size: font-size(xl);
+    }
+
+    &--xl {
+      font-size: font-size(2xl);
+    }
+  }
+
+  .card-subtitle {
+    font-size: font-size(sm);
+    color: color(text-secondary);
+    margin: spacing(1) 0 0 0;
+  }
+
+  .card-body {
+    flex: 1;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: spacing(4);
+    padding-top: spacing(4);
+    border-top: 1px solid color(border-light);
+
+    &--centered {
+      justify-content: center;
+    }
+
+    &--end {
+      justify-content: flex-end;
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    gap: spacing(2);
+    align-items: center;
+
+    &--centered {
+      justify-content: center;
+    }
+
+    &--end {
+      justify-content: flex-end;
+    }
+  }
+
+  // Card meta information
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: spacing(4);
+    font-size: font-size(xs);
+    color: color(text-tertiary);
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: spacing(1);
+
+      &::before {
+        content: "";
+        width: 4px;
+        height: 4px;
+        background: color(text-tertiary);
+        border-radius: 50%;
+      }
+    }
+  }
+
+  // Card badges
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: spacing(1) spacing(2);
+    background: color(primary);
+    color: color(white);
+    font-size: font-size(xs);
+    font-weight: font-weight(medium);
+    border-radius: border-radius(full);
+
+    &--secondary {
+      background: color(secondary);
+    }
+
+    &--success {
+      background: color(success);
+    }
+
+    &--warning {
+      background: color(warning);
+    }
+
+    &--error {
+      background: color(error);
+    }
+  }
+
+  // Card image
+  .card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: border-radius(md);
+    margin-bottom: spacing(4);
+
+    &--sm {
+      height: 120px;
+    }
+
+    &--lg {
+      height: 280px;
+    }
+
+    &--full {
+      height: auto;
+      max-height: 400px;
+    }
+  }
+
+  // Card list
+  .card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .card-list-item {
+      display: flex;
+      align-items: center;
+      padding: spacing(2) 0;
+      border-bottom: 1px solid color(border-light);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .list-item-content {
+        flex: 1;
+      }
+
+      .list-item-action {
+        margin-left: spacing(2);
+      }
+    }
+  }
+}
+
+// Card grid layouts
+.card-grid {
+  display: grid;
+  gap: spacing(6);
+
+  &--2 {
+    grid-template-columns: repeat(2, 1fr);
+
+    @include respond-below(md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &--3 {
+    grid-template-columns: repeat(3, 1fr);
+
+    @include respond-below(lg) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-below(md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &--4 {
+    grid-template-columns: repeat(4, 1fr);
+
+    @include respond-below(lg) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-below(md) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &--auto {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  &--masonry {
+    column-count: 3;
+    column-gap: spacing(6);
+
+    @include respond-below(lg) {
+      column-count: 2;
+    }
+
+    @include respond-below(md) {
+      column-count: 1;
+    }
+
+    .card {
+      break-inside: avoid;
+      margin-bottom: spacing(6);
+    }
+  }
+}
+
+// Special card variants
+.card--feature {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: map-get($gradients, primary);
+  }
+
+  .card-icon {
+    @include flex-center;
+    width: 64px;
+    height: 64px;
+    background: map-get($gradients, primary);
+    border-radius: border-radius(lg);
+    color: color(white);
+    margin-bottom: spacing(4);
+    box-shadow: map-get($shadows, glow-primary);
+  }
+}
+
+.card--stat {
+  text-align: center;
+
+  .stat-number {
+    font-size: font-size(3xl);
+    font-weight: font-weight(bold);
+    color: color(primary);
+    margin-bottom: spacing(2);
+  }
+
+  .stat-label {
+    font-size: font-size(sm);
+    color: color(text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}

@@ -1,103 +1,177 @@
-import Image from "next/image";
+import { Navigation } from "@/components/layout/Navigation";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import {
+  ArrowRight,
+  Zap,
+  Database,
+  FileText,
+  MessageSquare,
+} from "lucide-react";
+import Link from "next/link";
+import styles from "./page.module.scss";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className={styles.page}>
+      <Navigation />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main className={styles.main}>
+        {/* Hero Section */}
+        <section className={styles.hero}>
+          <div className="container">
+            <div className={styles.heroContent}>
+              <h1 className={styles.heroTitle}>
+                Next.js Тестовое Задание
+                <span className={styles.highlight}>Frontend Development</span>
+              </h1>
+
+              <p className={styles.heroDescription}>
+                Демонстрация различных методов рендеринга в Next.js: SSG, SSR,
+                ISR и CSR с современным стеком технологий
+              </p>
+
+              <div className={styles.heroActions}>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  rightIcon={<ArrowRight size={20} />}
+                  asChild
+                >
+                  <Link href="/ssg">Начать изучение</Link>
+                </Button>
+
+                <Button variant="outline" size="lg" asChild>
+                  <Link href="#features">Узнать больше</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className={styles.features}>
+          <div className="container">
+            <div className={styles.sectionHeader}>
+              <h2>Методы рендеринга Next.js</h2>
+              <p>
+                Изучите различные подходы к рендерингу в современном
+                веб-разработке
+              </p>
+            </div>
+
+            <div className={styles.featuresGrid}>
+              <Card className={styles.featureCard}>
+                <div className={styles.featureIcon}>
+                  <FileText size={32} />
+                </div>
+                <h3>SSG - Static Site Generation</h3>
+                <p>
+                  Статическая генерация сайта во время сборки. Максимальная
+                  производительность и SEO-оптимизация.
+                </p>
+                <Button variant="outline" asChild>
+                  <Link href="/ssg">Изучить SSG</Link>
+                </Button>
+              </Card>
+
+              <Card className={styles.featureCard}>
+                <div className={styles.featureIcon}>
+                  <Database size={32} />
+                </div>
+                <h3>SSR - Server-Side Rendering</h3>
+                <p>
+                  Серверный рендеринг на каждый запрос. Актуальные данные и
+                  персонализация контента.
+                </p>
+                <Button variant="outline" asChild>
+                  <Link href="/ssr">Изучить SSR</Link>
+                </Button>
+              </Card>
+
+              <Card className={styles.featureCard}>
+                <div className={styles.featureIcon}>
+                  <Zap size={32} />
+                </div>
+                <h3>ISR - Incremental Static Regeneration</h3>
+                <p>
+                  Инкрементальная статическая регенерация. Лучшее из SSG и SSR
+                  миров.
+                </p>
+                <Button variant="outline" asChild>
+                  <Link href="/isr">Изучить ISR</Link>
+                </Button>
+              </Card>
+
+              <Card className={styles.featureCard}>
+                <div className={styles.featureIcon}>
+                  <MessageSquare size={32} />
+                </div>
+                <h3>CSR - Client-Side Rendering</h3>
+                <p>
+                  Клиентский рендеринг с интерактивными формами. Динамический
+                  контент и пользовательские взаимодействия.
+                </p>
+                <Button variant="outline" asChild>
+                  <Link href="/csr">Изучить CSR</Link>
+                </Button>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Tech Stack Section */}
+        <section className={styles.techStack}>
+          <div className="container">
+            <div className={styles.sectionHeader}>
+              <h2>Технологический стек</h2>
+              <p>Современные инструменты для качественной разработки</p>
+            </div>
+
+            <div className={styles.techGrid}>
+              <div className={styles.techItem}>
+                <h4>Frontend</h4>
+                <ul>
+                  <li>Next.js 14 (App Router)</li>
+                  <li>TypeScript</li>
+                  <li>React 18</li>
+                  <li>SCSS Modules</li>
+                </ul>
+              </div>
+
+              <div className={styles.techItem}>
+                <h4>State Management</h4>
+                <ul>
+                  <li>TanStack Query</li>
+                  <li>Zustand</li>
+                  <li>React Hook Form</li>
+                  <li>Zod Validation</li>
+                </ul>
+              </div>
+
+              <div className={styles.techItem}>
+                <h4>UI & UX</h4>
+                <ul>
+                  <li>Custom Components</li>
+                  <li>Accessibility (a11y)</li>
+                  <li>Responsive Design</li>
+                  <li>Lucide Icons</li>
+                </ul>
+              </div>
+
+              <div className={styles.techItem}>
+                <h4>Development</h4>
+                <ul>
+                  <li>ESLint & Prettier</li>
+                  <li>TypeScript Strict</li>
+                  <li>Clean Architecture</li>
+                  <li>Custom Hooks</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }

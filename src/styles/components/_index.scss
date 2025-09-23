@@ -1,0 +1,14 @@
+/**
+ * Components styles index
+ * Центральный файл для импорта всех стилей компонентов
+ */
+
+// Import variables and mixins first
+@use "../variables" as *;
+@use "../mixins" as *;
+
+// Import all component styles
+@forward "buttons";
+@forward "forms";
+@forward "cards";
+@forward "modals";

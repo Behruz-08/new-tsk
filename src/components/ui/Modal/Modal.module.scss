@@ -1,0 +1,160 @@
+/**
+ * Modal component styles
+ */
+
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as *;
+
+.overlay {
+  @include modal-overlay;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(10, 14, 39, 0.8);
+  transition: all transition(normal);
+
+  &--closing {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.content {
+  @include modal-content;
+  background: map-get($gradients, card);
+  border: 1px solid color(border-light);
+  box-shadow: map-get($shadows, glow-white), map-get($shadows, 2xl);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all transition(normal);
+
+  // Sizes
+  &--sm {
+    max-width: 400px;
+  }
+
+  &--md {
+    max-width: 500px;
+  }
+
+  &--lg {
+    max-width: 700px;
+  }
+
+  &--xl {
+    max-width: 900px;
+  }
+
+  &--closing {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+}
+
+.header {
+  @include flex-between;
+  padding: spacing(6) spacing(6) 0;
+  border-bottom: 1px solid color(border-light);
+  margin-bottom: spacing(6);
+}
+
+.title {
+  margin: 0;
+  font-size: font-size(lg);
+  font-weight: font-weight(semibold);
+  color: color(text-primary);
+  background: map-get($gradients, primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.closeButton {
+  @include flex-center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: color(background-glass);
+  border-radius: border-radius(md);
+  color: color(text-secondary);
+  cursor: pointer;
+  transition: all transition(normal);
+  border: 1px solid color(border-light);
+
+  &:hover {
+    background: color(background-secondary);
+    color: color(primary);
+    box-shadow: map-get($shadows, glow-primary);
+    transform: scale(1.1);
+  }
+
+  &:focus {
+    outline: 2px solid color(primary);
+    outline-offset: 2px;
+    border-radius: border-radius(md);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    transition: all transition(normal);
+  }
+
+  &:hover svg {
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+  }
+}
+
+.body {
+  padding: 0 spacing(6) spacing(6);
+  overflow-y: auto;
+  max-height: calc(90vh - 120px);
+}
+
+// Responsive adjustments
+@include respond-below(sm) {
+  .overlay {
+    padding: spacing(2);
+  }
+
+  .content {
+    max-height: 95vh;
+    margin: 0;
+  }
+
+  .header {
+    padding: spacing(4) spacing(4) 0;
+    margin-bottom: spacing(4);
+  }
+
+  .body {
+    padding: 0 spacing(4) spacing(4);
+    max-height: calc(95vh - 100px);
+  }
+
+  .title {
+    font-size: font-size(base);
+  }
+}
+
+// Animation keyframes
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modal-exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+}
