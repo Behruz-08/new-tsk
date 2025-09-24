@@ -14,7 +14,7 @@ import { PostCard } from "@/components/posts/PostCard";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { FileList } from "@/components/files/FileList";
 import { useModalState } from "@/components/ui/Modal";
-import { usePosts } from "@/hooks/usePosts";
+import { usePostsWithZustand } from "@/hooks/usePostsWithZustand";
 // import { useCreatePost } from "@/hooks/usePosts"; // Пока не используется
 import { useComments } from "@/hooks/useComments";
 import {
@@ -32,13 +32,13 @@ export default function CSRPage() {
   const { isOpen, open, close } = useModalState();
   const [fileListRefreshTrigger, setFileListRefreshTrigger] = useState(0);
 
-  // CSR: Данные загружаются на клиенте
+  // CSR: Данные загружаются на клиенте с использованием Zustand
   const {
-    data: posts,
+    posts,
     isLoading: postsLoading,
     error: postsError,
-    refetch: refetchPosts,
-  } = usePosts();
+    refreshPosts,
+  } = usePostsWithZustand();
   const {
     data: comments,
     isLoading: commentsLoading,
@@ -50,7 +50,7 @@ export default function CSRPage() {
   const handleModalSuccess = () => {
     close();
     // Обновляем список постов после успешной отправки формы
-    refetchPosts();
+            refreshPosts();
     // Обновляем список файлов после успешной отправки формы
     setFileListRefreshTrigger((prev) => prev + 1);
   };

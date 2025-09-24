@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/Input";
 import { useFormSubmission } from "@/hooks/useForm";
 import { formApi } from "@/lib/api";
 import { Post } from "@/types";
+import { usePostsActions } from "@/stores/postsStore";
 import { toast } from "sonner";
 import { Upload, FileText, Edit3 } from "lucide-react";
 import styles from "./PostForm.module.scss";
@@ -45,6 +46,9 @@ export const PostForm: React.FC<PostFormProps> = ({
 
   const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } =
     useFormSubmission();
+
+  // Zustand actions
+  const { addPost } = usePostsActions();
 
   // Watch file input for display purposes
   const selectedFile = watch("file");
@@ -83,10 +87,15 @@ export const PostForm: React.FC<PostFormProps> = ({
         result !== null &&
         "post" in result
       ) {
+        const newPost = result.post as Post;
+        
+        // Add to Zustand store
+        addPost(newPost);
+        
         toast.success("Пост успешно создан!");
         reset();
         resetSubmission();
-        onSuccess?.(result.post as Post);
+        onSuccess?.(newPost);
       }
     } catch (error) {
       console.error("Form submission error:", error);
