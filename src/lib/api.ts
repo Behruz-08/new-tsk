@@ -150,7 +150,13 @@ export const postsApi = {
    */
   async getAll(): Promise<Post[]> {
     // Always use local API to combine JSONPlaceholder and locally created posts
-    const response = await fetch(API_ENDPOINTS.LOCAL.POSTS);
+    const baseUrl = typeof window !== 'undefined' 
+      ? '' // Client-side: use relative URL
+      : process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}` // Vercel production
+        : 'http://localhost:3000'; // Local development server
+    
+    const response = await fetch(`${baseUrl}/api/posts`);
 
     if (!response.ok) {
       throw new ApiClientError(
@@ -174,7 +180,13 @@ export const postsApi = {
    */
   async create(data: Omit<Post, "id">): Promise<Post> {
     // Always use local API to create new posts
-    const response = await fetch(API_ENDPOINTS.LOCAL.POSTS, {
+    const baseUrl = typeof window !== 'undefined' 
+      ? '' // Client-side: use relative URL
+      : process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}` // Vercel production
+        : 'http://localhost:3000'; // Local development server
+    
+    const response = await fetch(`${baseUrl}/api/posts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
@@ -319,7 +331,13 @@ export const formApi = {
       }
 
       // Create the post
-      const response = await fetch(API_ENDPOINTS.LOCAL.POSTS, {
+      const baseUrl = typeof window !== 'undefined' 
+        ? '' // Client-side: use relative URL
+        : process.env.VERCEL_URL 
+          ? `https://${process.env.VERCEL_URL}` // Vercel production
+          : 'http://localhost:3000'; // Local development server
+      
+      const response = await fetch(`${baseUrl}/api/posts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
