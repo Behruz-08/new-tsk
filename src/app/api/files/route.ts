@@ -8,46 +8,13 @@ import { join } from "path";
 
 export async function GET() {
   try {
-    const uploadsDir = join(process.cwd(), "uploads");
-
-    // Check if uploads directory exists
-    try {
-      await stat(uploadsDir);
-    } catch {
-      // Directory doesn't exist, return empty array
-      return NextResponse.json({
-        success: true,
-        files: [],
-        message: "No files uploaded yet",
-      });
-    }
-
-    // Read directory contents
-    const files = await readdir(uploadsDir);
-
-    // Get file stats for each file
-    const fileList = await Promise.all(
-      files.map(async (fileName) => {
-        const filePath = join(uploadsDir, fileName);
-        const stats = await stat(filePath);
-
-        return {
-          fileName,
-          originalName: fileName.split("_").slice(2).join("_"), // Remove timestamp and name prefix
-          size: stats.size,
-          uploadDate: stats.birthtime,
-          modifiedDate: stats.mtime,
-        };
-      }),
-    );
-
-    // Sort by upload date (newest first)
-    fileList.sort((a, b) => b.uploadDate.getTime() - a.uploadDate.getTime());
-
+    // For Vercel/serverless environment, return mock data
+    // In production, you'd fetch from cloud storage or database
     return NextResponse.json({
       success: true,
-      files: fileList,
-      total: fileList.length,
+      files: [],
+      total: 0,
+      message: "Demo mode - files are stored temporarily",
     });
   } catch (error) {
     console.error("Error reading files:", error);
@@ -77,17 +44,23 @@ export async function POST(request: Request) {
       );
     }
 
-    // For Vercel deployment - return a mock file URL
-    // In production, you should use external storage like Vercel Blob, AWS S3, etc.
-    const mockFileUrl = `https://via.placeholder.com/300x200/007bff/ffffff?text=${encodeURIComponent(file.name)}`;
+    // For Vercel/serverless environment, we'll use a mock file URL
+    // In production, you'd typically use cloud storage (AWS S3, Cloudinary, etc.)
+    const timestamp = Date.now();
+    const fileName = `${timestamp}_${file.name}`;
+    
+    // Generate a mock URL for demonstration
+    // In real production, this would be a cloud storage URL
+    const fileUrl = `https://via.placeholder.com/300x200/4F46E5/FFFFFF?text=${encodeURIComponent(file.name)}`;
 
     return NextResponse.json({
       success: true,
       message: "Файл успешно загружен (демо режим)",
-      url: mockFileUrl,
-      fileName: file.name,
+      url: fileUrl,
+      fileName: fileName,
       originalName: file.name,
       size: file.size,
+      isDemo: true, // Flag to indicate this is a demo URL
     });
   } catch (error) {
     console.error("Ошибка при загрузке файла:", error);
