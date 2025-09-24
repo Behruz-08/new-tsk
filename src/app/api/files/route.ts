@@ -77,31 +77,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), "uploads");
-    try {
-      await stat(uploadsDir);
-    } catch {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-
-    // Generate unique filename
-    const timestamp = Date.now();
-    const fileName = `${timestamp}_${file.name}`;
-    const filePath = join(uploadsDir, fileName);
-
-    // Save file to disk
-    const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(filePath, buffer);
-
-    // Return file URL (for demo purposes, using a placeholder URL)
-    const fileUrl = `/api/files/${fileName}`;
+    // For Vercel deployment - return a mock file URL
+    // In production, you should use external storage like Vercel Blob, AWS S3, etc.
+    const mockFileUrl = `https://via.placeholder.com/300x200/007bff/ffffff?text=${encodeURIComponent(file.name)}`;
 
     return NextResponse.json({
       success: true,
-      message: "Файл успешно загружен",
-      url: fileUrl,
-      fileName: fileName,
+      message: "Файл успешно загружен (демо режим)",
+      url: mockFileUrl,
+      fileName: file.name,
       originalName: file.name,
       size: file.size,
     });
