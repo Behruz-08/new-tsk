@@ -14,8 +14,8 @@ import { PostCard } from "@/components/posts/PostCard";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { FileList } from "@/components/files/FileList";
 import { useModalState } from "@/components/ui/Modal";
+import { usePosts } from "@/hooks/usePosts";
 import { usePostsWithZustand } from "@/hooks/usePostsWithZustand";
-// import { useCreatePost } from "@/hooks/usePosts"; // Пока не используется
 import { useComments } from "@/hooks/useComments";
 import {
   MessageSquare,
@@ -32,13 +32,16 @@ export default function CSRPage() {
   const { isOpen, open, close } = useModalState();
   const [fileListRefreshTrigger, setFileListRefreshTrigger] = useState(0);
 
-  // CSR: Данные загружаются на клиенте с использованием Zustand
+  // CSR: Данные загружаются на клиенте с TanStack Query + Zustand
   const {
-    posts,
+    data: posts,
     isLoading: postsLoading,
     error: postsError,
-    refreshPosts,
-  } = usePostsWithZustand();
+    refetch: refetchPosts,
+  } = usePosts();
+  
+  // Zustand для локального состояния
+  const { localPosts, addPost } = usePostsWithZustand();
   const {
     data: comments,
     isLoading: commentsLoading,
@@ -50,7 +53,7 @@ export default function CSRPage() {
   const handleModalSuccess = () => {
     close();
     // Обновляем список постов после успешной отправки формы
-            refreshPosts();
+    refetchPosts();
     // Обновляем список файлов после успешной отправки формы
     setFileListRefreshTrigger((prev) => prev + 1);
   };
@@ -125,12 +128,11 @@ export default function CSRPage() {
           {/* Posts Section */}
           <div className={styles.postsSection}>
             <h2 className={styles.sectionTitle}>
-              Посты (CSR) - {posts ? posts.length : 0}
+              Посты (CSR) - {posts ? posts.length : 0} | Локальные - {localPosts.length}
             </h2>
             <p className={styles.sectionDescription}>
-              Данные загружаются на клиенте с помощью TanStack Query. Новые
-              посты создаются через форму обратной связи и отправляются в
-              JSONPlaceholder API.
+              Данные загружаются на клиенте с помощью TanStack Query + Zustand. 
+              Серверные посты из JSONPlaceholder + локальные посты из Zustand.
             </p>
 
             {postsLoading && (
@@ -149,8 +151,13 @@ export default function CSRPage() {
 
             {posts && !postsLoading && (
               <div className={styles.postsGrid}>
-                {posts.slice(0, 6).map((post) => (
-                  <PostCard key={post.id} post={post} showRenderTime={false} />
+                {/* Показываем локальные посты из Zustand первыми */}
+                {localPosts.slice(0, 3).map((post) => (
+                  <PostCard key={`local-${post.id}`} post={post} showRenderTime={false} />
+                ))}
+                {/* Затем серверные посты из TanStack Query */}
+                {posts.slice(0, 3).map((post) => (
+                  <PostCard key={`server-${post.id}`} post={post} showRenderTime={false} />
                 ))}
               </div>
             )}
@@ -242,11 +249,13 @@ export default function CSRPage() {
                 <strong>SEO:</strong> Требует дополнительной настройки
               </div>
               <div className={styles.techItem}>
-                <strong>Кеширование:</strong> TanStack Query + браузер
+                <strong>Кеширование:</strong> TanStack Query + Zustand + браузер
               </div>
               <div className={styles.techItem}>
-                <strong>API интеграция:</strong> JSONPlaceholder для создания
-                постов
+                <strong>Состояние:</strong> TanStack Query (сервер) + Zustand (локальное)
+              </div>
+              <div className={styles.techItem}>
+                <strong>API интеграция:</strong> JSONPlaceholder + локальное API
               </div>
               <div className={styles.techItem}>
                 <strong>Форма:</strong> Отправляет POST запросы в
