@@ -9,6 +9,12 @@ export interface ContactFormData {
   file: File;
 }
 
+export interface CreatePostFormData {
+  title: string;
+  body: string;
+  file: File;
+}
+
 export interface FormFieldProps {
   label: string;
   name: string;

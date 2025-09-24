@@ -1,0 +1,246 @@
+/**
+ * PostForm component styles
+ * Стили для формы создания постов
+ */
+
+@use "@/styles/variables" as *;
+@use "@/styles/mixins" as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    color(background-secondary) 0%,
+    color(background-tertiary) 100%
+  );
+  border-radius: 1rem;
+  border: 1px solid rgba(color(primary), 0.1);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(color(primary), 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: all 250ms ease;
+
+  &:hover {
+    border-color: rgba(color(primary), 0.2);
+    box-shadow:
+      0 15px 40px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(color(primary), 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  @include respond-below(md) {
+    padding: 1.5rem;
+    gap: 1.25rem;
+  }
+}
+
+.bodyField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: color(gray-900);
+  margin-bottom: 0.5rem;
+}
+
+.required {
+  color: color(error);
+  font-weight: 700;
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(color(background), 0.5);
+  border: 2px solid rgba(color(primary), 0.1);
+  border-radius: 0.75rem;
+  color: color(gray-900);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 120px;
+  transition: all 150ms ease;
+  font-family: inherit;
+
+  &::placeholder {
+    color: color(gray-500);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: color(primary);
+    box-shadow:
+      0 0 0 3px rgba(color(primary), 0.1),
+      0 0 20px rgba(color(primary), 0.2);
+    background: rgba(color(background), 0.7);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &Error {
+    border-color: color(error);
+    box-shadow: 0 0 0 3px rgba(color(error), 0.1);
+
+    &:focus {
+      box-shadow:
+        0 0 0 3px rgba(color(error), 0.1),
+        0 0 20px rgba(color(error), 0.2);
+    }
+  }
+}
+
+.errorText {
+  color: color(error);
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  &::before {
+    content: "⚠";
+    font-size: 0.875rem;
+  }
+}
+
+.fileField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fileInfo {
+  background: rgba(color(background), 0.3);
+  border: 1px solid rgba(color(primary), 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 150ms ease;
+
+  &:hover {
+    background: rgba(color(background), 0.4);
+    border-color: rgba(color(primary), 0.2);
+  }
+}
+
+.fileDetails {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @include respond-below(md) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+.fileName {
+  color: color(gray-900);
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex: 1;
+  word-break: break-all;
+}
+
+.fileSize {
+  color: color(gray-600);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.fileType {
+  color: color(gray-500);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.submitError {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+  background: rgba(color(error), 0.1);
+  border: 1px solid rgba(color(error), 0.2);
+  border-radius: 0.5rem;
+  color: color(error);
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: fade-in 0.3s ease;
+
+  @include respond-below(md) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
+  }
+}
+
+.successMessage {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+  background: rgba(color(success), 0.1);
+  border: 1px solid rgba(color(success), 0.2);
+  border-radius: 0.5rem;
+  color: color(success);
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: fade-in 0.3s ease;
+
+  @include respond-below(md) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
+  }
+}
+
+// Animation keyframes
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive adjustments
+@include respond-below(lg) {
+  .form {
+    padding: 1.75rem;
+  }
+}
+
+@include respond-below(md) {
+  .form {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .textarea {
+    min-height: 100px;
+  }
+}

@@ -10,6 +10,8 @@ export interface Post extends BaseEntity {
   title: string;
   body: string;
   userId: number;
+  fileUrl?: string;
+  createdAt?: string;
 }
 
 export interface Comment extends BaseEntity {

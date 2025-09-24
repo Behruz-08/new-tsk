@@ -70,10 +70,28 @@ export const createPostSchema = z.object({
 });
 
 /**
+ * Post form validation schema (for UI form)
+ */
+export const postFormSchema = z.object({
+  title: z
+    .string()
+    .min(5, "Заголовок должен содержать минимум 5 символов")
+    .max(100, "Заголовок не должен превышать 100 символов"),
+
+  body: z
+    .string()
+    .min(10, "Содержимое должно содержать минимум 10 символов")
+    .max(1000, "Содержимое не должно превышать 1000 символов"),
+
+  file: fileSchema,
+});
+
+/**
  * Type inference from schemas
  */
 export type ContactFormData = z.infer<typeof contactFormSchema>;
 export type CreatePostData = z.infer<typeof createPostSchema>;
+export type PostFormData = z.infer<typeof postFormSchema>;
 
 /**
  * Common validation patterns

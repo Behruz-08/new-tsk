@@ -13,7 +13,9 @@ import { API_ENDPOINTS } from "@/constants";
  */
 const API_CONFIG = {
   baseUrl:
-    process.env.NODE_ENV === "development" ? "http://localhost:3000" : "/", // Changed to '/' for production to target internal Next.js APIs
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://jsonplaceholder.typicode.com", // Restored for production to target JSONPlaceholder directly
   timeout: 10000,
   retries: 3,
   headers: {
@@ -148,10 +150,16 @@ export const postsApi = {
    */
   async getAll(): Promise<Post[]> {
     // Always use local API to combine JSONPlaceholder and locally created posts
-    const response = await apiClient.get<{ posts: Post[] }>(
-      API_ENDPOINTS.LOCAL.POSTS,
-    );
-    return response.posts;
+    const response = await fetch(API_ENDPOINTS.LOCAL.POSTS);
+
+    if (!response.ok) {
+      throw new ApiClientError(
+        `HTTP ${response.status}: ${response.statusText}`,
+        response.status,
+      );
+    }
+    const data = await response.json();
+    return data.posts;
   },
 
   /**
@@ -166,11 +174,20 @@ export const postsApi = {
    */
   async create(data: Omit<Post, "id">): Promise<Post> {
     // Always use local API to create new posts
-    const response = await apiClient.post<{ post: Post }>(
-      API_ENDPOINTS.LOCAL.POSTS,
-      data,
-    );
-    return response.post;
+    const response = await fetch(API_ENDPOINTS.LOCAL.POSTS, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new ApiClientError(
+        `HTTP ${response.status}: ${response.statusText}`,
+        response.status,
+      );
+    }
+    const result = await response.json();
+    return result.post;
   },
 
   /**
@@ -268,6 +285,60 @@ export const formApi = {
     } catch (error) {
       throw new ApiClientError(
         error instanceof Error ? error.message : "Failed to submit form",
+      );
+    }
+  },
+
+  /**
+   * Create post with file upload
+   */
+  async createPostWithFile(
+    postData: { title: string; body: string; userId?: number },
+    file?: File,
+  ): Promise<{ success: boolean; post: Post; message: string }> {
+    try {
+      // First upload file if provided
+      let fileUrl: string | undefined;
+      if (file) {
+        const fileFormData = new FormData();
+        fileFormData.append("file", file);
+
+        const fileResponse = await fetch("/api/files", {
+          method: "POST",
+          body: fileFormData,
+        });
+
+        if (!fileResponse.ok) {
+          throw new ApiClientError(
+            `File upload failed: ${fileResponse.status}`,
+          );
+        }
+
+        const fileResult = await fileResponse.json();
+        fileUrl = fileResult.url;
+      }
+
+      // Create the post
+      const response = await fetch(API_ENDPOINTS.LOCAL.POSTS, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...postData,
+          userId: postData.userId || 1,
+          ...(fileUrl && { fileUrl }),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new ApiClientError(
+          `HTTP ${response.status}: ${response.statusText}`,
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      throw new ApiClientError(
+        error instanceof Error ? error.message : "Failed to create post",
       );
     }
   },

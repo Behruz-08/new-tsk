@@ -6,11 +6,11 @@
 import { Navigation } from "@/components/layout/Navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { PostCard } from "@/components/posts/PostCard";
 import { postsApi } from "@/lib/api";
 import { Post } from "@/types";
-import { FileText, Calendar, User, ArrowLeft } from "lucide-react";
+import { FileText, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { formatDate } from "@/lib/utils";
 import styles from "./page.module.scss";
 
 // SSG: Данные загружаются во время сборки
@@ -84,33 +84,7 @@ export default async function SSGPage() {
 
             <div className={styles.postsGrid}>
               {posts.map((post) => (
-                <Card key={post.id} className={styles.postCard} hover>
-                  <div className={styles.postHeader}>
-                    <h3 className={styles.postTitle}>{post.title}</h3>
-                    <div className={styles.postMeta}>
-                      <span className={styles.postId}>#{post.id}</span>
-                    </div>
-                  </div>
-
-                  <p className={styles.postBody}>
-                    {post.body.length > 120
-                      ? `${post.body.substring(0, 120)}...`
-                      : post.body}
-                  </p>
-
-                  <div className={styles.postFooter}>
-                    <div className={styles.postInfo}>
-                      <span className={styles.userInfo}>
-                        <User size={14} />
-                        User {post.userId}
-                      </span>
-                      <span className={styles.buildTime}>
-                        <Calendar size={14} />
-                        Собрано: {formatDate(new Date())}
-                      </span>
-                    </div>
-                  </div>
-                </Card>
+                <PostCard key={post.id} post={post} showRenderTime={false} />
               ))}
             </div>
           </div>

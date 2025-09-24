@@ -10,6 +10,7 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
+import { PostCard } from "@/components/posts/PostCard";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { FileList } from "@/components/files/FileList";
 import { useModalState } from "@/components/ui/Modal";
@@ -25,7 +26,6 @@ import {
   File,
 } from "lucide-react";
 import Link from "next/link";
-import { formatDate } from "@/lib/utils";
 import styles from "./page.module.scss";
 
 export default function CSRPage() {
@@ -150,27 +150,7 @@ export default function CSRPage() {
             {posts && !postsLoading && (
               <div className={styles.postsGrid}>
                 {posts.slice(0, 6).map((post) => (
-                  <Card key={post.id} className={styles.postCard} hover>
-                    <div className={styles.postHeader}>
-                      <h3 className={styles.postTitle}>{post.title}</h3>
-                      <span className={styles.postId}>#{post.id}</span>
-                    </div>
-
-                    <p className={styles.postBody}>
-                      {post.body.length > 100
-                        ? `${post.body.substring(0, 100)}...`
-                        : post.body}
-                    </p>
-
-                    <div className={styles.postFooter}>
-                      <span className={styles.userInfo}>
-                        User {post.userId}
-                      </span>
-                      <span className={styles.loadTime}>
-                        Загружено: {formatDate(new Date())}
-                      </span>
-                    </div>
-                  </Card>
+                  <PostCard key={post.id} post={post} showRenderTime={false} />
                 ))}
               </div>
             )}

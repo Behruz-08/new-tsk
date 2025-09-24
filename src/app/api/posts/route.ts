@@ -5,8 +5,14 @@
 import { NextResponse } from "next/server";
 import { Post } from "@/types";
 
+// Extended Post interface for local posts with optional file
+interface LocalPost extends Post {
+  fileUrl?: string;
+  createdAt?: string;
+}
+
 // In-memory storage for demo purposes (in production, use a database)
-let localPosts: Post[] = [];
+let localPosts: LocalPost[] = [];
 
 /**
  * Get all posts from JSONPlaceholder and combine with local posts
@@ -58,11 +64,13 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     // Create new post with unique ID
-    const newPost: Post = {
+    const newPost: LocalPost = {
       id: Date.now(), // Use timestamp as unique ID
       title: body.title,
       body: body.body,
       userId: body.userId || 1,
+      fileUrl: body.fileUrl,
+      createdAt: new Date().toISOString(),
     };
 
     // Add to local storage

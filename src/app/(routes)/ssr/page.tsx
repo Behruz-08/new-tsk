@@ -7,9 +7,10 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { RefreshButton } from "@/components/ui/RefreshButton";
+import { PostCard } from "@/components/posts/PostCard";
 import { postsApi } from "@/lib/api";
 import { Post } from "@/types";
-import { Database, Calendar, User, ArrowLeft, RefreshCw } from "lucide-react";
+import { Database, Calendar, ArrowLeft, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import styles from "./page.module.scss";
@@ -98,33 +99,12 @@ export default async function SSRPage() {
 
             <div className={styles.postsGrid}>
               {posts.map((post) => (
-                <Card key={post.id} className={styles.postCard} hover>
-                  <div className={styles.postHeader}>
-                    <h3 className={styles.postTitle}>{post.title}</h3>
-                    <div className={styles.postMeta}>
-                      <span className={styles.postId}>#{post.id}</span>
-                    </div>
-                  </div>
-
-                  <p className={styles.postBody}>
-                    {post.body.length > 120
-                      ? `${post.body.substring(0, 120)}...`
-                      : post.body}
-                  </p>
-
-                  <div className={styles.postFooter}>
-                    <div className={styles.postInfo}>
-                      <span className={styles.userInfo}>
-                        <User size={14} />
-                        User {post.userId}
-                      </span>
-                      <span className={styles.renderTime}>
-                        <Calendar size={14} />
-                        Рендер: {formatDate(renderTime)}
-                      </span>
-                    </div>
-                  </div>
-                </Card>
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  showRenderTime={true}
+                  renderTime={renderTime}
+                />
               ))}
             </div>
           </div>
