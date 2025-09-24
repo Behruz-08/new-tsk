@@ -13,9 +13,7 @@ import { API_ENDPOINTS } from "@/constants";
  */
 const API_CONFIG = {
   baseUrl:
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://jsonplaceholder.typicode.com",
+    process.env.NODE_ENV === "development" ? "http://localhost:3000" : "/", // Changed to '/' for production to target internal Next.js APIs
   timeout: 10000,
   retries: 3,
   headers: {
@@ -149,16 +147,11 @@ export const postsApi = {
    * Get all posts
    */
   async getAll(): Promise<Post[]> {
-    if (process.env.NODE_ENV === "development") {
-      // Use local API in development
-      const response = await apiClient.get<{ posts: Post[] }>(
-        API_ENDPOINTS.LOCAL.POSTS,
-      );
-      return response.posts;
-    } else {
-      // Use JSONPlaceholder in production
-      return apiClient.get<Post[]>(API_ENDPOINTS.JSONPLACEHOLDER.POSTS);
-    }
+    // Always use local API to combine JSONPlaceholder and locally created posts
+    const response = await apiClient.get<{ posts: Post[] }>(
+      API_ENDPOINTS.LOCAL.POSTS,
+    );
+    return response.posts;
   },
 
   /**
@@ -172,17 +165,12 @@ export const postsApi = {
    * Create new post
    */
   async create(data: Omit<Post, "id">): Promise<Post> {
-    if (process.env.NODE_ENV === "development") {
-      // Use local API in development
-      const response = await apiClient.post<{ post: Post }>(
-        API_ENDPOINTS.LOCAL.POSTS,
-        data,
-      );
-      return response.post;
-    } else {
-      // Use JSONPlaceholder in production
-      return apiClient.post<Post>(API_ENDPOINTS.JSONPLACEHOLDER.POSTS, data);
-    }
+    // Always use local API to create new posts
+    const response = await apiClient.post<{ post: Post }>(
+      API_ENDPOINTS.LOCAL.POSTS,
+      data,
+    );
+    return response.post;
   },
 
   /**

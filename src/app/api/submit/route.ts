@@ -5,6 +5,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { contactFormSchema } from "@/lib/validations";
+import fs from "fs/promises";
+import path from "path";
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,13 +38,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Handle file upload
+    let filePath = null;
+    if (file && file.size > 0) {
+      const uploadDir = path.join(process.cwd(), "uploads");
+      await fs.mkdir(uploadDir, { recursive: true });
+
+      const uniqueFileName = `${Date.now()}_${name.replace(/\s/g, "")}_${
+        file.name
+      }`;
+      filePath = path.join(uploadDir, uniqueFileName);
+      const buffer = Buffer.from(await file.arrayBuffer());
+      await fs.writeFile(filePath, buffer);
+    }
+
     // Simulate processing time
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Подготавливаем данные для отправки в JSONPlaceholder
     const postData = {
       title: `Сообщение от ${name}`,
-      body: `Email: ${email}\n\nСообщение: ${message}\n\nПрикрепленный файл: ${file.name} (${file.size} bytes, ${file.type})`,
+      body: `Email: ${email}\n\nСообщение: ${message}${
+        filePath ? `\n\nПрикрепленный файл: ${file.name}` : ""
+      }`,
       userId: 1, // Используем фиксированный userId для демонстрации
     };
 
@@ -111,6 +129,7 @@ export async function POST(request: NextRequest) {
           fileName: file.name,
           fileSize: file.size,
           fileType: file.type,
+          filePath: filePath, // Add file path to response
           submittedAt: new Date().toISOString(),
         },
       },
