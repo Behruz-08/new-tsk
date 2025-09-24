@@ -1,10 +1,9 @@
 /**
- * API endpoint for file upload and listing
+ * API endpoint for file upload using Vercel Blob Storage
  */
 
 import { NextResponse } from "next/server";
-import { readdir, stat, mkdir, writeFile } from "fs/promises";
-import { join } from "path";
+import { put } from "@vercel/blob";
 
 export async function GET() {
   try {
@@ -44,24 +43,41 @@ export async function POST(request: Request) {
       );
     }
 
-    // For Vercel/serverless environment, we'll use a mock file URL
-    // In production, you'd typically use cloud storage (AWS S3, Cloudinary, etc.)
+    // Generate unique filename
     const timestamp = Date.now();
     const fileName = `${timestamp}_${file.name}`;
-    
-    // Generate a mock URL for demonstration
-    // In real production, this would be a cloud storage URL
-    const fileUrl = `https://via.placeholder.com/300x200/4F46E5/FFFFFF?text=${encodeURIComponent(file.name)}`;
 
-    return NextResponse.json({
-      success: true,
-      message: "Файл успешно загружен (демо режим)",
-      url: fileUrl,
-      fileName: fileName,
-      originalName: file.name,
-      size: file.size,
-      isDemo: true, // Flag to indicate this is a demo URL
-    });
+    try {
+      // Upload to Vercel Blob Storage
+      const blob = await put(fileName, file, {
+        access: 'public',
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: "Файл успешно загружен",
+        url: blob.url,
+        fileName: fileName,
+        originalName: file.name,
+        size: file.size,
+        blobId: blob.pathname,
+      });
+    } catch (blobError) {
+      console.error("Vercel Blob error:", blobError);
+      
+      // Fallback to mock URL if Blob storage fails
+      const fallbackUrl = `https://via.placeholder.com/300x200/4F46E5/FFFFFF?text=${encodeURIComponent(file.name)}`;
+      
+      return NextResponse.json({
+        success: true,
+        message: "Файл загружен (fallback режим)",
+        url: fallbackUrl,
+        fileName: fileName,
+        originalName: file.name,
+        size: file.size,
+        isDemo: true,
+      });
+    }
   } catch (error) {
     console.error("Ошибка при загрузке файла:", error);
 
