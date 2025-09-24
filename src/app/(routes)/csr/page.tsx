@@ -41,7 +41,7 @@ export default function CSRPage() {
   } = usePosts();
   
   // Zustand для локального состояния
-  const { localPosts, addPost } = usePostsWithZustand();
+  const { localPosts } = usePostsWithZustand();
   const {
     data: comments,
     isLoading: commentsLoading,

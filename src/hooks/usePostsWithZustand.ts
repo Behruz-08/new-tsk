@@ -31,7 +31,7 @@ export const usePostsWithZustand = (): UsePostsWithZustandReturn => {
   // Load posts on mount
   useEffect(() => {
     refreshPosts();
-  }, []);
+  }, [refreshPosts]);
 
   const refreshPosts = useCallback(async () => {
     try {
