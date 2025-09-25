@@ -43,10 +43,13 @@ export default function CSRPage() {
   // const createPostMutation = useCreatePost(); // Пока не используется
 
   const handleModalSuccess = () => {
+    console.log('CSR Page: handleModalSuccess called');
     closeModal('contact-modal');
+    console.log('CSR Page: Modal closed, refreshing file list');
     // Кеш постов уже инвалидируется в ContactForm
     // Обновляем список файлов после успешной отправки формы
     refreshFileList();
+    console.log('CSR Page: handleModalSuccess completed');
   };
 
   return (

@@ -57,6 +57,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
   // Handle form submission
   const handleFormSubmit = async (data: ContactFormData) => {
     try {
+      console.log('ContactForm: Starting form submission', { data });
+      
       // Call custom onSubmit if provided
       if (onSubmit) {
         onSubmit(data);
@@ -79,11 +81,13 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
       );
 
       if (result) {
+        console.log('ContactForm: Form submitted successfully', { result });
         toast.success('Форма успешно отправлена!');
         reset();
         resetSubmission();
         // Инвалидируем кеш постов, чтобы показать новый пост
         invalidatePosts();
+        console.log('ContactForm: Calling onSuccess callback');
         onSuccess?.();
       }
     } catch (error) {
