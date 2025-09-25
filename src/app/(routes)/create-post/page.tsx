@@ -12,23 +12,19 @@ import { PostForm } from '@/components/forms/PostForm';
 import { Post } from '@/types';
 import { Plus, FileText, Upload } from 'lucide-react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { usePostsActions } from '@/store';
 import styles from './page.module.scss';
 
 export default function CreatePostPage() {
   const [createdPost, setCreatedPost] = useState<Post | null>(null);
-  const router = useRouter();
   const { addPost } = usePostsActions();
 
   const handlePostCreated = (post: Post) => {
     setCreatedPost(post);
     addPost(post); // Добавляем пост в Zustand store
 
-    // Redirect to posts list after a short delay
-    setTimeout(() => {
-      router.push('/ssr');
-    }, 2000);
+    // Show success message - no redirect needed
+    // User can manually navigate to any page they want
   };
 
   return (
