@@ -9,7 +9,6 @@ import { PageHeader } from '@/components/ui/PageHeader';
 import { TechInfo } from '@/components/ui/TechInfo';
 import { RefreshButton } from '@/components/ui/RefreshButton';
 import { PostCard } from '@/components/posts/PostCard';
-import { postsService } from '@/lib/services';
 import { Post } from '@/types';
 import { Database, Calendar, RefreshCw } from 'lucide-react';
 import { formatDate } from '@/lib/utils';
@@ -24,7 +23,15 @@ async function getPosts(): Promise<Post[]> {
     // Имитируем задержку сервера
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const posts = await postsService.getAll();
+    // Для SSR также обращаемся напрямую к JSONPlaceholder API
+    // чтобы избежать проблем с внутренними API роутами
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    
+    if (!response.ok) {
+      throw new Error(`JSONPlaceholder API error: ${response.status}`);
+    }
+    
+    const posts: Post[] = await response.json();
     return posts.slice(0, 12); // Ограничиваем количество для демонстрации
   } catch (error) {
     console.error('Error fetching posts:', error);

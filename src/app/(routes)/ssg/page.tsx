@@ -7,27 +7,44 @@ import { Navigation } from '@/components/layout/Navigation';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TechInfo } from '@/components/ui/TechInfo';
 import { PostCard } from '@/components/posts/PostCard';
-import { postsService } from '@/lib/services';
 import { Post } from '@/types';
 import { FileText } from 'lucide-react';
 import styles from './page.module.scss';
 
 // SSG: Данные загружаются во время сборки
 export async function generateStaticParams() {
-  // Получаем список постов для предгенерации
-  const posts = await postsService.getAll();
+  try {
+    // Получаем список постов напрямую из JSONPlaceholder для предгенерации
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    
+    if (!response.ok) {
+      throw new Error(`JSONPlaceholder API error: ${response.status}`);
+    }
+    
+    const posts: Post[] = await response.json();
 
-  // Генерируем параметры для статических страниц (если нужно)
-  return posts.slice(0, 10).map((post) => ({
-    id: post.id.toString(),
-  }));
+    // Генерируем параметры для статических страниц (если нужно)
+    return posts.slice(0, 10).map((post) => ({
+      id: post.id.toString(),
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
+  }
 }
 
 // SSG: Функция для получения данных во время сборки
 async function getPosts(): Promise<Post[]> {
   try {
-    // В реальном приложении здесь может быть кеширование
-    const posts = await postsService.getAll();
+    // Во время сборки обращаемся напрямую к JSONPlaceholder API
+    // потому что внутренние API роуты недоступны во время build time
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+    
+    if (!response.ok) {
+      throw new Error(`JSONPlaceholder API error: ${response.status}`);
+    }
+    
+    const posts: Post[] = await response.json();
     return posts.slice(0, 12); // Ограничиваем количество для демонстрации
   } catch (error) {
     console.error('Error fetching posts:', error);
