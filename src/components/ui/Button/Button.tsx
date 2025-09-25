@@ -1,33 +1,49 @@
 /**
  * Reusable Button component with multiple variants and sizes
+ * Переиспользуемый компонент кнопки с множественными вариантами и размерами
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import { cn } from "@/lib/utils";
-import styles from "./Button.module.scss";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import styles from './Button.module.scss';
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
-  size?: "sm" | "md" | "lg";
+/**
+ * Props interface for Button component
+ * Интерфейс пропсов для компонента Button
+ */
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Button variant style */
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  /** Button size */
+  size?: 'sm' | 'md' | 'lg';
+  /** Loading state with spinner */
   loading?: boolean;
+  /** Icon displayed on the left side */
   leftIcon?: React.ReactNode;
+  /** Icon displayed on the right side */
   rightIcon?: React.ReactNode;
+  /** Whether button should take full width */
   fullWidth?: boolean;
+  /** Render as child element (for Next.js Link) */
   asChild?: boolean;
+  /** Button content */
   children: React.ReactNode;
 }
 
 /**
  * Button component with multiple variants and accessibility features
+ * Компонент кнопки с множественными вариантами и функциями доступности
+ * @param props - Button props
+ * @param ref - Forwarded ref to button element
+ * @returns JSX element
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      variant = "primary",
-      size = "md",
+      variant = 'primary',
+      size = 'md',
       loading = false,
       leftIcon,
       rightIcon,
@@ -49,13 +65,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         styles[`button--${variant}`],
         styles[`button--${size}`],
         {
-          [styles["button--loading"]]: loading,
-          [styles["button--full-width"]]: fullWidth,
+          [styles['button--loading']]: loading,
+          [styles['button--full-width']]: fullWidth,
         },
         className,
       ),
       disabled: isDisabled,
-      "aria-disabled": isDisabled,
+      'aria-disabled': isDisabled,
       ...props,
     };
 
@@ -108,4 +124,4 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
-Button.displayName = "Button";
+Button.displayName = 'Button';

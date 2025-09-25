@@ -2,53 +2,46 @@
  * Main navigation component
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/Button";
-import {
-  MessageSquare,
-  Home,
-  FileText,
-  Database,
-  Zap,
-  Plus,
-} from "lucide-react";
-import styles from "./Navigation.module.scss";
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/Button';
+import { MessageSquare, Home, FileText, Database, Zap, Plus } from 'lucide-react';
+import styles from './Navigation.module.scss';
 
 const navigationItems = [
   {
-    href: "/",
-    label: "Главная",
+    href: '/',
+    label: 'Главная',
     icon: Home,
-    description: "Добро пожаловать на главную страницу",
+    description: 'Добро пожаловать на главную страницу',
   },
   {
-    href: "/ssg",
-    label: "SSG",
+    href: '/ssg',
+    label: 'SSG',
     icon: FileText,
-    description: "Static Site Generation - статическая генерация",
+    description: 'Static Site Generation - статическая генерация',
   },
   {
-    href: "/ssr",
-    label: "SSR",
+    href: '/ssr',
+    label: 'SSR',
     icon: Database,
-    description: "Server-Side Rendering - серверный рендеринг",
+    description: 'Server-Side Rendering - серверный рендеринг',
   },
   {
-    href: "/isr",
-    label: "ISR",
+    href: '/isr',
+    label: 'ISR',
     icon: Zap,
-    description: "Incremental Static Regeneration",
+    description: 'Incremental Static Regeneration',
   },
   {
-    href: "/csr",
-    label: "CSR",
+    href: '/csr',
+    label: 'CSR',
     icon: MessageSquare,
-    description: "Client-Side Rendering - клиентский рендеринг",
+    description: 'Client-Side Rendering - клиентский рендеринг',
   },
 ];
 
@@ -56,11 +49,7 @@ export const Navigation: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <nav
-      className={styles.navigation}
-      role="navigation"
-      aria-label="Основная навигация"
-    >
+    <nav className={styles.navigation} role="navigation" aria-label="Основная навигация">
       <div className="container">
         <div className={styles.navContent}>
           {/* Logo */}
@@ -93,12 +82,7 @@ export const Navigation: React.FC = () => {
           </ul>
 
           {/* Create Post Button */}
-          <Button
-            variant="primary"
-            size="md"
-            asChild
-            leftIcon={<Plus size={18} />}
-          >
+          <Button variant="primary" size="md" asChild leftIcon={<Plus size={18} />}>
             <Link href="/create-post">Создать пост</Link>
           </Button>
         </div>

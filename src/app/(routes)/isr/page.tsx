@@ -3,15 +3,15 @@
  * Статическая страница с перегенерацией по расписанию
  */
 
-import { Navigation } from "@/components/layout/Navigation";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { commentsApi } from "@/lib/api";
-import { Comment } from "@/types";
-import { Zap, Calendar, User, ArrowLeft, Clock } from "lucide-react";
-import Link from "next/link";
-import { formatDate } from "@/lib/utils";
-import styles from "./page.module.scss";
+import { Navigation } from '@/components/layout/Navigation';
+import { Card } from '@/components/ui/Card';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { TechInfo } from '@/components/ui/TechInfo';
+import { commentsService } from '@/lib/services';
+import { Comment } from '@/types';
+import { Zap, Calendar, User, Clock } from 'lucide-react';
+import { formatDate } from '@/lib/utils';
+import styles from './page.module.scss';
 
 // ISR: Перегенерация каждые 60 секунд
 export const revalidate = 60;
@@ -19,10 +19,10 @@ export const revalidate = 60;
 // ISR: Функция для получения данных с перегенерацией
 async function getComments(): Promise<Comment[]> {
   try {
-    const comments = await commentsApi.getAll();
+    const comments = await commentsService.getAll();
     return comments.slice(0, 15); // Ограничиваем количество для демонстрации
   } catch (error) {
-    console.error("Error fetching comments:", error);
+    console.error('Error fetching comments:', error);
     return [];
   }
 }
@@ -39,33 +39,15 @@ export default async function ISRPage() {
       <main className={styles.main}>
         <div className="container">
           {/* Header */}
-          <div className={styles.header}>
-            <div className={styles.headerContent}>
-              <div className={styles.headerInfo}>
-                <h1 className={styles.title}>
-                  <Zap size={32} />
-                  ISR - Incremental Static Regeneration
-                </h1>
-                <p className={styles.description}>
-                  Статическая страница с автоматической перегенерацией. Лучшее
-                  из SSG и SSR миров - скорость + актуальность данных.
-                </p>
-                <div className={styles.badge}>
-                  <span className={styles.badgeIcon}>
-                    <Clock size={16} />
-                  </span>
-                  Перегенерация: каждые 60 сек
-                </div>
-              </div>
-
-              <Button variant="outline" asChild>
-                <Link href="/">
-                  <ArrowLeft size={18} />
-                  На главную
-                </Link>
-              </Button>
-            </div>
-          </div>
+          <PageHeader
+            title="ISR - Incremental Static Regeneration"
+            description="Статическая страница с автоматической перегенерацией. Лучшее из SSG и SSR миров - скорость + актуальность данных."
+            icon={Zap}
+            badge={{
+              icon: Clock,
+              text: 'Перегенерация: каждые 60 сек',
+            }}
+          />
 
           {/* ISR Info */}
           <Card className={styles.isrInfo}>
@@ -102,9 +84,7 @@ export default async function ISRPage() {
                   <div className={styles.commentHeader}>
                     <div className={styles.commentMeta}>
                       <span className={styles.commentId}>#{comment.id}</span>
-                      <span className={styles.postId}>
-                        Post #{comment.postId}
-                      </span>
+                      <span className={styles.postId}>Post #{comment.postId}</span>
                     </div>
                   </div>
 
@@ -131,33 +111,17 @@ export default async function ISRPage() {
           </div>
 
           {/* Technical Info */}
-          <Card className={styles.techInfo}>
-            <h3>Техническая информация ISR</h3>
-            <div className={styles.techDetails}>
-              <div className={styles.techItem}>
-                <strong>Время генерации:</strong> Во время сборки +
-                перегенерация по расписанию
-              </div>
-              <div className={styles.techItem}>
-                <strong>Производительность:</strong> Максимальная (статические
-                страницы)
-              </div>
-              <div className={styles.techItem}>
-                <strong>SEO:</strong> Отличное (полный HTML на сервере)
-              </div>
-              <div className={styles.techItem}>
-                <strong>Кеширование:</strong> CDN + автоматическая перегенерация
-              </div>
-              <div className={styles.techItem}>
-                <strong>Актуальность данных:</strong> Контролируемая (каждые 60
-                сек)
-              </div>
-              <div className={styles.techItem}>
-                <strong>Масштабируемость:</strong> Отличная (статические
-                страницы)
-              </div>
-            </div>
-          </Card>
+          <TechInfo
+            title="Техническая информация ISR"
+            items={[
+              { label: 'Время генерации', value: 'Во время сборки + перегенерация по расписанию' },
+              { label: 'Производительность', value: 'Максимальная (статические страницы)' },
+              { label: 'SEO', value: 'Отличное (полный HTML на сервере)' },
+              { label: 'Кеширование', value: 'CDN + автоматическая перегенерация' },
+              { label: 'Актуальность данных', value: 'Контролируемая (каждые 60 сек)' },
+              { label: 'Масштабируемость', value: 'Отличная (статические страницы)' },
+            ]}
+          />
 
           {/* ISR Demo */}
           <Card className={styles.demoInfo}>
@@ -166,29 +130,25 @@ export default async function ISRPage() {
               <div className={styles.demoStep}>
                 <div className={styles.stepNumber}>1</div>
                 <div className={styles.stepContent}>
-                  <strong>Первое посещение:</strong> Страница генерируется на
-                  сервере
+                  <strong>Первое посещение:</strong> Страница генерируется на сервере
                 </div>
               </div>
               <div className={styles.demoStep}>
                 <div className={styles.stepNumber}>2</div>
                 <div className={styles.stepContent}>
-                  <strong>Следующие посещения:</strong> Показывается
-                  кешированная версия
+                  <strong>Следующие посещения:</strong> Показывается кешированная версия
                 </div>
               </div>
               <div className={styles.demoStep}>
                 <div className={styles.stepNumber}>3</div>
                 <div className={styles.stepContent}>
-                  <strong>Через 60 секунд:</strong> Страница перегенерируется в
-                  фоне
+                  <strong>Через 60 секунд:</strong> Страница перегенерируется в фоне
                 </div>
               </div>
               <div className={styles.demoStep}>
                 <div className={styles.stepNumber}>4</div>
                 <div className={styles.stepContent}>
-                  <strong>Следующий запрос:</strong> Показывается обновленная
-                  версия
+                  <strong>Следующий запрос:</strong> Показывается обновленная версия
                 </div>
               </div>
             </div>

@@ -174,7 +174,7 @@
       gap: spacing(1);
 
       &::before {
-        content: "";
+        content: '';
         width: 4px;
         height: 4px;
         background: color(text-tertiary);
@@ -326,7 +326,7 @@
   overflow: hidden;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;

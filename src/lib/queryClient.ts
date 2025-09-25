@@ -3,8 +3,8 @@
  * Конфигурация TanStack Query с централизованными ключами запросов
  */
 
-import { QueryClient } from "@tanstack/react-query";
-import { QUERY_KEYS } from "@/constants";
+import { QueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/constants';
 
 /**
  * Default query options for consistent behavior
@@ -19,12 +19,11 @@ const defaultQueryOptions = {
       // Retry failed requests up to 3 times
       retry: 3,
       // Retry with exponential backoff
-      retryDelay: (attemptIndex: number) =>
-        Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
       // Refetch on window focus
       refetchOnWindowFocus: false,
       // Don't refetch on reconnect by default
-      refetchOnReconnect: "always" as const,
+      refetchOnReconnect: 'always' as const,
     },
     mutations: {
       // Retry mutations once
@@ -56,7 +55,7 @@ export const prefetchQueries = {
   async postsList() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.POSTS.LISTS(),
-      queryFn: () => import("./api").then(({ postsApi }) => postsApi.getAll()),
+      queryFn: () => import('./api').then(({ postsApi }) => postsApi.getAll()),
       staleTime: 5 * 60 * 1000,
     });
   },
@@ -67,8 +66,7 @@ export const prefetchQueries = {
   async postDetail(id: number) {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.POSTS.DETAIL(id),
-      queryFn: () =>
-        import("./api").then(({ postsApi }) => postsApi.getById(id)),
+      queryFn: () => import('./api').then(({ postsApi }) => postsApi.getById(id)),
       staleTime: 10 * 60 * 1000,
     });
   },
@@ -79,10 +77,7 @@ export const prefetchQueries = {
   async postComments(postId: number) {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.COMMENTS.BY_POST(postId),
-      queryFn: () =>
-        import("./api").then(({ commentsApi }) =>
-          commentsApi.getByPostId(postId),
-        ),
+      queryFn: () => import('./api').then(({ commentsApi }) => commentsApi.getByPostId(postId)),
       staleTime: 5 * 60 * 1000,
     });
   },

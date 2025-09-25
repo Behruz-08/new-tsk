@@ -56,7 +56,7 @@
 
   &--required {
     &::after {
-      content: "*";
+      content: '*';
       color: color(error);
       margin-left: spacing(1);
     }
@@ -125,8 +125,8 @@
   gap: spacing(2);
   cursor: pointer;
 
-  input[type="checkbox"],
-  input[type="radio"] {
+  input[type='checkbox'],
+  input[type='radio'] {
     appearance: none;
     width: 18px;
     height: 18px;
@@ -141,7 +141,7 @@
       border-color: color(primary);
 
       &::after {
-        content: "✓";
+        content: '✓';
         display: flex;
         align-items: center;
         justify-content: center;
@@ -159,11 +159,11 @@
     }
   }
 
-  input[type="radio"] {
+  input[type='radio'] {
     border-radius: 50%;
 
     &:checked::after {
-      content: "";
+      content: '';
       width: 8px;
       height: 8px;
       border-radius: 50%;
@@ -182,7 +182,7 @@
   margin-top: spacing(1);
 
   &::before {
-    content: "⚠";
+    content: '⚠';
     font-size: 14px;
   }
 }
@@ -204,7 +204,7 @@
   margin-top: spacing(1);
 
   &::before {
-    content: "✓";
+    content: '✓';
     font-size: 14px;
   }
 }
@@ -213,7 +213,7 @@
 .form-file {
   position: relative;
 
-  input[type="file"] {
+  input[type='file'] {
     position: absolute;
     opacity: 0;
     width: 100%;

@@ -3,16 +3,12 @@
  * Стили для страницы создания постов
  */
 
-@use "@/styles/variables" as *;
-@use "@/styles/mixins" as *;
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
 
 .page {
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    color(background) 0%,
-    color(background-secondary) 100%
-  );
+  background: linear-gradient(135deg, color(background) 0%, color(background-secondary) 100%);
   color: color(gray-900);
 }
 

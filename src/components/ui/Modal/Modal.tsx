@@ -2,20 +2,20 @@
  * Reusable Modal component with accessibility features
  */
 
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { createPortal } from "react-dom";
-import { cn } from "@/lib/utils";
-import { useModal } from "@/hooks/useModal";
-import styles from "./Modal.module.scss";
+import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { cn } from '@/lib/utils';
+import { useModal } from '@/hooks/useModal';
+import styles from './Modal.module.scss';
 
 export interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   closeOnOverlayClick?: boolean;
   closeOnEscape?: boolean;
   showCloseButton?: boolean;
@@ -30,7 +30,7 @@ export const Modal: React.FC<ModalProps> = ({
   onClose,
   title,
   children,
-  size = "md",
+  size = 'md',
   closeOnOverlayClick = true,
   closeOnEscape = true,
   showCloseButton = true,
@@ -62,17 +62,17 @@ export const Modal: React.FC<ModalProps> = ({
     if (!closeOnEscape) return;
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isOpen) {
+      if (event.key === 'Escape' && isOpen) {
         handleClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
+      document.addEventListener('keydown', handleEscape);
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen, closeOnEscape, handleClose]);
 
@@ -80,7 +80,7 @@ export const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       // Focus the modal when it opens
-      const modal = document.getElementById("modal-content");
+      const modal = document.getElementById('modal-content');
       if (modal) {
         modal.focus();
       }
@@ -93,12 +93,12 @@ export const Modal: React.FC<ModalProps> = ({
   return createPortal(
     <div
       className={cn(styles.overlay, {
-        [styles["overlay--closing"]]: isClosing,
+        [styles['overlay--closing']]: isClosing,
       })}
       onClick={handleOverlayClick}
       role="dialog"
       aria-modal="true"
-      aria-labelledby={title ? "modal-title" : undefined}
+      aria-labelledby={title ? 'modal-title' : undefined}
     >
       <div
         id="modal-content"
@@ -106,7 +106,7 @@ export const Modal: React.FC<ModalProps> = ({
           styles.content,
           styles[`content--${size}`],
           {
-            [styles["content--closing"]]: isClosing,
+            [styles['content--closing']]: isClosing,
           },
           className,
         )}

@@ -3,9 +3,9 @@
  * Основные глобальные стили приложения
  */
 
-@use "./variables" as *;
-@use "./mixins" as *;
-@use "./animations" as *;
+@use './variables' as *;
+@use './mixins' as *;
+@use './animations' as *;
 
 /* CSS Reset and Base Styles */
 *,
@@ -40,28 +40,16 @@ body {
 
 /* Futuristic background effects */
 body::before {
-  content: "";
+  content: '';
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(
-      circle at 20% 80%,
-      rgba(0, 212, 255, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(139, 92, 246, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(0, 255, 136, 0.05) 0%,
-      transparent 50%
-    );
+    radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
   pointer-events: none;
   z-index: -1;
   animation: glowRotate 20s linear infinite;
@@ -138,7 +126,7 @@ a {
   position: relative;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     bottom: -2px;
     left: 0;
@@ -346,11 +334,11 @@ pre {
   }
 
   a[href]::after {
-    content: " (" attr(href) ")";
+    content: ' (' attr(href) ')';
   }
 
   abbr[title]::after {
-    content: " (" attr(title) ")";
+    content: ' (' attr(title) ')';
   }
 
   pre {

@@ -1,26 +1,23 @@
 /**
- * API client and utility functions
- * Оптимизированный API клиент с улучшенной архитектурой
+ * Legacy API client - deprecated, use services instead
+ * Устаревший API клиент - используйте сервисы вместо этого
+ * @deprecated Use services from @/lib/services
  */
 
-import { Post, Comment, User } from "@/types";
-import { API_ENDPOINTS } from "@/constants";
-// import { ERROR_MESSAGES } from "@/constants"; // Пока не используется
+import { Post, User } from '@/types';
+import { postsService, commentsService, formsService } from '@/lib/services';
 
 /**
  * API configuration
- * Конфигурация API клиента с поддержкой разных окружений
+ * Конфигурация API клиента
  */
 const API_CONFIG = {
-  baseUrl:
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://jsonplaceholder.typicode.com", // Restored for production to target JSONPlaceholder directly
+  baseUrl: 'https://jsonplaceholder.typicode.com',
   timeout: 10000,
   retries: 3,
   headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
   },
 } as const;
 
@@ -34,7 +31,7 @@ export class ApiClientError extends Error {
     public code?: string,
   ) {
     super(message);
-    this.name = "ApiClientError";
+    this.name = 'ApiClientError';
   }
 }
 
@@ -55,10 +52,7 @@ class ApiClient {
   /**
    * Make HTTP request with retry logic
    */
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {},
-  ): Promise<T> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
@@ -67,7 +61,7 @@ class ApiClient {
       ...options,
       signal: controller.signal,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         ...options.headers,
       },
     };
@@ -107,7 +101,7 @@ class ApiClient {
    * GET request
    */
   async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: "GET" });
+    return this.request<T>(endpoint, { method: 'GET' });
   }
 
   /**
@@ -115,7 +109,7 @@ class ApiClient {
    */
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
-      method: "POST",
+      method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
     });
   }
@@ -125,7 +119,7 @@ class ApiClient {
    */
   async put<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
-      method: "PUT",
+      method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
     });
   }
@@ -134,7 +128,7 @@ class ApiClient {
    * DELETE request
    */
   async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: "DELETE" });
+    return this.request<T>(endpoint, { method: 'DELETE' });
   }
 }
 
@@ -144,112 +138,29 @@ const apiClient = new ApiClient(API_CONFIG);
 /**
  * Posts API
  */
+/**
+ * Posts API - Legacy wrapper around postsService
+ * @deprecated Use postsService directly
+ */
 export const postsApi = {
-  /**
-   * Get all posts
-   */
-  async getAll(): Promise<Post[]> {
-    // Always use local API to combine JSONPlaceholder and locally created posts
-    const baseUrl = typeof window !== 'undefined' 
-      ? '' // Client-side: use relative URL
-      : process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` // Vercel production
-        : 'http://localhost:3000'; // Local development server
-    
-    const response = await fetch(`${baseUrl}/api/posts`);
-
-    if (!response.ok) {
-      throw new ApiClientError(
-        `HTTP ${response.status}: ${response.statusText}`,
-        response.status,
-      );
-    }
-    const data = await response.json();
-    return data.posts;
-  },
-
-  /**
-   * Get post by ID
-   */
-  async getById(id: number): Promise<Post> {
-    return apiClient.get<Post>(`${API_ENDPOINTS.JSONPLACEHOLDER.POSTS}/${id}`);
-  },
-
-  /**
-   * Create new post
-   */
-  async create(data: Omit<Post, "id">): Promise<Post> {
-    // Always use local API to create new posts
-    const baseUrl = typeof window !== 'undefined' 
-      ? '' // Client-side: use relative URL
-      : process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}` // Vercel production
-        : 'http://localhost:3000'; // Local development server
-    
-    const response = await fetch(`${baseUrl}/api/posts`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new ApiClientError(
-        `HTTP ${response.status}: ${response.statusText}`,
-        response.status,
-      );
-    }
-    const result = await response.json();
-    return result.post;
-  },
-
-  /**
-   * Update post
-   */
-  async update(id: number, data: Partial<Post>): Promise<Post> {
-    return apiClient.put<Post>(`/posts/${id}`, data);
-  },
-
-  /**
-   * Delete post
-   */
-  async delete(id: number): Promise<void> {
-    return apiClient.delete<void>(`/posts/${id}`);
-  },
+  getAll: () => postsService.getAll(),
+  getById: (id: number) => postsService.getById(id),
+  create: (data: Omit<Post, 'id'>) => postsService.create(data),
+  update: (id: number, data: Partial<Post>) => postsService.update(id, data),
+  delete: (id: number) => postsService.delete(id),
 };
 
 /**
  * Comments API
  */
+/**
+ * Comments API - Legacy wrapper around commentsService
+ * @deprecated Use commentsService directly
+ */
 export const commentsApi = {
-  /**
-   * Get all comments
-   */
-  async getAll(): Promise<Comment[]> {
-    if (process.env.NODE_ENV === "development") {
-      // Use local API in development
-      const response = await apiClient.get<{ comments: Comment[] }>(
-        API_ENDPOINTS.LOCAL.COMMENTS,
-      );
-      return response.comments;
-    } else {
-      // Use JSONPlaceholder in production
-      return apiClient.get<Comment[]>(API_ENDPOINTS.JSONPLACEHOLDER.COMMENTS);
-    }
-  },
-
-  /**
-   * Get comments by post ID
-   */
-  async getByPostId(postId: number): Promise<Comment[]> {
-    return apiClient.get<Comment[]>(`/posts/${postId}/comments`);
-  },
-
-  /**
-   * Get comment by ID
-   */
-  async getById(id: number): Promise<Comment> {
-    return apiClient.get<Comment>(`/comments/${id}`);
-  },
+  getAll: () => commentsService.getAll(),
+  getById: (id: number) => commentsService.getById(id),
+  getByPostId: (postId: number) => commentsService.getByPostId(postId),
 };
 
 /**
@@ -260,7 +171,7 @@ export const usersApi = {
    * Get all users
    */
   async getAll(): Promise<User[]> {
-    return apiClient.get<User[]>("/users");
+    return apiClient.get<User[]>('/users');
   },
 
   /**
@@ -272,92 +183,11 @@ export const usersApi = {
 };
 
 /**
- * Form submission API (our custom endpoint)
+ * Form submission API - Legacy wrapper around formsService
+ * @deprecated Use formsService directly
  */
 export const formApi = {
-  /**
-   * Submit contact form
-   */
-  async submitContactForm(
-    formData: FormData,
-  ): Promise<{ success: boolean; message: string }> {
-    try {
-      const response = await fetch("/api/submit", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new ApiClientError(
-          `HTTP ${response.status}: ${response.statusText}`,
-        );
-      }
-
-      return await response.json();
-    } catch (error) {
-      throw new ApiClientError(
-        error instanceof Error ? error.message : "Failed to submit form",
-      );
-    }
-  },
-
-  /**
-   * Create post with file upload
-   */
-  async createPostWithFile(
-    postData: { title: string; body: string; userId?: number },
-    file?: File,
-  ): Promise<{ success: boolean; post: Post; message: string }> {
-    try {
-      // First upload file if provided
-      let fileUrl: string | undefined;
-      if (file) {
-        const fileFormData = new FormData();
-        fileFormData.append("file", file);
-
-        const fileResponse = await fetch("/api/files", {
-          method: "POST",
-          body: fileFormData,
-        });
-
-        if (!fileResponse.ok) {
-          throw new ApiClientError(
-            `File upload failed: ${fileResponse.status}`,
-          );
-        }
-
-        const fileResult = await fileResponse.json();
-        fileUrl = fileResult.url;
-      }
-
-      // Create the post
-      const baseUrl = typeof window !== 'undefined' 
-        ? '' // Client-side: use relative URL
-        : process.env.VERCEL_URL 
-          ? `https://${process.env.VERCEL_URL}` // Vercel production
-          : 'http://localhost:3000'; // Local development server
-      
-      const response = await fetch(`${baseUrl}/api/posts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...postData,
-          userId: postData.userId || 1,
-          ...(fileUrl && { fileUrl }),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new ApiClientError(
-          `HTTP ${response.status}: ${response.statusText}`,
-        );
-      }
-
-      return await response.json();
-    } catch (error) {
-      throw new ApiClientError(
-        error instanceof Error ? error.message : "Failed to create post",
-      );
-    }
-  },
+  submitContactForm: (formData: FormData) => formsService.submitContactForm(formData),
+  createPostWithFile: (postData: { title: string; body: string; userId?: number }, file?: File) =>
+    formsService.createPostWithFile(postData, file),
 };

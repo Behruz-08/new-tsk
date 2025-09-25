@@ -4,27 +4,26 @@
  */
 
 export const APP_CONFIG = {
-  name: "Next.js Test Task",
-  version: "1.0.0",
-  description:
-    "Тестовое задание для демонстрации навыков разработки на Next.js",
-  author: "Frontend Developer",
+  name: 'Next.js Test Task',
+  version: '1.0.0',
+  description: 'Тестовое задание для демонстрации навыков разработки на Next.js',
+  author: 'Frontend Developer',
 
   // Environment configuration
-  environment: process.env.NODE_ENV || "development",
+  environment: process.env.NODE_ENV || 'development',
 
   // API configuration
   api: {
     jsonPlaceholder: {
-      baseUrl: "https://jsonplaceholder.typicode.com",
+      baseUrl: 'https://jsonplaceholder.typicode.com',
       timeout: 10000,
       retries: 3,
     },
     local: {
       baseUrl:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000"
-          : "https://jsonplaceholder.typicode.com",
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:3000'
+          : 'https://jsonplaceholder.typicode.com',
       timeout: 10000,
       retries: 3,
     },
@@ -33,35 +32,34 @@ export const APP_CONFIG = {
   // Routes configuration
   routes: [
     {
-      path: "/",
-      name: "Главная",
-      description: "Главная страница с навигацией по всем типам рендеринга",
-      renderType: "SSG" as const,
+      path: '/',
+      name: 'Главная',
+      description: 'Главная страница с навигацией по всем типам рендеринга',
+      renderType: 'SSG' as const,
     },
     {
-      path: "/ssg",
-      name: "SSG",
-      description: "Static Site Generation - статическая генерация сайта",
-      renderType: "SSG" as const,
+      path: '/ssg',
+      name: 'SSG',
+      description: 'Static Site Generation - статическая генерация сайта',
+      renderType: 'SSG' as const,
     },
     {
-      path: "/ssr",
-      name: "SSR",
-      description: "Server-Side Rendering - серверный рендеринг",
-      renderType: "SSR" as const,
+      path: '/ssr',
+      name: 'SSR',
+      description: 'Server-Side Rendering - серверный рендеринг',
+      renderType: 'SSR' as const,
     },
     {
-      path: "/isr",
-      name: "ISR",
-      description:
-        "Incremental Static Regeneration - инкрементальная статическая регенерация",
-      renderType: "ISR" as const,
+      path: '/isr',
+      name: 'ISR',
+      description: 'Incremental Static Regeneration - инкрементальная статическая регенерация',
+      renderType: 'ISR' as const,
     },
     {
-      path: "/csr",
-      name: "CSR",
-      description: "Client-Side Rendering - клиентский рендеринг",
-      renderType: "CSR" as const,
+      path: '/csr',
+      name: 'CSR',
+      description: 'Client-Side Rendering - клиентский рендеринг',
+      renderType: 'CSR' as const,
     },
   ],
 
@@ -76,21 +74,21 @@ export const APP_CONFIG = {
 
   // UI configuration
   ui: {
-    theme: "dark",
+    theme: 'dark',
     animations: {
       duration: {
         fast: 150,
         normal: 250,
         slow: 350,
       },
-      easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
     },
     breakpoints: {
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
-      "2xl": "1536px",
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
     },
   },
 
@@ -99,15 +97,15 @@ export const APP_CONFIG = {
     contactForm: {
       maxFileSize: 5 * 1024 * 1024, // 5MB
       allowedFileTypes: [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-        "application/pdf",
-        "text/plain",
-        "application/json",
-        "application/octet-stream",
+        'image/jpeg',
+        'image/jpg',
+        'image/png',
+        'image/gif',
+        'image/webp',
+        'application/pdf',
+        'text/plain',
+        'application/json',
+        'application/octet-stream',
       ],
       validation: {
         name: {

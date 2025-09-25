@@ -2,4 +2,4 @@
  * PostForm component exports
  */
 
-export { PostForm } from "./PostForm";
+export { PostForm } from './PostForm';

@@ -62,17 +62,16 @@ $colors: (
 
 // Typography
 $font-family-sans:
-  "Inter",
+  'Inter',
   -apple-system,
   BlinkMacSystemFont,
-  "Segoe UI",
+  'Segoe UI',
   Roboto,
-  "Helvetica Neue",
+  'Helvetica Neue',
   Arial,
   sans-serif;
 $font-family-mono:
-  "JetBrains Mono", "Fira Code", Consolas, "Liberation Mono", Menlo, Courier,
-  monospace;
+  'JetBrains Mono', 'Fira Code', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
 
 $font-sizes: (
   xs: 0.75rem,
@@ -238,17 +237,9 @@ $gradients: (
   secondary: linear-gradient(135deg, #8b5cf6 0%, #00ff88 100%),
   accent: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%),
   dark: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%),
-  glass: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.05) 100%
-    ),
+  glass: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%),
   hero: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #252b4d 100%),
-  card: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.05) 0%,
-      rgba(255, 255, 255, 0.02) 100%
-    ),
+  card: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%),
   button: linear-gradient(135deg, #00d4ff 0%, #8b5cf6 100%),
   button-hover: linear-gradient(135deg, #33ddff 0%, #a78bfa 100%),
 );

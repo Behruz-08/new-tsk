@@ -2,93 +2,69 @@
  * File list component for displaying uploaded files
  */
 
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import {
-  Download,
-  File,
-  Image,
-  FileText,
-  Calendar,
-  HardDrive,
-} from "lucide-react";
-import { formatDate } from "@/lib/utils";
-import styles from "./FileList.module.scss";
+import React, { useEffect, useCallback } from 'react';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Download, File, Image, FileText, Calendar, HardDrive } from 'lucide-react';
+import { formatDate } from '@/lib/utils';
+import { useFilesState, useFilesActions } from '@/store';
+import styles from './FileList.module.scss';
 
-interface FileInfo {
-  fileName: string;
-  originalName: string;
-  size: number;
-  uploadDate: string;
-  modifiedDate: string;
-}
+// FileInfo interface is imported from store types
 
 interface FileListProps {
   className?: string;
-  refreshTrigger?: number; // Добавляем триггер для обновления
 }
 
-export const FileList: React.FC<FileListProps> = ({
-  className,
-  refreshTrigger,
-}) => {
-  const [files, setFiles] = useState<FileInfo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export const FileList: React.FC<FileListProps> = ({ className }) => {
+  const { files, loading, error, refreshTrigger } = useFilesState();
+  const { setFiles, setLoading, setError } = useFilesActions();
 
-  const fetchFiles = async () => {
+  const fetchFiles = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/files");
+      const response = await fetch('/api/files');
       const data = await response.json();
 
       if (data.success) {
         setFiles(data.files);
         setError(null);
       } else {
-        setError(data.message || "Ошибка при загрузке файлов");
+        setError(data.message || 'Ошибка при загрузке файлов');
       }
     } catch (err) {
-      setError("Ошибка при загрузке файлов");
-      console.error("Error fetching files:", err);
+      setError('Ошибка при загрузке файлов');
+      console.error('Error fetching files:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, [setLoading, setFiles, setError]);
 
   useEffect(() => {
     fetchFiles();
-  }, []);
-
-  // Обновляем список файлов при изменении refreshTrigger
-  useEffect(() => {
-    if (refreshTrigger && refreshTrigger > 0) {
-      fetchFiles();
-    }
-  }, [refreshTrigger]);
+  }, [fetchFiles, refreshTrigger]);
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return "0 Bytes";
+    if (bytes === 0) return '0 Bytes';
     const k = 1024;
-    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
   const getFileIcon = (fileName: string) => {
-    const extension = fileName.split(".").pop()?.toLowerCase();
+    const extension = fileName.split('.').pop()?.toLowerCase();
 
     switch (extension) {
-      case "jpg":
-      case "jpeg":
-      case "png":
-      case "gif":
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
         return <Image size={20} aria-label="Image file" />;
-      case "pdf":
-      case "txt":
+      case 'pdf':
+      case 'txt':
         return <FileText size={20} />;
       default:
         return <File size={20} />;
@@ -96,7 +72,7 @@ export const FileList: React.FC<FileListProps> = ({
   };
 
   const handleDownload = (fileName: string, originalName: string) => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = `/api/files/${fileName}`;
     link.download = originalName;
     document.body.appendChild(link);
@@ -157,10 +133,7 @@ export const FileList: React.FC<FileListProps> = ({
         <div className={styles.stat}>
           <HardDrive size={16} />
           <span>
-            Общий размер:{" "}
-            {formatFileSize(
-              files.reduce((total, file) => total + file.size, 0),
-            )}
+            Общий размер: {formatFileSize(files.reduce((total, file) => total + file.size, 0))}
           </span>
         </div>
       </div>
@@ -169,15 +142,11 @@ export const FileList: React.FC<FileListProps> = ({
         {files.map((file) => (
           <div key={file.fileName} className={styles.fileItem}>
             <div className={styles.fileInfo}>
-              <div className={styles.fileIcon}>
-                {getFileIcon(file.fileName)}
-              </div>
+              <div className={styles.fileIcon}>{getFileIcon(file.fileName)}</div>
               <div className={styles.fileDetails}>
                 <h4>{file.originalName}</h4>
                 <div className={styles.fileMeta}>
-                  <span className={styles.fileSize}>
-                    {formatFileSize(file.size)}
-                  </span>
+                  <span className={styles.fileSize}>{formatFileSize(file.size)}</span>
                   <span className={styles.uploadDate}>
                     <Calendar size={12} />
                     {formatDate(new Date(file.uploadDate))}

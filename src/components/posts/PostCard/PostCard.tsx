@@ -1,23 +1,38 @@
 /**
  * PostCard component for displaying individual posts
+ * Компонент карточки поста для отображения отдельных постов
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import { Card } from "@/components/ui/Card";
-import { Post } from "@/types";
-import { User, Calendar, Paperclip, FileText } from "lucide-react";
-import { formatDate } from "@/lib/utils";
-import styles from "./PostCard.module.scss";
+import React from 'react';
+import { Card } from '@/components/ui/Card';
+import { Post } from '@/types';
+import { User, Calendar, Paperclip, FileText } from 'lucide-react';
+import { formatDate } from '@/lib/utils';
+import styles from './PostCard.module.scss';
 
+/**
+ * Props interface for PostCard component
+ * Интерфейс пропсов для компонента PostCard
+ */
 interface PostCardProps {
+  /** Post data to display */
   post: Post;
+  /** Whether to show render time instead of load time */
   showRenderTime?: boolean;
+  /** Custom render time to display */
   renderTime?: Date;
+  /** Additional CSS classes */
   className?: string;
 }
 
+/**
+ * PostCard component for displaying individual posts with metadata and file attachments
+ * Компонент карточки поста для отображения отдельных постов с метаданными и вложениями
+ * @param props - PostCard props
+ * @returns JSX element
+ */
 export const PostCard: React.FC<PostCardProps> = ({
   post,
   showRenderTime = false,
@@ -28,13 +43,11 @@ export const PostCard: React.FC<PostCardProps> = ({
   const displayTime = showRenderTime && renderTime ? renderTime : new Date();
 
   return (
-    <Card className={`${styles.postCard} ${className || ""}`} hover>
+    <Card className={`${styles.postCard} ${className || ''}`} hover>
       <div className={styles.postHeader}>
         <h3 className={styles.postTitle}>{post.title}</h3>
         <div className={styles.postMeta}>
-          <span
-            className={`${styles.postId} ${isLocalPost ? styles.localPost : ""}`}
-          >
+          <span className={`${styles.postId} ${isLocalPost ? styles.localPost : ''}`}>
             #{post.id}
           </span>
           {isLocalPost && <span className={styles.localBadge}>Новый</span>}
@@ -42,9 +55,7 @@ export const PostCard: React.FC<PostCardProps> = ({
       </div>
 
       <p className={styles.postBody}>
-        {post.body.length > 120
-          ? `${post.body.substring(0, 120)}...`
-          : post.body}
+        {post.body.length > 120 ? `${post.body.substring(0, 120)}...` : post.body}
       </p>
 
       {/* File Attachment */}
@@ -59,7 +70,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               rel="noopener noreferrer"
               className={styles.fileLink}
             >
-              {post.fileUrl.split("/").pop()}
+              {post.fileUrl.split('/').pop()}
             </a>
           </div>
         </div>

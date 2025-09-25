@@ -3,8 +3,8 @@
  * Стили для формы создания постов
  */
 
-@use "@/styles/variables" as *;
-@use "@/styles/mixins" as *;
+@use '@/styles/variables' as *;
+@use '@/styles/mixins' as *;
 
 .form {
   display: flex;
@@ -114,7 +114,7 @@
   gap: 0.25rem;
 
   &::before {
-    content: "⚠";
+    content: '⚠';
     font-size: 0.875rem;
   }
 }

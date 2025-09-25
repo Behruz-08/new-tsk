@@ -3,29 +3,31 @@
  * Страница для создания новых постов
  */
 
-"use client";
+'use client';
 
-import { Navigation } from "@/components/layout/Navigation";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { PostForm } from "@/components/forms/PostForm";
-import { Post } from "@/types";
-import { Plus, ArrowLeft, FileText, Upload } from "lucide-react";
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import styles from "./page.module.scss";
+import { Navigation } from '@/components/layout/Navigation';
+import { Card } from '@/components/ui/Card';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { PostForm } from '@/components/forms/PostForm';
+import { Post } from '@/types';
+import { Plus, FileText, Upload } from 'lucide-react';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { usePostsActions } from '@/store';
+import styles from './page.module.scss';
 
 export default function CreatePostPage() {
   const [createdPost, setCreatedPost] = useState<Post | null>(null);
   const router = useRouter();
+  const { addPost } = usePostsActions();
 
   const handlePostCreated = (post: Post) => {
     setCreatedPost(post);
+    addPost(post); // Добавляем пост в Zustand store
 
     // Redirect to posts list after a short delay
     setTimeout(() => {
-      router.push("/ssr");
+      router.push('/ssr');
     }, 2000);
   };
 
@@ -36,34 +38,15 @@ export default function CreatePostPage() {
       <main className={styles.main}>
         <div className="container">
           {/* Header */}
-          <div className={styles.header}>
-            <div className={styles.headerContent}>
-              <div className={styles.headerInfo}>
-                <h1 className={styles.title}>
-                  <Plus size={32} />
-                  Создать новый пост
-                </h1>
-                <p className={styles.description}>
-                  Создайте новый пост с заголовком, содержимым и прикрепленным
-                  файлом. Пост будет добавлен в общий список и отображен на всех
-                  страницах.
-                </p>
-                <div className={styles.badge}>
-                  <span className={styles.badgeIcon}>
-                    <FileText size={16} />
-                  </span>
-                  Создание поста
-                </div>
-              </div>
-
-              <Button variant="outline" asChild>
-                <Link href="/">
-                  <ArrowLeft size={18} />
-                  На главную
-                </Link>
-              </Button>
-            </div>
-          </div>
+          <PageHeader
+            title="Создать новый пост"
+            description="Создайте новый пост с заголовком, содержимым и прикрепленным файлом. Пост будет добавлен в общий список и отображен на всех страницах."
+            icon={Plus}
+            badge={{
+              icon: FileText,
+              text: 'Создание поста',
+            }}
+          />
 
           {/* Create Post Section */}
           <Card className={styles.createSection}>
@@ -74,8 +57,8 @@ export default function CreatePostPage() {
                   Форма создания поста
                 </h2>
                 <p className={styles.createDescription}>
-                  Заполните форму ниже для создания нового поста. Все поля
-                  обязательны для заполнения.
+                  Заполните форму ниже для создания нового поста. Все поля обязательны для
+                  заполнения.
                 </p>
 
                 <div className={styles.features}>
@@ -95,10 +78,7 @@ export default function CreatePostPage() {
               </div>
 
               <div className={styles.formSection}>
-                <PostForm
-                  onSuccess={handlePostCreated}
-                  className={styles.postForm}
-                />
+                <PostForm onSuccess={handlePostCreated} className={styles.postForm} />
               </div>
             </div>
           </Card>
@@ -111,10 +91,7 @@ export default function CreatePostPage() {
                 <div className={styles.stepNumber}>1</div>
                 <div className={styles.stepContent}>
                   <h4>Заголовок</h4>
-                  <p>
-                    Введите краткий и информативный заголовок поста (5-100
-                    символов)
-                  </p>
+                  <p>Введите краткий и информативный заголовок поста (5-100 символов)</p>
                 </div>
               </div>
               <div className={styles.step}>
@@ -135,10 +112,7 @@ export default function CreatePostPage() {
                 <div className={styles.stepNumber}>4</div>
                 <div className={styles.stepContent}>
                   <h4>Отправка</h4>
-                  <p>
-                    Нажмите &quot;Создать пост&quot; для добавления в общий
-                    список
-                  </p>
+                  <p>Нажмите &quot;Создать пост&quot; для добавления в общий список</p>
                 </div>
               </div>
             </div>
@@ -154,8 +128,8 @@ export default function CreatePostPage() {
                 <div className={styles.successText}>
                   <h3>Пост успешно создан!</h3>
                   <p>
-                    Ваш пост &quot;{createdPost.title}&quot; был добавлен в
-                    список. Перенаправление на страницу с постами...
+                    Ваш пост &quot;{createdPost.title}&quot; был добавлен в список. Перенаправление
+                    на страницу с постами...
                   </p>
                 </div>
               </div>

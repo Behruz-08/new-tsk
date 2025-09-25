@@ -1,10 +1,10 @@
 /**
- * API endpoint for downloading uploaded files
+ * API endpoint for serving uploaded files
  */
 
-import { NextRequest, NextResponse } from "next/server";
-import { readFile, stat } from "fs/promises";
-import { join } from "path";
+import { NextRequest, NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
 export async function GET(
   request: NextRequest,
@@ -12,69 +12,48 @@ export async function GET(
 ) {
   try {
     const { filename } = await params;
-    const uploadsDir = join(process.cwd(), "uploads");
-    const filePath = join(uploadsDir, filename);
+    const uploadsDir = path.join(process.cwd(), 'uploads');
+    const filePath = path.join(uploadsDir, filename);
+
+    // Security check - prevent directory traversal
+    if (!filePath.startsWith(uploadsDir)) {
+      return new NextResponse('File not found', { status: 404 });
+    }
 
     // Check if file exists
-    try {
-      await stat(filePath);
-    } catch {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Файл не найден",
-        },
-        { status: 404 },
-      );
+    if (!fs.existsSync(filePath)) {
+      return new NextResponse('File not found', { status: 404 });
     }
 
     // Read file
-    const fileBuffer = await readFile(filePath);
+    const fileBuffer = fs.readFileSync(filePath);
 
     // Get file extension for content type
-    const extension = filename.split(".").pop()?.toLowerCase();
-    let contentType = "application/octet-stream";
+    const ext = path.extname(filename).toLowerCase();
+    const contentTypeMap: Record<string, string> = {
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.gif': 'image/gif',
+      '.pdf': 'application/pdf',
+      '.txt': 'text/plain',
+      '.json': 'application/json',
+      '.doc': 'application/msword',
+      '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    };
 
-    switch (extension) {
-      case "jpg":
-      case "jpeg":
-        contentType = "image/jpeg";
-        break;
-      case "png":
-        contentType = "image/png";
-        break;
-      case "gif":
-        contentType = "image/gif";
-        break;
-      case "pdf":
-        contentType = "application/pdf";
-        break;
-      case "txt":
-        contentType = "text/plain";
-        break;
-      case "json":
-        contentType = "application/json";
-        break;
-    }
+    const contentType = contentTypeMap[ext] || 'application/octet-stream';
 
-    // Return file with appropriate headers
-    return new Response(new Uint8Array(fileBuffer), {
+    return new NextResponse(fileBuffer, {
       status: 200,
       headers: {
-        "Content-Type": contentType,
-        "Content-Disposition": `attachment; filename="${filename}"`,
-        "Content-Length": fileBuffer.length.toString(),
+        'Content-Type': contentType,
+        'Content-Length': fileBuffer.length.toString(),
+        'Cache-Control': 'public, max-age=3600',
       },
     });
   } catch (error) {
-    console.error("Error downloading file:", error);
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Ошибка при скачивании файла",
-      },
-      { status: 500 },
-    );
+    console.error('Error serving file:', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }

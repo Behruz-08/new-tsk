@@ -2,8 +2,8 @@
  * Input component styles
  */
 
-@use "../../../styles/variables" as *;
-@use "../../../styles/mixins" as *;
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .inputWrapper {
   display: flex;
@@ -103,13 +103,13 @@
   gap: spacing(1);
 
   &::before {
-    content: "⚠";
+    content: '⚠';
     font-size: font-size(xs);
   }
 }
 
 // File input specific styles
-.input[type="file"] {
+.input[type='file'] {
   padding: spacing(2) spacing(3);
   cursor: pointer;
 

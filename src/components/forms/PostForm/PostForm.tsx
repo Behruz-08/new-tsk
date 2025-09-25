@@ -2,20 +2,21 @@
  * Post creation form component with validation and file upload
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import { useValidatedForm } from "@/hooks/useForm";
-import { postFormSchema, type PostFormData } from "@/lib/validations";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { useFormSubmission } from "@/hooks/useForm";
-import { formApi } from "@/lib/api";
-import { Post } from "@/types";
-import { usePostsActions } from "@/stores/postsStore";
-import { toast } from "sonner";
-import { Upload, FileText, Edit3 } from "lucide-react";
-import styles from "./PostForm.module.scss";
+import React from 'react';
+import { useValidatedForm } from '@/hooks/useForm';
+import { postFormSchema, type PostFormData } from '@/lib/validations';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { useFormSubmission } from '@/hooks/useForm';
+import { formsService } from '@/lib/services';
+import { Post } from '@/types';
+import { toast } from 'sonner';
+import { Upload, FileText, Edit3 } from 'lucide-react';
+import { formatFileSize } from '@/lib/utils';
+import styles from './PostForm.module.scss';
+import { usePostsStore } from '@/store';
 
 interface PostFormProps {
   onSubmit?: (data: PostFormData) => void;
@@ -26,11 +27,7 @@ interface PostFormProps {
 /**
  * Post creation form with title, body and file inputs, validation, and submission
  */
-export const PostForm: React.FC<PostFormProps> = ({
-  onSubmit,
-  onSuccess,
-  className,
-}) => {
+export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, className }) => {
   const {
     register,
     handleSubmit,
@@ -39,25 +36,23 @@ export const PostForm: React.FC<PostFormProps> = ({
     watch,
     setValue,
   } = useValidatedForm(postFormSchema, {
-    title: "",
-    body: "",
+    title: '',
+    body: '',
     file: undefined,
   });
 
-  const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } =
-    useFormSubmission();
+  const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } = useFormSubmission();
 
-  // Zustand actions
-  const { addPost } = usePostsActions();
+  const addPost = usePostsStore((state) => state.addPost); // Get addPost from Zustand
 
   // Watch file input for display purposes
-  const selectedFile = watch("file");
+  const selectedFile = watch('file');
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setValue("file", file, { shouldValidate: true });
+      setValue('file', file, { shouldValidate: true });
     }
   };
 
@@ -78,37 +73,19 @@ export const PostForm: React.FC<PostFormProps> = ({
           userId: 1, // Default user ID
         };
 
-        return await formApi.createPostWithFile(postData, data.file);
+        return await formsService.createPostWithFile(postData, data.file);
       }, null);
 
-      if (
-        result &&
-        typeof result === "object" &&
-        result !== null &&
-        "post" in result
-      ) {
-        const newPost = result.post as Post;
-        
-        // Add to Zustand store
-        addPost(newPost);
-        
-        toast.success("Пост успешно создан!");
+      if (result && typeof result === 'object' && result !== null && 'post' in result) {
+        toast.success('Пост успешно создан!');
         reset();
         resetSubmission();
-        onSuccess?.(newPost);
+        onSuccess?.(result.post as Post);
+        addPost(result.post as Post); // Add new post to Zustand store
       }
     } catch (error) {
-      console.error("Form submission error:", error);
+      console.error('Form submission error:', error);
     }
-  };
-
-  // Format file size for display
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -116,7 +93,7 @@ export const PostForm: React.FC<PostFormProps> = ({
       <div className={styles.form}>
         {/* Title Field */}
         <Input
-          {...register("title")}
+          {...register('title')}
           label="Заголовок поста"
           placeholder="Введите заголовок поста"
           leftIcon={<Edit3 size={18} />}
@@ -132,12 +109,10 @@ export const PostForm: React.FC<PostFormProps> = ({
             <span className={styles.required}>*</span>
           </label>
           <textarea
-            {...register("body")}
+            {...register('body')}
             id="body"
             placeholder="Введите содержимое поста"
-            className={`${styles.textarea} ${
-              errors.body ? styles.textareaError : ""
-            }`}
+            className={`${styles.textarea} ${errors.body ? styles.textareaError : ''}`}
             rows={6}
             disabled={isSubmitting}
           />
@@ -164,13 +139,9 @@ export const PostForm: React.FC<PostFormProps> = ({
             <div className={styles.fileInfo}>
               <div className={styles.fileDetails}>
                 <span className={styles.fileName}>{selectedFile.name}</span>
-                <span className={styles.fileSize}>
-                  {formatFileSize(selectedFile.size)}
-                </span>
+                <span className={styles.fileSize}>{formatFileSize(selectedFile.size)}</span>
               </div>
-              <div className={styles.fileType}>
-                {selectedFile.type || "Неизвестный тип"}
-              </div>
+              <div className={styles.fileType}>{selectedFile.type || 'Неизвестный тип'}</div>
             </div>
           )}
         </div>
@@ -193,7 +164,7 @@ export const PostForm: React.FC<PostFormProps> = ({
           disabled={!isValid || isSubmitting}
           leftIcon={!isSubmitting && <FileText size={18} />}
         >
-          {isSubmitting ? "Создание поста..." : "Создать пост"}
+          {isSubmitting ? 'Создание поста...' : 'Создать пост'}
         </Button>
 
         {/* Success Message */}

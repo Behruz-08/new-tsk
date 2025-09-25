@@ -2,15 +2,15 @@
  * Reusable Card component
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import { cn } from "@/lib/utils";
-import styles from "./Card.module.scss";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import styles from './Card.module.scss';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "outlined" | "elevated";
-  padding?: "none" | "sm" | "md" | "lg";
+  variant?: 'default' | 'outlined' | 'elevated';
+  padding?: 'none' | 'sm' | 'md' | 'lg';
   hover?: boolean;
   children: React.ReactNode;
 }
@@ -19,17 +19,7 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
  * Card component with multiple variants and accessibility features
  */
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  (
-    {
-      variant = "default",
-      padding = "md",
-      hover = false,
-      className,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ variant = 'default', padding = 'md', hover = false, className, children, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -38,7 +28,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
           styles[`card--${variant}`],
           styles[`card--${padding}`],
           {
-            [styles["card--hover"]]: hover,
+            [styles['card--hover']]: hover,
           },
           className,
         )}
@@ -50,4 +40,4 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   },
 );
 
-Card.displayName = "Card";
+Card.displayName = 'Card';

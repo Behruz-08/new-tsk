@@ -1,23 +1,40 @@
 /**
- * Custom hooks for posts data management with TanStack Query
+ * Legacy posts hooks - deprecated, use useApiQuery and useApiMutation instead
+ * @deprecated Use useApiQuery and useApiMutation from @/hooks/useApiQuery and @/hooks/useApiMutation
+ * Кастомные хуки для управления данными постов с TanStack Query
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { postsApi } from "@/lib/api";
-import { queryKeys } from "@/lib/queryClient";
-import { Post } from "@/types";
-import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { postsApi } from '@/lib/api';
+import { queryKeys } from '@/lib/queryClient';
+import { Post } from '@/types';
+import { toast } from 'sonner';
+import { usePostsActions } from '@/store';
 
 /**
- * Hook to fetch all posts
+ * Hook to fetch all posts and update Zustand store
+ * Хук для получения всех постов и обновления Zustand store
+ * @returns Объект с данными постов и состоянием запроса
  */
 export function usePosts() {
-  return useQuery({
+  const { setPosts } = usePostsActions();
+
+  const { data, ...queryResult } = useQuery<Post[], Error, Post[], readonly ['posts']>({
     queryKey: queryKeys.POSTS.LISTS(),
     queryFn: postsApi.getAll,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
+    refetchInterval: 30000, // Refetch every 30s
   });
+
+  useEffect(() => {
+    if (data) {
+      setPosts(data);
+    }
+  }, [data, setPosts]);
+
+  return { data, ...queryResult };
 }
 
 /**
@@ -38,9 +55,10 @@ export function usePost(id: number) {
  */
 export function useCreatePost() {
   const queryClient = useQueryClient();
+  const { addPost } = usePostsActions();
 
   return useMutation({
-    mutationFn: (data: Omit<Post, "id">) => postsApi.create(data),
+    mutationFn: (data: Omit<Post, 'id'>) => postsApi.create(data),
     onSuccess: (newPost) => {
       // Invalidate and refetch posts list
       queryClient.invalidateQueries({
@@ -50,7 +68,10 @@ export function useCreatePost() {
       // Add the new post to cache
       queryClient.setQueryData(queryKeys.POSTS.DETAIL(newPost.id), newPost);
 
-      toast.success("Пост успешно создан!");
+      // Add the new post to Zustand store
+      addPost(newPost);
+
+      toast.success('Пост успешно создан!');
     },
     onError: (error: Error) => {
       toast.error(`Ошибка при создании поста: ${error.message}`);
@@ -65,21 +86,17 @@ export function useUpdatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Partial<Post> }) =>
-      postsApi.update(id, data),
+    mutationFn: ({ id, data }: { id: number; data: Partial<Post> }) => postsApi.update(id, data),
     onSuccess: (updatedPost, variables) => {
       // Update the specific post in cache
-      queryClient.setQueryData(
-        queryKeys.POSTS.DETAIL(variables.id),
-        updatedPost,
-      );
+      queryClient.setQueryData(queryKeys.POSTS.DETAIL(variables.id), updatedPost);
 
       // Invalidate posts list to ensure consistency
       queryClient.invalidateQueries({
         queryKey: queryKeys.POSTS.LISTS(),
       });
 
-      toast.success("Пост успешно обновлен!");
+      toast.success('Пост успешно обновлен!');
     },
     onError: (error: Error) => {
       toast.error(`Ошибка при обновлении поста: ${error.message}`);
@@ -106,7 +123,7 @@ export function useDeletePost() {
         queryKey: queryKeys.POSTS.LISTS(),
       });
 
-      toast.success("Пост успешно удален!");
+      toast.success('Пост успешно удален!');
     },
     onError: (error: Error) => {
       toast.error(`Ошибка при удалении поста: ${error.message}`);
@@ -121,7 +138,7 @@ export function useOptimisticCreatePost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: Omit<Post, "id">) => postsApi.create(data),
+    mutationFn: (data: Omit<Post, 'id'>) => postsApi.create(data),
     onMutate: async (newPost) => {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({
@@ -137,10 +154,10 @@ export function useOptimisticCreatePost() {
         id: Date.now(), // Temporary ID
       };
 
-      queryClient.setQueryData(
-        queryKeys.POSTS.LISTS(),
-        (old: Post[] | undefined) => [optimisticPost, ...(old || [])],
-      );
+      queryClient.setQueryData(queryKeys.POSTS.LISTS(), (old: Post[] | undefined) => [
+        optimisticPost,
+        ...(old || []),
+      ]);
 
       // Return a context object with the snapshotted value
       return { previousPosts };
@@ -151,7 +168,7 @@ export function useOptimisticCreatePost() {
       toast.error(`Ошибка при создании поста: ${err.message}`);
     },
     onSuccess: () => {
-      toast.success("Пост успешно создан!");
+      toast.success('Пост успешно создан!');
     },
     onSettled: () => {
       // Always refetch after error or success

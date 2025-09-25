@@ -2,22 +2,22 @@
  * Reusable Input component with validation and error states
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import { cn } from "@/lib/utils";
-import styles from "./Input.module.scss";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import styles from './Input.module.scss';
 
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
-  size?: "sm" | "md" | "lg";
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+  size?: 'sm' | 'md' | 'lg';
   error?: string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   fullWidth?: boolean;
   label?: string;
   helperText?: string;
-  type?: "text" | "email" | "file" | "password" | "number";
+  type?: 'text' | 'email' | 'file' | 'password' | 'number';
   placeholder?: string;
   required?: boolean;
   disabled?: boolean;
@@ -29,7 +29,7 @@ export interface InputProps
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      size = "md",
+      size = 'md',
       error,
       leftIcon,
       rightIcon,
@@ -38,7 +38,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       helperText,
       className,
       id,
-      type = "text",
+      type = 'text',
       ...props
     },
     ref,
@@ -51,7 +51,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div
         className={cn(styles.inputWrapper, {
-          [styles["inputWrapper--full-width"]]: fullWidth,
+          [styles['inputWrapper--full-width']]: fullWidth,
         })}
       >
         {label && (
@@ -76,17 +76,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               styles.input,
               styles[`input--${size}`],
               {
-                [styles["input--error"]]: error,
-                [styles["input--with-left-icon"]]: leftIcon,
-                [styles["input--with-right-icon"]]: rightIcon,
+                [styles['input--error']]: error,
+                [styles['input--with-left-icon']]: leftIcon,
+                [styles['input--with-right-icon']]: rightIcon,
               },
               className,
             )}
-            aria-invalid={error ? "true" : "false"}
-            aria-describedby={cn(
-              error ? errorId : undefined,
-              helperText ? helperId : undefined,
-            )}
+            aria-invalid={error ? 'true' : 'false'}
+            aria-describedby={cn(error ? errorId : undefined, helperText ? helperId : undefined)}
             {...props}
           />
 
@@ -113,4 +110,4 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   },
 );
 
-Input.displayName = "Input";
+Input.displayName = 'Input';

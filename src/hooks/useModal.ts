@@ -2,7 +2,7 @@
  * Custom hook for managing modal state
  */
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from 'react';
 
 interface UseModalState {
   isOpen: boolean;
@@ -18,9 +18,7 @@ interface UseModalActions {
 /**
  * Hook for managing modal open/close state with animation support
  */
-export function useModal(
-  initialState = false,
-): UseModalState & UseModalActions {
+export function useModal(initialState = false): UseModalState & UseModalActions {
   const [isOpen, setIsOpen] = useState(initialState);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -49,20 +47,20 @@ export function useModal(
   // Handle escape key press
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && isOpen) {
+      if (event.key === 'Escape' && isOpen) {
         close();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
+      document.addEventListener('keydown', handleEscape);
       // Prevent body scroll when modal is open
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
   }, [isOpen, close]);
 

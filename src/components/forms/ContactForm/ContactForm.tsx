@@ -2,18 +2,18 @@
  * Contact form component with validation and file upload
  */
 
-"use client";
+'use client';
 
-import React from "react";
-import { useValidatedForm } from "@/hooks/useForm";
-import { contactFormSchema, type ContactFormData } from "@/lib/validations";
-import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
-import { useFormSubmission } from "@/hooks/useForm";
-import { formApi } from "@/lib/api";
-import { toast } from "sonner";
-import { Upload, User, Mail, MessageSquare } from "lucide-react";
-import styles from "./ContactForm.module.scss";
+import React from 'react';
+import { useValidatedForm, useFormSubmission } from '@/hooks/useForm';
+import { contactFormSchema, type ContactFormData } from '@/lib/validations';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { formsService } from '@/lib/services';
+import { toast } from 'sonner';
+import { Upload, User, Mail, MessageSquare } from 'lucide-react';
+import { formatFileSize } from '@/lib/utils';
+import styles from './ContactForm.module.scss';
 
 interface ContactFormProps {
   onSubmit?: (data: ContactFormData) => void;
@@ -24,11 +24,7 @@ interface ContactFormProps {
 /**
  * Contact form with text and file inputs, validation, and submission
  */
-export const ContactForm: React.FC<ContactFormProps> = ({
-  onSubmit,
-  onSuccess,
-  className,
-}) => {
+export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, className }) => {
   const {
     register,
     handleSubmit,
@@ -37,23 +33,22 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     watch,
     setValue,
   } = useValidatedForm(contactFormSchema, {
-    name: "",
-    email: "",
-    message: "",
+    name: '',
+    email: '',
+    message: '',
     file: undefined,
   });
 
-  const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } =
-    useFormSubmission();
+  const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } = useFormSubmission();
 
   // Watch file input for display purposes
-  const selectedFile = watch("file");
+  const selectedFile = watch('file');
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setValue("file", file, { shouldValidate: true });
+      setValue('file', file, { shouldValidate: true });
     }
   };
 
@@ -68,35 +63,28 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
       // Create FormData for file upload
       const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("email", data.email);
-      formData.append("message", data.message);
-      formData.append("file", data.file);
+      formData.append('name', data.name);
+      formData.append('email', data.email);
+      formData.append('message', data.message);
+      if (data.file) {
+        formData.append('file', data.file);
+      }
 
       // Submit to API
       const result = await submit(
-        (data: unknown) => formApi.submitContactForm(data as FormData),
+        (data: unknown) => formsService.submitContactForm(data as FormData),
         formData,
       );
 
       if (result) {
-        toast.success("Форма успешно отправлена!");
+        toast.success('Форма успешно отправлена!');
         reset();
         resetSubmission();
         onSuccess?.();
       }
     } catch (error) {
-      console.error("Form submission error:", error);
+      console.error('Form submission error:', error);
     }
-  };
-
-  // Format file size for display
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const sizes = ["Bytes", "KB", "MB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -104,7 +92,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
       <div className={styles.form}>
         {/* Name Field */}
         <Input
-          {...register("name")}
+          {...register('name')}
           label="Имя"
           placeholder="Введите ваше имя"
           leftIcon={<User size={18} />}
@@ -115,7 +103,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
         {/* Email Field */}
         <Input
-          {...register("email")}
+          {...register('email')}
           type="email"
           label="Email"
           placeholder="Введите ваш email"
@@ -132,12 +120,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             <span className={styles.required}>*</span>
           </label>
           <textarea
-            {...register("message")}
+            {...register('message')}
             id="message"
             placeholder="Введите ваше сообщение"
-            className={`${styles.textarea} ${
-              errors.message ? styles.textareaError : ""
-            }`}
+            className={`${styles.textarea} ${errors.message ? styles.textareaError : ''}`}
             rows={4}
             disabled={isSubmitting}
           />
@@ -165,13 +151,9 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             <div className={styles.fileInfo}>
               <div className={styles.fileDetails}>
                 <span className={styles.fileName}>{selectedFile.name}</span>
-                <span className={styles.fileSize}>
-                  {formatFileSize(selectedFile.size)}
-                </span>
+                <span className={styles.fileSize}>{formatFileSize(selectedFile.size)}</span>
               </div>
-              <div className={styles.fileType}>
-                {selectedFile.type || "Неизвестный тип"}
-              </div>
+              <div className={styles.fileType}>{selectedFile.type || 'Неизвестный тип'}</div>
             </div>
           )}
         </div>
@@ -194,7 +176,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
           disabled={!isValid || isSubmitting}
           leftIcon={!isSubmitting && <MessageSquare size={18} />}
         >
-          {isSubmitting ? "Отправка..." : "Отправить сообщение"}
+          {isSubmitting ? 'Отправка...' : 'Отправить сообщение'}
         </Button>
 
         {/* Success Message */}

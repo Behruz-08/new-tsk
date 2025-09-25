@@ -3,73 +3,57 @@
  * Хуки для работы с уведомлениями и тостами
  */
 
-import { toast } from "sonner";
-import {
-  SUCCESS_MESSAGES,
-  ERROR_MESSAGES,
-  LOADING_MESSAGES,
-} from "@/constants";
+import { toast } from 'sonner';
+import { SUCCESS_MESSAGES, ERROR_MESSAGES, LOADING_MESSAGES } from '@/constants';
 
 /**
  * Hook for managing toast notifications
  */
 export function useNotifications() {
-  const showSuccess = (
-    message: string,
-    options?: { duration?: number; description?: string },
-  ) => {
+  const showSuccess = (message: string, options?: { duration?: number; description?: string }) => {
     toast.success(message, {
       duration: options?.duration || 4000,
       description: options?.description,
       style: {
-        background: "rgba(0, 255, 136, 0.1)",
-        border: "1px solid rgba(0, 255, 136, 0.3)",
-        color: "#ffffff",
+        background: 'rgba(0, 255, 136, 0.1)',
+        border: '1px solid rgba(0, 255, 136, 0.3)',
+        color: '#ffffff',
       },
     });
   };
 
-  const showError = (
-    message: string,
-    options?: { duration?: number; description?: string },
-  ) => {
+  const showError = (message: string, options?: { duration?: number; description?: string }) => {
     toast.error(message, {
       duration: options?.duration || 6000,
       description: options?.description,
       style: {
-        background: "rgba(255, 71, 87, 0.1)",
-        border: "1px solid rgba(255, 71, 87, 0.3)",
-        color: "#ffffff",
+        background: 'rgba(255, 71, 87, 0.1)',
+        border: '1px solid rgba(255, 71, 87, 0.3)',
+        color: '#ffffff',
       },
     });
   };
 
-  const showWarning = (
-    message: string,
-    options?: { duration?: number; description?: string },
-  ) => {
+  const showWarning = (message: string, options?: { duration?: number; description?: string }) => {
     toast.warning(message, {
       duration: options?.duration || 5000,
       description: options?.description,
       style: {
-        background: "rgba(255, 184, 0, 0.1)",
-        border: "1px solid rgba(255, 184, 0, 0.3)",
-        color: "#ffffff",
+        background: 'rgba(255, 184, 0, 0.1)',
+        border: '1px solid rgba(255, 184, 0, 0.3)',
+        color: '#ffffff',
       },
     });
   };
 
-  const showInfo = (
-    message: string,
-    options?: { duration?: number; description?: string },
-  ) => {
+  const showInfo = (message: string, options?: { duration?: number; description?: string }) => {
     toast.info(message, {
       duration: options?.duration || 4000,
       description: options?.description,
       style: {
-        background: "rgba(0, 212, 255, 0.1)",
-        border: "1px solid rgba(0, 212, 255, 0.3)",
-        color: "#ffffff",
+        background: 'rgba(0, 212, 255, 0.1)',
+        border: '1px solid rgba(0, 212, 255, 0.3)',
+        color: '#ffffff',
       },
     });
   };
@@ -78,9 +62,9 @@ export function useNotifications() {
     return toast.loading(message, {
       duration: options?.duration || 0,
       style: {
-        background: "rgba(139, 92, 246, 0.1)",
-        border: "1px solid rgba(139, 92, 246, 0.3)",
-        color: "#ffffff",
+        background: 'rgba(139, 92, 246, 0.1)',
+        border: '1px solid rgba(139, 92, 246, 0.3)',
+        color: '#ffffff',
       },
     });
   };
@@ -127,9 +111,7 @@ export function useFormNotifications() {
   };
 
   const showLoadingState = (message?: string) => {
-    return notifications.showLoading(
-      message || LOADING_MESSAGES.SUBMITTING_FORM,
-    );
+    return notifications.showLoading(message || LOADING_MESSAGES.SUBMITTING_FORM);
   };
 
   return {
@@ -152,7 +134,7 @@ export function useApiNotifications() {
   };
 
   const showApiError = (error: Error | string, operation?: string) => {
-    const message = typeof error === "string" ? error : error.message;
+    const message = typeof error === 'string' ? error : error.message;
     const fullMessage = operation ? `${operation}: ${message}` : message;
     notifications.showError(fullMessage);
   };

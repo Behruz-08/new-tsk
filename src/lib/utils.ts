@@ -3,9 +3,9 @@
  * Улучшенные утилиты с расширенной функциональностью
  */
 
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
-import { FILE_CONFIG } from "@/constants";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import { FILE_CONFIG } from '@/constants';
 
 /**
  * Utility function for merging Tailwind CSS classes
@@ -20,12 +20,12 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function formatDate(date: string | Date): string {
   const d = new Date(date);
-  return d.toLocaleDateString("ru-RU", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  return d.toLocaleDateString('ru-RU', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }
 
@@ -63,9 +63,9 @@ export function sleep(ms: number): Promise<void> {
  */
 export function isEmpty(value: unknown): boolean {
   if (value == null) return true;
-  if (typeof value === "string") return value.trim().length === 0;
+  if (typeof value === 'string') return value.trim().length === 0;
   if (Array.isArray(value)) return value.length === 0;
-  if (typeof value === "object") return Object.keys(value).length === 0;
+  if (typeof value === 'object') return Object.keys(value).length === 0;
   return false;
 }
 
@@ -73,10 +73,10 @@ export function isEmpty(value: unknown): boolean {
  * Deep clone object
  */
 export function deepClone<T>(obj: T): T {
-  if (obj === null || typeof obj !== "object") return obj;
+  if (obj === null || typeof obj !== 'object') return obj;
   if (obj instanceof Date) return new Date(obj.getTime()) as T;
   if (obj instanceof Array) return obj.map((item) => deepClone(item)) as T;
-  if (typeof obj === "object") {
+  if (typeof obj === 'object') {
     const clonedObj = {} as T;
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -93,27 +93,27 @@ export function deepClone<T>(obj: T): T {
  */
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trim() + "...";
+  return text.slice(0, maxLength).trim() + '...';
 }
 
 /**
  * Format file size in human-readable format
  */
 export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 Bytes";
+  if (bytes === 0) return '0 Bytes';
 
   const k = 1024;
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
 /**
  * Get file type label from MIME type
  */
 export function getFileTypeLabel(mimeType: string): string {
-  return FILE_CONFIG.TYPE_LABELS[mimeType] || "Unknown File";
+  return FILE_CONFIG.TYPE_LABELS[mimeType] || 'Unknown File';
 }
 
 /**
@@ -126,14 +126,11 @@ export function isFileTypeAllowed(mimeType: string): boolean {
 /**
  * Generate unique filename with timestamp
  */
-export function generateUniqueFileName(
-  originalName: string,
-  prefix?: string,
-): string {
+export function generateUniqueFileName(originalName: string, prefix?: string): string {
   const timestamp = Date.now();
-  const extension = originalName.split(".").pop();
-  const nameWithoutExt = originalName.replace(/\.[^/.]+$/, "");
-  const sanitizedName = nameWithoutExt.replace(/[^a-zA-Z0-9]/g, "_");
+  const extension = originalName.split('.').pop();
+  const nameWithoutExt = originalName.replace(/\.[^/.]+$/, '');
+  const sanitizedName = nameWithoutExt.replace(/[^a-zA-Z0-9]/g, '_');
 
   return prefix
     ? `${timestamp}_${prefix}_${sanitizedName}.${extension}`
@@ -145,7 +142,7 @@ export function generateUniqueFileName(
  */
 export function validateFile(file: File): { isValid: boolean; error?: string } {
   if (!file) {
-    return { isValid: false, error: "Файл не выбран" };
+    return { isValid: false, error: 'Файл не выбран' };
   }
 
   if (file.size > FILE_CONFIG.MAX_SIZE) {
@@ -158,7 +155,7 @@ export function validateFile(file: File): { isValid: boolean; error?: string } {
   if (!isFileTypeAllowed(file.type)) {
     return {
       isValid: false,
-      error: "Тип файла не поддерживается",
+      error: 'Тип файла не поддерживается',
     };
   }
 

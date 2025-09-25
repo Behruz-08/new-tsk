@@ -2,4 +2,4 @@
  * PostCard component exports
  */
 
-export { PostCard } from "./PostCard";
+export { PostCard } from './PostCard';

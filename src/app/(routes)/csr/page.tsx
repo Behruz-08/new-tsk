@@ -3,59 +3,51 @@
  * Интерактивная страница с формами и клиентским состоянием
  */
 
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Navigation } from "@/components/layout/Navigation";
-import { Card } from "@/components/ui/Card";
-import { Button } from "@/components/ui/Button";
-import { Modal } from "@/components/ui/Modal";
-import { PostCard } from "@/components/posts/PostCard";
-import { ContactForm } from "@/components/forms/ContactForm";
-import { FileList } from "@/components/files/FileList";
-import { useModalState } from "@/components/ui/Modal";
-import { usePosts } from "@/hooks/usePosts";
-import { usePostsWithZustand } from "@/hooks/usePostsWithZustand";
-import { useComments } from "@/hooks/useComments";
-import {
-  MessageSquare,
-  ArrowLeft,
-  RefreshCw,
-  Loader,
-  AlertCircle,
-  File,
-} from "lucide-react";
-import Link from "next/link";
-import styles from "./page.module.scss";
+import React from 'react';
+import { Navigation } from '@/components/layout/Navigation';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Modal } from '@/components/ui/Modal';
+import { PageHeader } from '@/components/ui/PageHeader';
+import { LoadingState } from '@/components/ui/LoadingState';
+import { ErrorState } from '@/components/ui/ErrorState';
+import { PostCard } from '@/components/posts/PostCard';
+import { ContactForm } from '@/components/forms/ContactForm';
+import { FileList } from '@/components/files/FileList';
+import { useModalState, useModalActions } from '@/store';
+import { usePostsQuery, useCommentsQuery } from '@/hooks/useApiQuery';
+import { useFilesActions } from '@/store';
+import { MessageSquare, RefreshCw, File } from 'lucide-react';
+import styles from './page.module.scss';
 
 export default function CSRPage() {
-  const { isOpen, open, close } = useModalState();
-  const [fileListRefreshTrigger, setFileListRefreshTrigger] = useState(0);
+  const { isOpen } = useModalState('contact-modal');
+  const { openModal, closeModal } = useModalActions();
+  const { refresh: refreshFileList } = useFilesActions();
 
-  // CSR: Данные загружаются на клиенте с TanStack Query + Zustand
+  // CSR: Данные загружаются на клиенте
   const {
     data: posts,
     isLoading: postsLoading,
     error: postsError,
     refetch: refetchPosts,
-  } = usePosts();
-  
-  // Zustand для локального состояния
-  const { localPosts } = usePostsWithZustand();
+  } = usePostsQuery();
   const {
     data: comments,
     isLoading: commentsLoading,
     error: commentsError,
     refetch: refetchComments,
-  } = useComments();
+  } = useCommentsQuery();
   // const createPostMutation = useCreatePost(); // Пока не используется
 
   const handleModalSuccess = () => {
-    close();
+    closeModal('contact-modal');
     // Обновляем список постов после успешной отправки формы
     refetchPosts();
     // Обновляем список файлов после успешной отправки формы
-    setFileListRefreshTrigger((prev) => prev + 1);
+    refreshFileList();
   };
 
   return (
@@ -65,31 +57,14 @@ export default function CSRPage() {
       <main className={styles.main}>
         <div className="container">
           {/* Header */}
-          <div className={styles.header}>
-            <div className={styles.headerContent}>
-              <div className={styles.headerInfo}>
-                <h1 className={styles.title}>
-                  <MessageSquare size={32} />
-                  CSR - Client-Side Rendering
-                </h1>
-                <p className={styles.description}>
-                  Интерактивная страница с клиентским рендерингом. Данные
-                  загружаются в браузере, формы работают динамически.
-                </p>
-                <div className={styles.badge}>
-                  <span className={styles.badgeIcon}>⚡</span>
-                  Клиентский рендеринг
-                </div>
-              </div>
-
-              <Button variant="outline" asChild>
-                <Link href="/">
-                  <ArrowLeft size={18} />
-                  На главную
-                </Link>
-              </Button>
-            </div>
-          </div>
+          <PageHeader
+            title="CSR - Client-Side Rendering"
+            description="Интерактивная страница с клиентским рендерингом. Данные загружаются в браузере, формы работают динамически."
+            icon={MessageSquare}
+            badge={{
+              text: '⚡ Клиентский рендеринг',
+            }}
+          />
 
           {/* Interactive Controls */}
           <Card className={styles.controlsCard}>
@@ -98,7 +73,7 @@ export default function CSRPage() {
               <div className={styles.controls}>
                 <Button
                   variant="primary"
-                  onClick={open}
+                  onClick={() => openModal('contact-modal')}
                   leftIcon={<MessageSquare size={18} />}
                 >
                   Открыть форму
@@ -127,37 +102,25 @@ export default function CSRPage() {
 
           {/* Posts Section */}
           <div className={styles.postsSection}>
-            <h2 className={styles.sectionTitle}>
-              Посты (CSR) - {posts ? posts.length : 0} | Локальные - {localPosts.length}
-            </h2>
+            <h2 className={styles.sectionTitle}>Посты (CSR) - {posts ? posts.length : 0}</h2>
             <p className={styles.sectionDescription}>
-              Данные загружаются на клиенте с помощью TanStack Query + Zustand. 
-              Серверные посты из JSONPlaceholder + локальные посты из Zustand.
+              Данные загружаются на клиенте с помощью TanStack Query. Новые посты создаются через
+              форму обратной связи и отправляются в JSONPlaceholder API.
             </p>
 
-            {postsLoading && (
-              <div className={styles.loadingState}>
-                <Loader className={styles.spinner} />
-                <span>Загрузка постов...</span>
-              </div>
-            )}
+            {postsLoading && <LoadingState message="Загрузка постов..." />}
 
             {postsError && (
-              <div className={styles.errorState}>
-                <AlertCircle size={20} />
-                <span>Ошибка загрузки постов: {postsError.message}</span>
-              </div>
+              <ErrorState
+                message={`Ошибка загрузки постов: ${(postsError as Error).message}`}
+                onRetry={() => refetchPosts()}
+              />
             )}
 
             {posts && !postsLoading && (
               <div className={styles.postsGrid}>
-                {/* Показываем локальные посты из Zustand первыми */}
-                {localPosts.slice(0, 3).map((post) => (
-                  <PostCard key={`local-${post.id}`} post={post} showRenderTime={false} />
-                ))}
-                {/* Затем серверные посты из TanStack Query */}
-                {posts.slice(0, 3).map((post) => (
-                  <PostCard key={`server-${post.id}`} post={post} showRenderTime={false} />
+                {posts.slice(0, 6).map((post) => (
+                  <PostCard key={post.id} post={post} showRenderTime={false} />
                 ))}
               </div>
             )}
@@ -172,20 +135,13 @@ export default function CSRPage() {
               Комментарии загружаются отдельно с кешированием
             </p>
 
-            {commentsLoading && (
-              <div className={styles.loadingState}>
-                <Loader className={styles.spinner} />
-                <span>Загрузка комментариев...</span>
-              </div>
-            )}
+            {commentsLoading && <LoadingState message="Загрузка комментариев..." />}
 
             {commentsError && (
-              <div className={styles.errorState}>
-                <AlertCircle size={20} />
-                <span>
-                  Ошибка загрузки комментариев: {commentsError.message}
-                </span>
-              </div>
+              <ErrorState
+                message={`Ошибка загрузки комментариев: ${(commentsError as Error).message}`}
+                onRetry={() => refetchComments()}
+              />
             )}
 
             {comments && !commentsLoading && (
@@ -204,12 +160,8 @@ export default function CSRPage() {
                     </p>
 
                     <div className={styles.commentFooter}>
-                      <span className={styles.commentEmail}>
-                        {comment.email}
-                      </span>
-                      <span className={styles.loadTime}>
-                        Post #{comment.postId}
-                      </span>
+                      <span className={styles.commentEmail}>{comment.email}</span>
+                      <span className={styles.loadTime}>Post #{comment.postId}</span>
                     </div>
                   </Card>
                 ))}
@@ -224,46 +176,45 @@ export default function CSRPage() {
               Загруженные файлы (дополнительно)
             </h2>
             <p className={styles.sectionDescription}>
-              Дополнительная функциональность - файлы, загруженные через форму
-              обратной связи. Основные данные отправляются в JSONPlaceholder API
-              как посты.
+              Дополнительная функциональность - файлы, загруженные через форму обратной связи.
+              Основные данные отправляются в JSONPlaceholder API как посты.
             </p>
-            <FileList
-              className={styles.fileList}
-              refreshTrigger={fileListRefreshTrigger}
-            />
+            <FileList className={styles.fileList} />
           </div>
 
           {/* Technical Info */}
           <Card className={styles.techInfo}>
             <h3>Техническая информация CSR</h3>
-            <div className={styles.techDetails}>
+            <div className={styles.techItems}>
               <div className={styles.techItem}>
-                <strong>Время рендеринга:</strong> В браузере (client-side)
+                <span className={styles.techLabel}>Время рендеринга:</span>
+                <span className={styles.techValue}>В браузере (client-side)</span>
               </div>
               <div className={styles.techItem}>
-                <strong>Производительность:</strong> Зависит от устройства
-                пользователя
+                <span className={styles.techLabel}>Производительность:</span>
+                <span className={styles.techValue}>Зависит от устройства пользователя</span>
               </div>
               <div className={styles.techItem}>
-                <strong>SEO:</strong> Требует дополнительной настройки
+                <span className={styles.techLabel}>SEO:</span>
+                <span className={styles.techValue}>Требует дополнительной настройки</span>
               </div>
               <div className={styles.techItem}>
-                <strong>Кеширование:</strong> TanStack Query + Zustand + браузер
+                <span className={styles.techLabel}>Кеширование:</span>
+                <span className={styles.techValue}>TanStack Query + браузер</span>
               </div>
               <div className={styles.techItem}>
-                <strong>Состояние:</strong> TanStack Query (сервер) + Zustand (локальное)
+                <span className={styles.techLabel}>API интеграция:</span>
+                <span className={styles.techValue}>JSONPlaceholder для создания постов</span>
               </div>
               <div className={styles.techItem}>
-                <strong>API интеграция:</strong> JSONPlaceholder + локальное API
+                <span className={styles.techLabel}>Форма:</span>
+                <span className={styles.techValue}>
+                  Отправляет POST запросы в JSONPlaceholder API
+                </span>
               </div>
               <div className={styles.techItem}>
-                <strong>Форма:</strong> Отправляет POST запросы в
-                JSONPlaceholder API
-              </div>
-              <div className={styles.techItem}>
-                <strong>Интерактивность:</strong> Максимальная с модальными
-                окнами
+                <span className={styles.techLabel}>Интерактивность:</span>
+                <span className={styles.techValue}>Максимальная с модальными окнами</span>
               </div>
             </div>
           </Card>
@@ -273,7 +224,7 @@ export default function CSRPage() {
       {/* Contact Modal */}
       <Modal
         isOpen={isOpen}
-        onClose={close}
+        onClose={() => closeModal('contact-modal')}
         title="Связаться с нами (CSR)"
         size="md"
       >

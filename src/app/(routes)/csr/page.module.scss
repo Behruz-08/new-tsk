@@ -2,8 +2,8 @@
  * CSR page styles
  */
 
-@use "../../../styles/variables" as *;
-@use "../../../styles/mixins" as *;
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .page {
   min-height: 100vh;
@@ -266,22 +266,29 @@
   }
 }
 
-.techDetails {
+.techItems {
   display: flex;
   flex-direction: column;
   gap: spacing(3);
 }
 
 .techItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: spacing(3);
   background: map-get($gradients, card);
   border-radius: border-radius(md);
   border: 1px solid color(gray-200);
   font-size: font-size(sm);
 
-  strong {
+  .techLabel {
     color: color(gray-900);
     font-weight: font-weight(semibold);
+  }
+
+  .techValue {
+    color: color(gray-600);
   }
 }
 

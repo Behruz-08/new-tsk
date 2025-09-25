@@ -2,8 +2,8 @@
  * Card component styles
  */
 
-@use "../../../styles/variables" as *;
-@use "../../../styles/mixins" as *;
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .card {
   @include card-base;

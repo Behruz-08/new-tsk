@@ -2,8 +2,8 @@
  * Button component styles
  */
 
-@use "../../../styles/variables" as *;
-@use "../../../styles/mixins" as *;
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
 
 .button {
   @include button-base;
@@ -76,7 +76,7 @@
 
   // Ripple effect
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;

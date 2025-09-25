@@ -1,15 +1,9 @@
-import { Navigation } from "@/components/layout/Navigation";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
-import {
-  ArrowRight,
-  Zap,
-  Database,
-  FileText,
-  MessageSquare,
-} from "lucide-react";
-import Link from "next/link";
-import styles from "./page.module.scss";
+import { Navigation } from '@/components/layout/Navigation';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { ArrowRight, Zap, Database, FileText, MessageSquare } from 'lucide-react';
+import Link from 'next/link';
+import styles from './page.module.scss';
 
 export default function HomePage() {
   return (
@@ -27,17 +21,12 @@ export default function HomePage() {
               </h1>
 
               <p className={styles.heroDescription}>
-                Демонстрация различных методов рендеринга в Next.js: SSG, SSR,
-                ISR и CSR с современным стеком технологий
+                Демонстрация различных методов рендеринга в Next.js: SSG, SSR, ISR и CSR с
+                современным стеком технологий
               </p>
 
               <div className={styles.heroActions}>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  rightIcon={<ArrowRight size={20} />}
-                  asChild
-                >
+                <Button variant="primary" size="lg" rightIcon={<ArrowRight size={20} />} asChild>
                   <Link href="/ssg">Начать изучение</Link>
                 </Button>
 
@@ -54,10 +43,7 @@ export default function HomePage() {
           <div className="container">
             <div className={styles.sectionHeader}>
               <h2>Методы рендеринга Next.js</h2>
-              <p>
-                Изучите различные подходы к рендерингу в современном
-                веб-разработке
-              </p>
+              <p>Изучите различные подходы к рендерингу в современном веб-разработке</p>
             </div>
 
             <div className={styles.featuresGrid}>
@@ -67,8 +53,8 @@ export default function HomePage() {
                 </div>
                 <h3>SSG - Static Site Generation</h3>
                 <p>
-                  Статическая генерация сайта во время сборки. Максимальная
-                  производительность и SEO-оптимизация.
+                  Статическая генерация сайта во время сборки. Максимальная производительность и
+                  SEO-оптимизация.
                 </p>
                 <Button variant="outline" asChild>
                   <Link href="/ssg">Изучить SSG</Link>
@@ -81,8 +67,7 @@ export default function HomePage() {
                 </div>
                 <h3>SSR - Server-Side Rendering</h3>
                 <p>
-                  Серверный рендеринг на каждый запрос. Актуальные данные и
-                  персонализация контента.
+                  Серверный рендеринг на каждый запрос. Актуальные данные и персонализация контента.
                 </p>
                 <Button variant="outline" asChild>
                   <Link href="/ssr">Изучить SSR</Link>
@@ -94,10 +79,7 @@ export default function HomePage() {
                   <Zap size={32} />
                 </div>
                 <h3>ISR - Incremental Static Regeneration</h3>
-                <p>
-                  Инкрементальная статическая регенерация. Лучшее из SSG и SSR
-                  миров.
-                </p>
+                <p>Инкрементальная статическая регенерация. Лучшее из SSG и SSR миров.</p>
                 <Button variant="outline" asChild>
                   <Link href="/isr">Изучить ISR</Link>
                 </Button>
@@ -109,8 +91,8 @@ export default function HomePage() {
                 </div>
                 <h3>CSR - Client-Side Rendering</h3>
                 <p>
-                  Клиентский рендеринг с интерактивными формами. Динамический
-                  контент и пользовательские взаимодействия.
+                  Клиентский рендеринг с интерактивными формами. Динамический контент и
+                  пользовательские взаимодействия.
                 </p>
                 <Button variant="outline" asChild>
                   <Link href="/csr">Изучить CSR</Link>
