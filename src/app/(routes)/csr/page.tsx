@@ -44,8 +44,7 @@ export default function CSRPage() {
 
   const handleModalSuccess = () => {
     closeModal('contact-modal');
-    // Обновляем список постов после успешной отправки формы
-    refetchPosts();
+    // Кеш постов уже инвалидируется в ContactForm
     // Обновляем список файлов после успешной отправки формы
     refreshFileList();
   };

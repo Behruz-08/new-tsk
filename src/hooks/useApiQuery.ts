@@ -3,7 +3,7 @@
  * Улучшенный хук для API запросов
  */
 
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useQuery, UseQueryOptions, useQueryClient } from '@tanstack/react-query';
 import { ApiError } from '@/lib/api-client';
 
 /**
@@ -92,4 +92,29 @@ export function usePostCommentsQuery(postId: number) {
       enabled: !!postId,
     },
   );
+}
+
+/**
+ * Hook for cache invalidation
+ */
+export function useCacheInvalidation() {
+  const queryClient = useQueryClient();
+
+  const invalidatePosts = () => {
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+  };
+
+  const invalidateComments = () => {
+    queryClient.invalidateQueries({ queryKey: ['comments'] });
+  };
+
+  const invalidateAll = () => {
+    queryClient.invalidateQueries();
+  };
+
+  return {
+    invalidatePosts,
+    invalidateComments,
+    invalidateAll,
+  };
 }

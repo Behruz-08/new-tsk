@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { useValidatedForm, useFormSubmission } from '@/hooks/useForm';
+import { useCacheInvalidation } from '@/hooks/useApiQuery';
 import { contactFormSchema, type ContactFormData } from '@/lib/validations';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -40,6 +41,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
   });
 
   const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } = useFormSubmission();
+  const { invalidatePosts } = useCacheInvalidation();
 
   // Watch file input for display purposes
   const selectedFile = watch('file');
@@ -80,6 +82,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
         toast.success('Форма успешно отправлена!');
         reset();
         resetSubmission();
+        // Инвалидируем кеш постов, чтобы показать новый пост
+        invalidatePosts();
         onSuccess?.();
       }
     } catch (error) {
