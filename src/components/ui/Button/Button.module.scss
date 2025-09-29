@@ -1,7 +1,3 @@
-/**
- * Button component styles
- */
-
 @use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
 
@@ -42,7 +38,6 @@
     }
   }
 
-  // Sizes
   &--sm {
     padding: spacing(2) spacing(4);
     font-size: font-size(xs);
@@ -61,7 +56,6 @@
     gap: spacing(2);
   }
 
-  // States
   &--loading {
     pointer-events: none;
 
@@ -74,7 +68,6 @@
     width: 100%;
   }
 
-  // Ripple effect
   &::before {
     content: '';
     position: absolute;
@@ -96,7 +89,6 @@
   }
 }
 
-// Loading spinner
 .loadingSpinner {
   position: absolute;
   top: 50%;
@@ -130,7 +122,6 @@
   }
 }
 
-// Icons
 .leftIcon,
 .rightIcon {
   display: flex;
@@ -147,7 +138,6 @@
   margin-left: spacing(1);
 }
 
-// Content
 .content {
   transition: opacity transition(fast);
 }

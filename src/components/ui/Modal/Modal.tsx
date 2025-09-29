@@ -1,12 +1,8 @@
-/**
- * Reusable Modal component with accessibility features
- */
-
 'use client';
 
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { useLocalModal } from '@/hooks/useModal';
 import styles from './Modal.module.scss';
 
@@ -22,9 +18,6 @@ export interface ModalProps {
   className?: string;
 }
 
-/**
- * Modal component with proper accessibility and keyboard navigation
- */
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
@@ -38,16 +31,13 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const { isClosing, close } = useLocalModal(isOpen);
 
-  // Handle close functionality
   const handleClose = React.useCallback(() => {
     close();
-    // Delay the actual close callback to allow for exit animation
     setTimeout(() => {
       onClose();
     }, 200);
   }, [close, onClose]);
 
-  // Handle overlay click
   const handleOverlayClick = React.useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       if (closeOnOverlayClick && event.target === event.currentTarget) {
@@ -57,7 +47,6 @@ export const Modal: React.FC<ModalProps> = ({
     [closeOnOverlayClick, handleClose],
   );
 
-  // Handle escape key
   useEffect(() => {
     if (!closeOnEscape) return;
 
@@ -76,10 +65,8 @@ export const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen, closeOnEscape, handleClose]);
 
-  // Focus management
   useEffect(() => {
     if (isOpen) {
-      // Focus the modal when it opens
       const modal = document.getElementById('modal-content');
       if (modal) {
         modal.focus();
@@ -87,7 +74,6 @@ export const Modal: React.FC<ModalProps> = ({
     }
   }, [isOpen]);
 
-  // Don't render if not open
   if (!isOpen) return null;
 
   return createPortal(
@@ -112,7 +98,6 @@ export const Modal: React.FC<ModalProps> = ({
         )}
         tabIndex={-1}
       >
-        {/* Header */}
         {(title || showCloseButton) && (
           <div className={styles.header}>
             {title && (
@@ -146,7 +131,6 @@ export const Modal: React.FC<ModalProps> = ({
           </div>
         )}
 
-        {/* Body */}
         <div className={styles.body}>{children}</div>
       </div>
     </div>,
@@ -154,9 +138,6 @@ export const Modal: React.FC<ModalProps> = ({
   );
 };
 
-/**
- * Hook for managing modal state
- */
 export function useModalState(initialState = false) {
   const [isOpen, setIsOpen] = React.useState(initialState);
 

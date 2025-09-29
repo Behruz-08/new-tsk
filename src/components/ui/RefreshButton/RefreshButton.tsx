@@ -1,13 +1,7 @@
-/**
- * Refresh Button Component
- * Client component for handling page refresh
- */
-
 'use client';
 
 import { Button } from '@/components/ui/Button';
 import { RefreshCw } from 'lucide-react';
-// import styles from "./RefreshButton.module.scss"; // Пока не используется
 
 interface RefreshButtonProps {
   className?: string;

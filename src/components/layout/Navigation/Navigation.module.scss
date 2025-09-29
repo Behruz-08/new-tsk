@@ -1,7 +1,3 @@
-/**
- * Navigation component styles
- */
-
 @use '../../../styles/variables' as *;
 @use '../../../styles/mixins' as *;
 
@@ -129,7 +125,6 @@
   animation: pulse 2s ease-in-out infinite;
 }
 
-// Responsive adjustments
 @include respond-below(lg) {
   .navContent {
     gap: spacing(4);

@@ -1,8 +1,3 @@
-/**
- * Reusable page header component
- * Переиспользуемый компонент заголовка страницы
- */
-
 import React from 'react';
 import { Button } from '@/components/ui/Button';
 import { LucideIcon, ArrowLeft } from 'lucide-react';

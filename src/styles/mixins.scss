@@ -1,11 +1,5 @@
-/**
- * Comprehensive SCSS Mixins with CSS Variables and enhanced functionality
- * Комплексные миксины с поддержкой CSS переменных и расширенной функциональностью
- */
-
 @use './variables' as *;
 
-// Responsive breakpoints
 @mixin respond-to($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {
     @media (min-width: map-get($breakpoints, $breakpoint)) {
@@ -50,7 +44,6 @@
   }
 }
 
-// Flexbox utilities
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -83,7 +76,6 @@
   gap: $gap;
 }
 
-// Grid utilities
 @mixin grid($columns: 1, $gap: var(--spacing-4)) {
   display: grid;
   grid-template-columns: repeat($columns, 1fr);
@@ -96,7 +88,6 @@
   gap: $gap;
 }
 
-// Button styles - Futuristic
 @mixin button-base {
   display: inline-flex;
   align-items: center;
@@ -117,7 +108,6 @@
   position: relative;
   overflow: hidden;
 
-  // Glassmorphism effect
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 
@@ -235,7 +225,6 @@
   }
 }
 
-// Form elements
 @mixin input-base {
   width: 100%;
   padding: var(--spacing-3, spacing(3)) var(--spacing-4, spacing(4));
@@ -290,7 +279,6 @@
   resize: vertical;
 }
 
-// Card styles - Futuristic
 @mixin card-base {
   background: var(--color-background-glass, map-get($gradients, card));
   border-radius: var(--radius-lg, border-radius(lg));
@@ -319,7 +307,6 @@
   @include card-hover;
 }
 
-// Modal styles
 @mixin modal-overlay {
   position: fixed;
   top: 0;
@@ -354,7 +341,6 @@
   }
 }
 
-// Loading states
 @mixin loading-skeleton {
   background: linear-gradient(
     90deg,
@@ -393,7 +379,6 @@
   }
 }
 
-// Text utilities
 @mixin text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -420,7 +405,6 @@
   background-clip: text;
 }
 
-// Accessibility
 @mixin sr-only {
   position: absolute;
   width: 1px;
@@ -440,7 +424,6 @@
   }
 }
 
-// Glassmorphism
 @mixin glass {
   background: var(--color-background-glass, color(background-glass));
   backdrop-filter: blur(10px);
@@ -455,7 +438,6 @@
   border: 1px solid var(--color-border-medium, color(border-medium));
 }
 
-// Animations
 @mixin fade-in($duration: 0.3s) {
   animation: fadeIn $duration ease-out;
 }
@@ -499,7 +481,6 @@
   }
 }
 
-// Container
 @mixin container {
   width: 100%;
   max-width: 1200px;
@@ -515,7 +496,6 @@
   }
 }
 
-// Section spacing
 @mixin section-spacing {
   padding: var(--spacing-16, spacing(16)) 0;
 
@@ -524,7 +504,6 @@
   }
 }
 
-// Page layout
 @mixin page-layout {
   min-height: 100vh;
   display: flex;

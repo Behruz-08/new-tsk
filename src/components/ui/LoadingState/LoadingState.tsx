@@ -1,8 +1,3 @@
-/**
- * Loading state component
- * Компонент для отображения состояния загрузки
- */
-
 import React from 'react';
 import { Loader } from 'lucide-react';
 import styles from './LoadingState.module.scss';

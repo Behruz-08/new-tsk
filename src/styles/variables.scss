@@ -1,25 +1,14 @@
-/**
- * SCSS Variables and Configuration
- */
-
 // Colors - Futuristic Dark Theme
 $colors: (
-  // Primary colors - Cyber Blue
   primary: #00d4ff,
   primary-dark: #00b8e6,
   primary-light: #33ddff,
-
-  // Secondary colors - Electric Purple
   secondary: #8b5cf6,
   secondary-dark: #7c3aed,
   secondary-light: #a78bfa,
-
-  // Accent colors - Neon Green
   accent: #00ff88,
   accent-dark: #00e676,
   accent-light: #33ff9a,
-
-  // Status colors - Neon variants
   success: #00ff88,
   success-dark: #00e676,
   warning: #ffb800,
@@ -28,8 +17,6 @@ $colors: (
   error-dark: #e63e4e,
   info: #00d4ff,
   info-dark: #00b8e6,
-
-  // Neutral colors - Dark theme
   white: #ffffff,
   black: #000000,
   gray-50: #0f172a,
@@ -42,22 +29,17 @@ $colors: (
   gray-700: #e2e8f0,
   gray-800: #f1f5f9,
   gray-900: #f8fafc,
-
-  // Background colors
   background: #0a0e27,
   background-secondary: #1a1f3a,
   background-tertiary: #252b4d,
   background-glass: rgba(255, 255, 255, 0.05),
-  // Text colors
   text-primary: #ffffff,
   text-secondary: #cbd5e1,
   text-tertiary: #94a3b8,
   text-inverse: #0f172a,
-
-  // Border colors
   border-light: rgba(255, 255, 255, 0.1),
   border-medium: rgba(255, 255, 255, 0.2),
-  border-dark: rgba(255, 255, 255, 0.3)
+  border-dark: rgba(255, 255, 255, 0.3),
 );
 
 // Typography
@@ -75,24 +57,15 @@ $font-family-mono:
 
 $font-sizes: (
   xs: 0.75rem,
-  // 12px
   sm: 0.875rem,
-  // 14px
   base: 1rem,
-  // 16px
   lg: 1.125rem,
-  // 18px
   xl: 1.25rem,
-  // 20px
   2xl: 1.5rem,
-  // 24px
   3xl: 1.875rem,
-  // 30px
   4xl: 2.25rem,
-  // 36px
   5xl: 3rem,
-  // 48px
-  6xl: 3.75rem, // 60px
+  6xl: 3.75rem,
 );
 
 $font-weights: (
@@ -119,38 +92,22 @@ $line-heights: (
 $spacing: (
   0: 0,
   1: 0.25rem,
-  // 4px
   2: 0.5rem,
-  // 8px
   3: 0.75rem,
-  // 12px
   4: 1rem,
-  // 16px
   5: 1.25rem,
-  // 20px
   6: 1.5rem,
-  // 24px
   8: 2rem,
-  // 32px
   10: 2.5rem,
-  // 40px
   12: 3rem,
-  // 48px
   16: 4rem,
-  // 64px
   20: 5rem,
-  // 80px
   24: 6rem,
-  // 96px
   32: 8rem,
-  // 128px
   40: 10rem,
-  // 160px
   48: 12rem,
-  // 192px
   56: 14rem,
-  // 224px
-  64: 16rem, // 256px
+  64: 16rem,
 );
 
 // Breakpoints
@@ -167,19 +124,12 @@ $breakpoints: (
 $border-radius: (
   none: 0,
   sm: 0.125rem,
-  // 2px
   base: 0.25rem,
-  // 4px
   md: 0.375rem,
-  // 6px
   lg: 0.5rem,
-  // 8px
   xl: 0.75rem,
-  // 12px
   2xl: 1rem,
-  // 16px
   3xl: 1.5rem,
-  // 24px
   full: 9999px,
 );
 
@@ -212,11 +162,10 @@ $shadows: (
   ),
   none: none,
 
-  // Glow effects
   glow-primary: (
-      0 0 20px rgba(0, 212, 255, 0.3),
-      0 0 40px rgba(0, 212, 255, 0.2),
-    ),
+    0 0 20px rgba(0, 212, 255, 0.3),
+    0 0 40px rgba(0, 212, 255, 0.2),
+  ),
   glow-secondary: (
     0 0 20px rgba(139, 92, 246, 0.3),
     0 0 40px rgba(139, 92, 246, 0.2),
@@ -256,33 +205,24 @@ $transitions: (
 
 // Animations - Futuristic keyframes
 $animations: (
-  // Fade animations
   fade-in: fadeIn 0.6s ease-out,
   fade-in-up: fadeInUp 0.8s ease-out,
   fade-in-down: fadeInDown 0.8s ease-out,
   fade-in-left: fadeInLeft 0.8s ease-out,
   fade-in-right: fadeInRight 0.8s ease-out,
-
-  // Scale animations
   scale-in: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
   scale-out: scaleOut 0.3s ease-in,
   pulse: pulse 2s infinite,
-
-  // Slide animations
   slide-in-up: slideInUp 0.6s ease-out,
   slide-in-down: slideInDown 0.6s ease-out,
   slide-in-left: slideInLeft 0.6s ease-out,
   slide-in-right: slideInRight 0.6s ease-out,
-
-  // Glow animations
   glow-pulse: glowPulse 2s ease-in-out infinite,
   glow-rotate: glowRotate 4s linear infinite,
-
-  // Special effects
   float: float 3s ease-in-out infinite,
   shimmer: shimmer 2s infinite,
   matrix-rain: matrixRain 20s linear infinite,
-  cyber-scan: cyberScan 3s ease-in-out infinite
+  cyber-scan: cyberScan 3s ease-in-out infinite,
 );
 
 // Z-index layers

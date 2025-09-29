@@ -1,11 +1,3 @@
-/**
- * Improved API client with better error handling and configuration
- * Улучшенный API клиент с лучшей обработкой ошибок и конфигурацией
- */
-
-/**
- * API configuration
- */
 export const API_CONFIG = {
   baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://jsonplaceholder.typicode.com',
   timeout: 10000,
@@ -13,9 +5,6 @@ export const API_CONFIG = {
   retryDelay: 1000,
 } as const;
 
-/**
- * Custom error class for API errors
- */
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -28,9 +17,6 @@ export class ApiError extends Error {
   }
 }
 
-/**
- * HTTP client with retry logic and error handling
- */
 export class ApiClient {
   private baseUrl: string;
   private timeout: number;
@@ -44,9 +30,6 @@ export class ApiClient {
     this.retryDelay = config.retryDelay;
   }
 
-  /**
-   * Make HTTP request with retry logic
-   */
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const controller = new AbortController();
@@ -94,9 +77,6 @@ export class ApiClient {
     throw lastError!;
   }
 
-  /**
-   * Parse error response
-   */
   private async parseErrorResponse(response: Response) {
     try {
       return await response.json();
@@ -105,9 +85,6 @@ export class ApiClient {
     }
   }
 
-  /**
-   * Check if request should be retried
-   */
   private shouldRetry(error: Error): boolean {
     if (error.name === 'AbortError') return false;
     if (error instanceof ApiError) {
@@ -116,23 +93,14 @@ export class ApiClient {
     return true;
   }
 
-  /**
-   * Delay utility
-   */
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  /**
-   * GET request
-   */
   async get<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'GET' });
   }
 
-  /**
-   * POST request
-   */
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
@@ -140,9 +108,6 @@ export class ApiClient {
     });
   }
 
-  /**
-   * PUT request
-   */
   async put<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
@@ -150,37 +115,25 @@ export class ApiClient {
     });
   }
 
-  /**
-   * DELETE request
-   */
   async delete<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'DELETE' });
   }
 }
 
-/**
- * Create API client instance
- */
 export const apiClient = new ApiClient(API_CONFIG);
 
-/**
- * Local API client for our custom endpoints
- */
 export class LocalApiClient {
   private baseUrl: string;
 
   constructor() {
     this.baseUrl =
       typeof window !== 'undefined'
-        ? '' // Client-side: use relative URL
+        ? ''
         : process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}` // Vercel production
-          : 'http://localhost:3000'; // Local development
+          ? `https://${process.env.VERCEL_URL}`
+          : 'http://localhost:3000';
   }
 
-  /**
-   * Make request to local API
-   */
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
 
@@ -205,9 +158,6 @@ export class LocalApiClient {
     return response.json();
   }
 
-  /**
-   * Parse error response
-   */
   private async parseErrorResponse(response: Response) {
     try {
       return await response.json();
@@ -216,16 +166,10 @@ export class LocalApiClient {
     }
   }
 
-  /**
-   * GET request
-   */
   async get<T>(endpoint: string): Promise<T> {
     return this.request<T>(endpoint, { method: 'GET' });
   }
 
-  /**
-   * POST request
-   */
   async post<T>(endpoint: string, data?: unknown): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
@@ -233,9 +177,6 @@ export class LocalApiClient {
     });
   }
 
-  /**
-   * POST request with FormData
-   */
   async postFormData<T>(endpoint: string, formData: FormData): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
 
@@ -258,7 +199,4 @@ export class LocalApiClient {
   }
 }
 
-/**
- * Create local API client instance
- */
 export const localApiClient = new LocalApiClient();

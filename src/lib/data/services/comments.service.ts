@@ -1,35 +1,19 @@
-/**
- * Comments service with improved error handling
- * Сервис для работы с комментариями
- */
-
 import { Comment } from '@/types';
-import { apiClient, localApiClient } from '@/lib/api-client';
+import { apiClient, localApiClient } from '@/lib/api/api-client';
 
-/**
- * Comments service interface
- */
 export interface CommentsService {
   getAll(): Promise<Comment[]>;
   getById(id: number): Promise<Comment>;
   getByPostId(postId: number): Promise<Comment[]>;
 }
 
-/**
- * Comments service implementation
- */
 class CommentsServiceImpl implements CommentsService {
-  /**
-   * Get all comments
-   */
   async getAll(): Promise<Comment[]> {
     try {
       if (process.env.NODE_ENV === 'development') {
-        // Use local API in development
         const response = await localApiClient.get<{ comments: Comment[] }>('/api/comments');
         return response.comments;
       } else {
-        // Use JSONPlaceholder in production
         return await apiClient.get<Comment[]>('/comments');
       }
     } catch (error) {
@@ -38,9 +22,6 @@ class CommentsServiceImpl implements CommentsService {
     }
   }
 
-  /**
-   * Get comment by ID
-   */
   async getById(id: number): Promise<Comment> {
     try {
       return await apiClient.get<Comment>(`/comments/${id}`);
@@ -50,9 +31,6 @@ class CommentsServiceImpl implements CommentsService {
     }
   }
 
-  /**
-   * Get comments by post ID
-   */
   async getByPostId(postId: number): Promise<Comment[]> {
     try {
       return await apiClient.get<Comment[]>(`/posts/${postId}/comments`);
@@ -63,7 +41,4 @@ class CommentsServiceImpl implements CommentsService {
   }
 }
 
-/**
- * Export singleton instance
- */
 export const commentsService = new CommentsServiceImpl();

@@ -1,11 +1,7 @@
-/**
- * Reusable Card component
- */
-
 'use client';
 
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import styles from './Card.module.scss';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -15,9 +11,6 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
 }
 
-/**
- * Card component with multiple variants and accessibility features
- */
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ variant = 'default', padding = 'md', hover = false, className, children, ...props }, ref) => {
     return (

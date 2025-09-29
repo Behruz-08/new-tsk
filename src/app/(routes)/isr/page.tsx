@@ -1,26 +1,19 @@
-/**
- * ISR Page - Incremental Static Regeneration
- * Статическая страница с перегенерацией по расписанию
- */
-
 import { Navigation } from '@/components/layout/Navigation';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TechInfo } from '@/components/ui/TechInfo';
-import { commentsService } from '@/lib/services';
+import { commentsService } from '@/lib/data/services';
 import { Comment } from '@/types';
 import { Zap, Calendar, User, Clock } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils/utils';
 import styles from './page.module.scss';
 
-// ISR: Перегенерация каждые 60 секунд
 export const revalidate = 60;
 
-// ISR: Функция для получения данных с перегенерацией
 async function getComments(): Promise<Comment[]> {
   try {
     const comments = await commentsService.getAll();
-    return comments.slice(0, 15); // Ограничиваем количество для демонстрации
+    return comments.slice(0, 15);
   } catch (error) {
     console.error('Error fetching comments:', error);
     return [];
@@ -28,7 +21,6 @@ async function getComments(): Promise<Comment[]> {
 }
 
 export default async function ISRPage() {
-  // ISR: Данные загружаются и кешируются, обновляются по расписанию
   const comments = await getComments();
   const buildTime = new Date();
 
@@ -38,7 +30,6 @@ export default async function ISRPage() {
 
       <main className={styles.main}>
         <div className="container">
-          {/* Header */}
           <PageHeader
             title="ISR - Incremental Static Regeneration"
             description="Статическая страница с автоматической перегенерацией. Лучшее из SSG и SSR миров - скорость + актуальность данных."
@@ -49,7 +40,6 @@ export default async function ISRPage() {
             }}
           />
 
-          {/* ISR Info */}
           <Card className={styles.isrInfo}>
             <div className={styles.isrContent}>
               <div className={styles.isrTime}>
@@ -69,7 +59,6 @@ export default async function ISRPage() {
             </div>
           </Card>
 
-          {/* Comments Grid */}
           <div className={styles.commentsSection}>
             <h2 className={styles.sectionTitle}>
               Комментарии из JSONPlaceholder ({comments.length})
@@ -110,7 +99,6 @@ export default async function ISRPage() {
             </div>
           </div>
 
-          {/* Technical Info */}
           <TechInfo
             title="Техническая информация ISR"
             items={[
@@ -123,7 +111,6 @@ export default async function ISRPage() {
             ]}
           />
 
-          {/* ISR Demo */}
           <Card className={styles.demoInfo}>
             <h3>Демонстрация ISR</h3>
             <div className={styles.demoContent}>

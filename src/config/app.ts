@@ -1,18 +1,9 @@
-/**
- * Application configuration
- * Централизованная конфигурация приложения
- */
-
 export const APP_CONFIG = {
   name: 'Next.js Test Task',
   version: '1.0.0',
   description: 'Тестовое задание для демонстрации навыков разработки на Next.js',
   author: 'Frontend Developer',
-
-  // Environment configuration
   environment: process.env.NODE_ENV || 'development',
-
-  // API configuration
   api: {
     jsonPlaceholder: {
       baseUrl: 'https://jsonplaceholder.typicode.com',
@@ -28,8 +19,6 @@ export const APP_CONFIG = {
       retries: 3,
     },
   },
-
-  // Routes configuration
   routes: [
     {
       path: '/',
@@ -62,8 +51,6 @@ export const APP_CONFIG = {
       renderType: 'CSR' as const,
     },
   ],
-
-  // Feature flags
   features: {
     enableFileUpload: true,
     enableRealTimeUpdates: true,
@@ -71,8 +58,6 @@ export const APP_CONFIG = {
     enableDarkTheme: true,
     enableAPIErrorRetry: true,
   },
-
-  // UI configuration
   ui: {
     theme: 'dark',
     animations: {
@@ -91,11 +76,9 @@ export const APP_CONFIG = {
       '2xl': '1536px',
     },
   },
-
-  // Form configuration
   forms: {
     contactForm: {
-      maxFileSize: 5 * 1024 * 1024, // 5MB
+      maxFileSize: 5 * 1024 * 1024,
       allowedFileTypes: [
         'image/jpeg',
         'image/jpg',
@@ -124,8 +107,6 @@ export const APP_CONFIG = {
       },
     },
   },
-
-  // Performance configuration
   performance: {
     enableImageOptimization: true,
     enableCodeSplitting: true,
@@ -134,7 +115,6 @@ export const APP_CONFIG = {
   },
 } as const;
 
-// Type inference for better type safety
 export type AppConfig = typeof APP_CONFIG;
 export type RouteConfig = (typeof APP_CONFIG.routes)[0];
 export type FeatureFlag = keyof typeof APP_CONFIG.features;

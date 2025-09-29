@@ -1,13 +1,9 @@
-/**
- * Main navigation component
- */
-
 'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { Button } from '@/components/ui/Button';
 import { MessageSquare, Home, FileText, Database, Zap, Plus } from 'lucide-react';
 import styles from './Navigation.module.scss';
@@ -52,12 +48,10 @@ export const Navigation: React.FC = () => {
     <nav className={styles.navigation} role="navigation" aria-label="Основная навигация">
       <div className="container">
         <div className={styles.navContent}>
-          {/* Logo */}
           <Link href="/" className={styles.logo}>
             <h1>Next.js Test Task</h1>
           </Link>
 
-          {/* Navigation Links */}
           <ul className={styles.navList}>
             {navigationItems.map((item) => {
               const Icon = item.icon;
@@ -81,7 +75,6 @@ export const Navigation: React.FC = () => {
             })}
           </ul>
 
-          {/* Create Post Button */}
           <Button variant="primary" size="md" asChild leftIcon={<Plus size={18} />}>
             <Link href="/create-post">Создать пост</Link>
           </Button>

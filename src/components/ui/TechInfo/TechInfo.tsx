@@ -1,8 +1,3 @@
-/**
- * Technical information component
- * Компонент для отображения технической информации
- */
-
 import React from 'react';
 import { Card } from '@/components/ui/Card';
 import styles from './TechInfo.module.scss';

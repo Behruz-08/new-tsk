@@ -1,8 +1,3 @@
-/**
- * Modal component styles
- * Улучшенные стили модальных окон с футуристическим дизайном
- */
-
 // Modal overlay
 .modal-overlay {
   position: fixed;
@@ -60,7 +55,6 @@
   transform: scale(0.95) translateY(-10px);
   transition: all transition(normal);
 
-  // Size variants
   &--sm {
     max-width: 400px;
   }
@@ -82,7 +76,6 @@
     max-height: 95vh;
   }
 
-  // Animation variants
   &--slide-up {
     transform: translateY(100%);
 

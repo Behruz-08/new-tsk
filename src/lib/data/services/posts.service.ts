@@ -1,14 +1,6 @@
-/**
- * Posts service with improved error handling and type safety
- * Сервис для работы с постами с улучшенной обработкой ошибок
- */
-
 import { Post } from '@/types';
-import { apiClient, localApiClient } from '@/lib/api-client';
+import { apiClient, localApiClient } from '@/lib/api/api-client';
 
-/**
- * Posts service interface
- */
 export interface PostsService {
   getAll(): Promise<Post[]>;
   getById(id: number): Promise<Post>;
@@ -17,13 +9,7 @@ export interface PostsService {
   delete(id: number): Promise<void>;
 }
 
-/**
- * Posts service implementation
- */
 class PostsServiceImpl implements PostsService {
-  /**
-   * Get all posts (combines JSONPlaceholder and local posts)
-   */
   async getAll(): Promise<Post[]> {
     try {
       const response = await localApiClient.get<{ posts: Post[] }>('/api/posts');
@@ -34,9 +20,6 @@ class PostsServiceImpl implements PostsService {
     }
   }
 
-  /**
-   * Get post by ID from JSONPlaceholder
-   */
   async getById(id: number): Promise<Post> {
     try {
       return await apiClient.get<Post>(`/posts/${id}`);
@@ -46,9 +29,6 @@ class PostsServiceImpl implements PostsService {
     }
   }
 
-  /**
-   * Create new post (saves locally and to JSONPlaceholder)
-   */
   async create(data: Omit<Post, 'id'>): Promise<Post> {
     try {
       const response = await localApiClient.post<{ post: Post }>('/api/posts', data);
@@ -59,9 +39,6 @@ class PostsServiceImpl implements PostsService {
     }
   }
 
-  /**
-   * Update post in JSONPlaceholder
-   */
   async update(id: number, data: Partial<Post>): Promise<Post> {
     try {
       return await apiClient.put<Post>(`/posts/${id}`, data);
@@ -71,9 +48,6 @@ class PostsServiceImpl implements PostsService {
     }
   }
 
-  /**
-   * Delete post from JSONPlaceholder
-   */
   async delete(id: number): Promise<void> {
     try {
       await apiClient.delete<void>(`/posts/${id}`);
@@ -84,7 +58,4 @@ class PostsServiceImpl implements PostsService {
   }
 }
 
-/**
- * Export singleton instance
- */
 export const postsService = new PostsServiceImpl();

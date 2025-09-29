@@ -1,8 +1,3 @@
-/**
- * CSR Page - Client-Side Rendering
- * Интерактивная страница с формами и клиентским состоянием
- */
-
 'use client';
 
 import React from 'react';
@@ -15,19 +10,15 @@ import { LoadingState } from '@/components/ui/LoadingState';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { PostCard } from '@/components/posts/PostCard';
 import { ContactForm } from '@/components/forms/ContactForm';
-import { FileList } from '@/components/files/FileList';
 import { useModalState, useModalActions } from '@/store';
 import { usePostsQuery, useCommentsQuery } from '@/hooks/useApi';
-import { useFilesActions } from '@/store';
-import { MessageSquare, RefreshCw, File } from 'lucide-react';
+import { MessageSquare, RefreshCw } from 'lucide-react';
 import styles from './page.module.scss';
 
 export default function CSRPage() {
   const { isOpen } = useModalState('contact-modal');
   const { openModal, closeModal } = useModalActions();
-  const { refresh: refreshFileList } = useFilesActions();
 
-  // CSR: Данные загружаются на клиенте
   const {
     data: posts,
     isLoading: postsLoading,
@@ -40,16 +31,11 @@ export default function CSRPage() {
     error: commentsError,
     refetch: refetchComments,
   } = useCommentsQuery();
-  // const createPostMutation = useCreatePost(); // Пока не используется
 
   const handleModalSuccess = () => {
     console.log('CSR Page: handleModalSuccess called');
     closeModal('contact-modal');
-    console.log('CSR Page: Modal closed, refreshing file list');
-    // Кеш постов уже инвалидируется в ContactForm
-    // Обновляем список файлов после успешной отправки формы
-    refreshFileList();
-    console.log('CSR Page: handleModalSuccess completed');
+    console.log('CSR Page: Modal closed');
   };
 
   return (
@@ -58,7 +44,6 @@ export default function CSRPage() {
 
       <main className={styles.main}>
         <div className="container">
-          {/* Header */}
           <PageHeader
             title="CSR - Client-Side Rendering"
             description="Интерактивная страница с клиентским рендерингом. Данные загружаются в браузере, формы работают динамически."
@@ -68,7 +53,6 @@ export default function CSRPage() {
             }}
           />
 
-          {/* Interactive Controls */}
           <Card className={styles.controlsCard}>
             <div className={styles.controlsContent}>
               <h3>Интерактивные элементы</h3>
@@ -102,7 +86,6 @@ export default function CSRPage() {
             </div>
           </Card>
 
-          {/* Posts Section */}
           <div className={styles.postsSection}>
             <h2 className={styles.sectionTitle}>Посты (CSR) - {posts ? posts.length : 0}</h2>
             <p className={styles.sectionDescription}>
@@ -128,7 +111,6 @@ export default function CSRPage() {
             )}
           </div>
 
-          {/* Comments Section */}
           <div className={styles.commentsSection}>
             <h2 className={styles.sectionTitle}>
               Комментарии (CSR) - {comments ? comments.length : 0}
@@ -171,20 +153,6 @@ export default function CSRPage() {
             )}
           </div>
 
-          {/* Files Section */}
-          <div className={styles.filesSection}>
-            <h2 className={styles.sectionTitle}>
-              <File size={24} />
-              Загруженные файлы (дополнительно)
-            </h2>
-            <p className={styles.sectionDescription}>
-              Дополнительная функциональность - файлы, загруженные через форму обратной связи.
-              Основные данные отправляются в JSONPlaceholder API как посты.
-            </p>
-            <FileList className={styles.fileList} />
-          </div>
-
-          {/* Technical Info */}
           <Card className={styles.techInfo}>
             <h3>Техническая информация CSR</h3>
             <div className={styles.techItems}>
@@ -223,7 +191,6 @@ export default function CSRPage() {
         </div>
       </main>
 
-      {/* Contact Modal */}
       <Modal
         isOpen={isOpen}
         onClose={() => closeModal('contact-modal')}

@@ -1,11 +1,7 @@
-/**
- * Reusable Input component with validation and error states
- */
-
 'use client';
 
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import styles from './Input.module.scss';
 
 export interface InputProps
@@ -23,9 +19,6 @@ export interface InputProps
   disabled?: boolean;
 }
 
-/**
- * Input component with validation, icons, and accessibility features
- */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {

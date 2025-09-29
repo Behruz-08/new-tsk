@@ -1,19 +1,15 @@
-/**
- * Contact form component with validation and file upload
- */
-
 'use client';
 
 import React from 'react';
 import { useValidatedForm, useFormSubmission } from '@/hooks/useForm';
 import { useCacheInvalidation } from '@/hooks/useApi';
-import { contactFormSchema, type ContactFormData } from '@/lib/validations';
+import { contactFormSchema, type ContactFormData } from '@/lib/utils/validations';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { formsService } from '@/lib/services';
+import { formsService } from '@/lib/data/services';
 import { toast } from 'sonner';
 import { Upload, User, Mail, MessageSquare } from 'lucide-react';
-import { formatFileSize } from '@/lib/utils';
+import { formatFileSize } from '@/lib/utils/utils';
 import styles from './ContactForm.module.scss';
 
 interface ContactFormProps {
@@ -22,9 +18,6 @@ interface ContactFormProps {
   className?: string;
 }
 
-/**
- * Contact form with text and file inputs, validation, and submission
- */
 export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, className }) => {
   const {
     register,
@@ -43,38 +36,61 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
   const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } = useFormSubmission();
   const { invalidatePosts } = useCacheInvalidation();
 
-  // Watch file input for display purposes
-  const selectedFile = watch('file');
+  const uploadedFileUrl = watch('file');
 
-  // Handle file selection
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [localFile, setLocalFile] = React.useState<File | undefined>(undefined);
+  const [isFileUploading, setIsFileUploading] = React.useState<boolean>(false);
+  const [fileUploadError, setFileUploadError] = React.useState<string | undefined>(undefined);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    setLocalFile(file);
+    setFileUploadError(undefined);
     if (file) {
-      setValue('file', file, { shouldValidate: true });
+      setIsFileUploading(true);
+      try {
+        const fileFormData = new FormData();
+        fileFormData.append('file', file);
+
+        const fileResponse = await formsService.uploadFileToBlob(fileFormData);
+        if (fileResponse && fileResponse.url) {
+          setValue('file', fileResponse.url, { shouldValidate: true });
+        } else {
+          setFileUploadError('Ошибка загрузки файла: не получен URL.');
+          setValue('file', undefined, { shouldValidate: true });
+          setLocalFile(undefined);
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        setFileUploadError('Ошибка при загрузке файла.');
+        setValue('file', undefined, { shouldValidate: true });
+        setLocalFile(undefined);
+      } finally {
+        setIsFileUploading(false);
+      }
+    } else {
+      setValue('file', undefined, { shouldValidate: true });
+      setLocalFile(undefined);
     }
   };
 
-  // Handle form submission
   const handleFormSubmit = async (data: ContactFormData) => {
     try {
       console.log('ContactForm: Starting form submission', { data });
 
-      // Call custom onSubmit if provided
       if (onSubmit) {
         onSubmit(data);
         return;
       }
 
-      // Create FormData for file upload
       const formData = new FormData();
       formData.append('name', data.name);
       formData.append('email', data.email);
       formData.append('message', data.message);
       if (data.file) {
-        formData.append('file', data.file);
+        formData.append('fileUrl', data.file);
       }
 
-      // Submit to API
       const result = await submit(
         (data: unknown) => formsService.submitContactForm(data as FormData),
         formData,
@@ -85,10 +101,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
         toast.success('Форма успешно отправлена!');
         reset();
         resetSubmission();
-        // Инвалидируем кеш постов, чтобы показать новый пост
         invalidatePosts();
         console.log('ContactForm: Calling onSuccess callback');
         onSuccess?.();
+        setLocalFile(undefined);
       }
     } catch (error) {
       console.error('Form submission error:', error);
@@ -98,7 +114,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className={className}>
       <div className={styles.form}>
-        {/* Name Field */}
         <Input
           {...register('name')}
           label="Имя"
@@ -109,7 +124,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           disabled={isSubmitting}
         />
 
-        {/* Email Field */}
         <Input
           {...register('email')}
           type="email"
@@ -121,7 +135,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           disabled={isSubmitting}
         />
 
-        {/* Message Field */}
         <div className={styles.messageField}>
           <label htmlFor="message" className={styles.label}>
             Сообщение
@@ -142,7 +155,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           )}
         </div>
 
-        {/* File Upload Field */}
         <div className={styles.fileField}>
           <Input
             type="file"
@@ -150,23 +162,33 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
             onChange={handleFileChange}
             leftIcon={<Upload size={18} />}
             error={errors.file?.message}
-            required
             disabled={isSubmitting}
             accept="image/*,.pdf,.txt"
           />
 
-          {selectedFile && (
+          {uploadedFileUrl && (
             <div className={styles.fileInfo}>
               <div className={styles.fileDetails}>
-                <span className={styles.fileName}>{selectedFile.name}</span>
-                <span className={styles.fileSize}>{formatFileSize(selectedFile.size)}</span>
+                <span className={styles.fileName}>{uploadedFileUrl.split('/').pop()}</span>
+                {isFileUploading && <span className={styles.fileSize}>Загрузка...</span>}
               </div>
-              <div className={styles.fileType}>{selectedFile.type || 'Неизвестный тип'}</div>
+              <div className={styles.fileType}>
+                {uploadedFileUrl.split('.').pop() || 'Неизвестный тип'}
+              </div>
+              {fileUploadError && <span className={styles.errorText}>{fileUploadError}</span>}
+            </div>
+          )}
+          {localFile && !uploadedFileUrl && (
+            <div className={styles.fileInfo}>
+              <div className={styles.fileDetails}>
+                <span className={styles.fileName}>{localFile.name}</span>
+                <span className={styles.fileSize}>{formatFileSize(localFile.size)}</span>
+              </div>
+              <div className={styles.fileType}>{localFile.type || 'Неизвестный тип'}</div>
             </div>
           )}
         </div>
 
-        {/* Submit Error */}
         {submitError && (
           <div className={styles.submitError} role="alert">
             <MessageSquare size={16} />
@@ -174,7 +196,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           </div>
         )}
 
-        {/* Submit Button */}
         <Button
           type="submit"
           variant="primary"
@@ -187,7 +208,6 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           {isSubmitting ? 'Отправка...' : 'Отправить сообщение'}
         </Button>
 
-        {/* Success Message */}
         {submitSuccess && (
           <div className={styles.successMessage}>
             <MessageSquare size={16} />

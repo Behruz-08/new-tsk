@@ -1,23 +1,11 @@
-/**
- * Comprehensive utility functions with enhanced functionality
- * Комплексные утилиты с расширенной функциональностью
- */
-
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { FILE_CONFIG } from '@/constants';
 
-/**
- * Utility function for merging Tailwind CSS classes
- * Note: We'll replace this with SCSS utilities later
- */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Format date with better localization support
- */
 export function formatDate(
   date: Date | string | number,
   options: Intl.DateTimeFormatOptions = {},
@@ -36,9 +24,6 @@ export function formatDate(
   return new Intl.DateTimeFormat('ru-RU', defaultOptions).format(dateObj);
 }
 
-/**
- * Format relative time (e.g., "2 hours ago")
- */
 export function formatRelativeTime(date: Date | string | number, locale: string = 'ru-RU'): string {
   const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
 
@@ -62,9 +47,6 @@ export function formatRelativeTime(date: Date | string | number, locale: string 
   }
 }
 
-/**
- * Format file size in human readable format
- */
 export function formatFileSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
 
@@ -75,9 +57,6 @@ export function formatFileSize(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-/**
- * Debounce function for performance optimization
- */
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number,
@@ -90,9 +69,6 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   };
 }
 
-/**
- * Throttle function for performance optimization
- */
 export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number,
@@ -108,9 +84,6 @@ export function throttle<T extends (...args: unknown[]) => unknown>(
   };
 }
 
-/**
- * Generate a random ID
- */
 export function generateId(length: number = 8): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -122,9 +95,6 @@ export function generateId(length: number = 8): string {
   return result;
 }
 
-/**
- * Deep clone an object
- */
 export function deepClone<T>(obj: T): T {
   if (obj === null || typeof obj !== 'object') {
     return obj;
@@ -151,9 +121,6 @@ export function deepClone<T>(obj: T): T {
   return obj;
 }
 
-/**
- * Check if a value is empty (null, undefined, empty string, empty array, empty object)
- */
 export function isEmpty(value: unknown): boolean {
   if (value === null || value === undefined) {
     return true;
@@ -174,17 +141,11 @@ export function isEmpty(value: unknown): boolean {
   return false;
 }
 
-/**
- * Capitalize first letter of a string
- */
 export function capitalize(str: string): string {
   if (!str) return str;
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-/**
- * Convert string to kebab-case
- */
 export function kebabCase(str: string): string {
   return str
     .replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -192,9 +153,6 @@ export function kebabCase(str: string): string {
     .toLowerCase();
 }
 
-/**
- * Convert string to camelCase
- */
 export function camelCase(str: string): string {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
@@ -203,31 +161,19 @@ export function camelCase(str: string): string {
     .replace(/\s+/g, '');
 }
 
-/**
- * Truncate text to specified length
- */
 export function truncate(str: string, length: number, suffix: string = '...'): string {
   if (str.length <= length) return str;
   return str.slice(0, length) + suffix;
 }
 
-/**
- * Truncate text with ellipsis (alias for truncate)
- */
 export function truncateText(text: string, maxLength: number): string {
   return truncate(text, maxLength);
 }
 
-/**
- * Sleep function for async operations
- */
 export function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/**
- * Retry function with exponential backoff
- */
 export async function retry<T>(
   fn: () => Promise<T>,
   retries: number = 3,
@@ -244,9 +190,6 @@ export async function retry<T>(
   }
 }
 
-/**
- * Safe JSON parse with fallback
- */
 export function safeJsonParse<T>(str: string, fallback: T): T {
   try {
     return JSON.parse(str);
@@ -255,9 +198,6 @@ export function safeJsonParse<T>(str: string, fallback: T): T {
   }
 }
 
-/**
- * Safe JSON stringify with fallback
- */
 export function safeJsonStringify(obj: unknown, fallback: string = '{}'): string {
   try {
     return JSON.stringify(obj);
@@ -266,9 +206,6 @@ export function safeJsonStringify(obj: unknown, fallback: string = '{}'): string
   }
 }
 
-/**
- * Get nested object property safely
- */
 export function getNestedProperty(
   obj: unknown,
   path: string,
@@ -281,9 +218,6 @@ export function getNestedProperty(
   }, obj);
 }
 
-/**
- * Set nested object property safely
- */
 export function setNestedProperty(
   obj: Record<string, unknown>,
   path: string,
@@ -300,9 +234,6 @@ export function setNestedProperty(
   target[lastKey] = value;
 }
 
-/**
- * Remove undefined values from object
- */
 export function removeUndefined<T extends Record<string, unknown>>(obj: T): Partial<T> {
   const result: Partial<T> = {};
   for (const key in obj) {
@@ -313,9 +244,6 @@ export function removeUndefined<T extends Record<string, unknown>>(obj: T): Part
   return result;
 }
 
-/**
- * Pick specific properties from object
- */
 export function pick<T extends Record<string, unknown>, K extends keyof T>(
   obj: T,
   keys: K[],
@@ -329,9 +257,6 @@ export function pick<T extends Record<string, unknown>, K extends keyof T>(
   return result;
 }
 
-/**
- * Omit specific properties from object
- */
 export function omit<T extends Record<string, unknown>, K extends keyof T>(
   obj: T,
   keys: K[],
@@ -343,9 +268,6 @@ export function omit<T extends Record<string, unknown>, K extends keyof T>(
   return result;
 }
 
-/**
- * Group array by key
- */
 export function groupBy<T, K extends keyof T>(array: T[], key: K): Record<string, T[]> {
   return array.reduce(
     (groups, item) => {
@@ -358,9 +280,6 @@ export function groupBy<T, K extends keyof T>(array: T[], key: K): Record<string
   );
 }
 
-/**
- * Sort array by key
- */
 export function sortBy<T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 'asc'): T[] {
   return [...array].sort((a, b) => {
     const aVal = a[key];
@@ -372,16 +291,10 @@ export function sortBy<T>(array: T[], key: keyof T, direction: 'asc' | 'desc' = 
   });
 }
 
-/**
- * Unique array values
- */
 export function unique<T>(array: T[]): T[] {
   return [...new Set(array)];
 }
 
-/**
- * Chunk array into smaller arrays
- */
 export function chunk<T>(array: T[], size: number): T[][] {
   const chunks: T[][] = [];
   for (let i = 0; i < array.length; i += size) {
@@ -390,17 +303,11 @@ export function chunk<T>(array: T[], size: number): T[][] {
   return chunks;
 }
 
-/**
- * Validate email format
- */
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
-/**
- * Validate URL format
- */
 export function isValidUrl(url: string): boolean {
   try {
     new URL(url);
@@ -410,9 +317,6 @@ export function isValidUrl(url: string): boolean {
   }
 }
 
-/**
- * Generate random color
- */
 export function randomColor(): string {
   const colors = [
     '#00d4ff',
@@ -429,41 +333,26 @@ export function randomColor(): string {
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-/**
- * Get contrast color (black or white) for given background color
- */
 export function getContrastColor(hexColor: string): string {
-  // Remove # if present
   const color = hexColor.replace('#', '');
 
-  // Convert to RGB
   const r = parseInt(color.substr(0, 2), 16);
   const g = parseInt(color.substr(2, 2), 16);
   const b = parseInt(color.substr(4, 2), 16);
 
-  // Calculate luminance
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 
   return luminance > 0.5 ? '#000000' : '#ffffff';
 }
 
-/**
- * Get file type label from MIME type
- */
 export function getFileTypeLabel(mimeType: string): string {
   return FILE_CONFIG.TYPE_LABELS[mimeType] || 'Unknown File';
 }
 
-/**
- * Check if file type is allowed
- */
 export function isFileTypeAllowed(mimeType: string): boolean {
   return (FILE_CONFIG.ALLOWED_TYPES as readonly string[]).includes(mimeType);
 }
 
-/**
- * Generate unique filename with timestamp
- */
 export function generateUniqueFileName(originalName: string, prefix?: string): string {
   const timestamp = Date.now();
   const extension = originalName.split('.').pop();
@@ -475,9 +364,6 @@ export function generateUniqueFileName(originalName: string, prefix?: string): s
     : `${timestamp}_${sanitizedName}.${extension}`;
 }
 
-/**
- * Validate file before upload
- */
 export function validateFile(file: File): { isValid: boolean; error?: string } {
   if (!file) {
     return { isValid: false, error: 'Файл не выбран' };

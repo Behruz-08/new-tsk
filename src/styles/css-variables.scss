@@ -1,10 +1,4 @@
-/**
- * CSS Custom Properties (CSS Variables) for theming
- * CSS переменные для поддержки тем
- */
-
 :root {
-  // Color system
   --color-primary-50: #f0f9ff;
   --color-primary-100: #e0f2fe;
   --color-primary-200: #bae6fd;
@@ -38,7 +32,6 @@
   --color-accent-800: #15803d;
   --color-accent-900: #14532d;
 
-  // Status colors
   --color-success-50: #f0fdf4;
   --color-success-100: #dcfce7;
   --color-success-200: #bbf7d0;
@@ -83,7 +76,6 @@
   --color-info-800: #0369a1;
   --color-info-900: #0c4a6e;
 
-  // Neutral colors
   --color-white: #ffffff;
   --color-black: #000000;
   --color-gray-50: #f8fafc;
@@ -97,25 +89,21 @@
   --color-gray-800: #1e293b;
   --color-gray-900: #0f172a;
 
-  // Background colors
   --color-background: #0a0e27;
   --color-background-secondary: #1a1f3a;
   --color-background-tertiary: #252b4d;
   --color-background-glass: rgba(255, 255, 255, 0.05);
 
-  // Text colors
   --color-text-primary: #ffffff;
   --color-text-secondary: #cbd5e1;
   --color-text-tertiary: #94a3b8;
   --color-text-inverse: #0f172a;
 
-  // Border colors
   --color-border: rgba(255, 255, 255, 0.1);
   --color-border-light: rgba(255, 255, 255, 0.05);
   --color-border-medium: rgba(255, 255, 255, 0.2);
   --color-border-dark: rgba(255, 255, 255, 0.3);
 
-  // Typography
   --font-family-sans:
     'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     sans-serif;
@@ -149,7 +137,6 @@
   --line-height-relaxed: 1.625;
   --line-height-loose: 2;
 
-  // Spacing
   --spacing-0: 0;
   --spacing-1: 0.25rem;
   --spacing-2: 0.5rem;
@@ -169,7 +156,6 @@
   --spacing-56: 14rem;
   --spacing-64: 16rem;
 
-  // Border radius
   --radius-none: 0;
   --radius-sm: 0.125rem;
   --radius-base: 0.25rem;
@@ -180,7 +166,6 @@
   --radius-3xl: 1.5rem;
   --radius-full: 9999px;
 
-  // Shadows
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-base: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
@@ -190,13 +175,11 @@
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
   --shadow-none: none;
 
-  // Glow effects
   --shadow-glow-primary: 0 0 20px rgba(0, 212, 255, 0.3), 0 0 40px rgba(0, 212, 255, 0.2);
   --shadow-glow-secondary: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 40px rgba(139, 92, 246, 0.2);
   --shadow-glow-accent: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.2);
   --shadow-glow-white: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 40px rgba(255, 255, 255, 0.1);
 
-  // Transitions
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -204,7 +187,6 @@
   --transition-elastic: 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --transition-glow: 300ms ease-out;
 
-  // Z-index
   --z-hide: -1;
   --z-auto: auto;
   --z-base: 0;
@@ -220,7 +202,6 @@
   --z-tooltip: 1800;
 }
 
-// Light theme overrides
 [data-theme='light'] {
   --color-background: #ffffff;
   --color-background-secondary: #f8fafc;

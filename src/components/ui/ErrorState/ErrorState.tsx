@@ -1,8 +1,3 @@
-/**
- * Error state component
- * Компонент для отображения состояния ошибки
- */
-
 import React from 'react';
 import { AlertCircle } from 'lucide-react';
 import styles from './ErrorState.module.scss';

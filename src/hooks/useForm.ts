@@ -1,8 +1,3 @@
-/**
- * Comprehensive form hooks with validation and error handling
- * Комплексные хуки для форм с валидацией и обработкой ошибок
- */
-
 import {
   useForm as useReactHookForm,
   UseFormProps,
@@ -15,28 +10,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useState, useCallback, useMemo } from 'react';
 import { toast } from 'sonner';
-import { debounce } from '@/lib/utils';
+import { debounce } from '@/lib/utils/utils';
 import { useApiNotifications } from '@/hooks/useNotifications';
 
-/**
- * Type-safe wrapper for zodResolver to handle generic types
- */
 function createZodResolver<T extends FieldValues>(schema: z.ZodSchema<T>): Resolver<T> {
   return zodResolver(schema as never) as Resolver<T>;
 }
 
-/**
- * Enhanced form submission state
- */
 interface FormSubmissionState {
   isSubmitting: boolean;
   submitError: string | null;
   submitSuccess: boolean;
 }
 
-/**
- * Enhanced form submission hook
- */
 export function useFormSubmission<T = unknown>() {
   const [state, setState] = useState<FormSubmissionState>({
     isSubmitting: false,
@@ -90,9 +76,6 @@ export function useFormSubmission<T = unknown>() {
   };
 }
 
-/**
- * Enhanced validated form hook
- */
 export function useValidatedForm<T extends FieldValues>(
   schema: z.ZodSchema<T>,
   defaultValues?: Partial<T>,
@@ -109,7 +92,6 @@ export function useValidatedForm<T extends FieldValues>(
     formState: { errors, isValid, isDirty, isSubmitting },
   } = form;
 
-  // Enhanced error handling
   const getFieldError = useCallback(
     (fieldName: Path<T>) => {
       const error = errors[fieldName];
@@ -138,9 +120,6 @@ export function useValidatedForm<T extends FieldValues>(
   };
 }
 
-/**
- * Hook for form field validation with custom error messages
- */
 export function useFieldValidation() {
   const validateField = useCallback(
     (
@@ -181,40 +160,19 @@ export function useFieldValidation() {
   return { validateField };
 }
 
-/**
- * Form validation utilities
- */
 export const formValidation = {
-  /**
-   * Required field validation
-   */
   required: (message: string = 'Это поле обязательно') => z.string().min(1, message),
 
-  /**
-   * Email validation
-   */
   email: (message: string = 'Введите корректный email') => z.string().email(message),
 
-  /**
-   * Password validation
-   */
   password: (minLength: number = 8, message?: string) =>
     z.string().min(minLength, message || `Пароль должен содержать минимум ${minLength} символов`),
 
-  /**
-   * Phone number validation
-   */
   phone: (message: string = 'Введите корректный номер телефона') =>
     z.string().regex(/^[\+]?[1-9][\d]{0,15}$/, message),
 
-  /**
-   * URL validation
-   */
   url: (message: string = 'Введите корректный URL') => z.string().url(message),
 
-  /**
-   * File validation
-   */
   file: (maxSize: number = 5 * 1024 * 1024, message?: string) =>
     z
       .instanceof(File, { message: 'Выберите файл' })
@@ -223,9 +181,6 @@ export const formValidation = {
         message || `Размер файла не должен превышать ${Math.round(maxSize / 1024 / 1024)}MB`,
       ),
 
-  /**
-   * Image file validation
-   */
   imageFile: (maxSize: number = 5 * 1024 * 1024, message?: string) =>
     z
       .instanceof(File, { message: 'Выберите изображение' })
@@ -235,27 +190,18 @@ export const formValidation = {
         message || `Размер файла не должен превышать ${Math.round(maxSize / 1024 / 1024)}MB`,
       ),
 
-  /**
-   * Text length validation
-   */
   textLength: (min: number, max: number, message?: string) =>
     z
       .string()
       .min(min, message || `Минимум ${min} символов`)
       .max(max, message || `Максимум ${max} символов`),
 
-  /**
-   * Number range validation
-   */
   numberRange: (min: number, max: number, message?: string) =>
     z
       .number()
       .min(min, message || `Значение должно быть не менее ${min}`)
       .max(max, message || `Значение должно быть не более ${max}`),
 
-  /**
-   * Array length validation
-   */
   arrayLength: (min: number, max: number, message?: string) =>
     z
       .array(z.any())
@@ -263,13 +209,7 @@ export const formValidation = {
       .max(max, message || `Максимум ${max} элементов`),
 };
 
-/**
- * Common form schemas
- */
 export const commonSchemas = {
-  /**
-   * Contact form schema
-   */
   contactForm: z.object({
     name: formValidation.required('Введите ваше имя'),
     email: formValidation.email(),
@@ -281,18 +221,12 @@ export const commonSchemas = {
     file: formValidation.file().optional(),
   }),
 
-  /**
-   * Post form schema
-   */
   postForm: z.object({
     title: formValidation.textLength(5, 100, 'Заголовок должен содержать от 5 до 100 символов'),
     body: formValidation.textLength(10, 1000, 'Содержимое должно содержать от 10 до 1000 символов'),
     file: formValidation.file().optional(),
   }),
 
-  /**
-   * User profile schema
-   */
   userProfile: z.object({
     name: formValidation.required(),
     email: formValidation.email(),
@@ -301,18 +235,12 @@ export const commonSchemas = {
     bio: formValidation.textLength(0, 500, 'Биография не должна превышать 500 символов').optional(),
   }),
 
-  /**
-   * Login form schema
-   */
   loginForm: z.object({
     email: formValidation.email(),
     password: formValidation.password(),
     rememberMe: z.boolean().optional(),
   }),
 
-  /**
-   * Registration form schema
-   */
   registrationForm: z
     .object({
       name: formValidation.required(),
@@ -326,9 +254,6 @@ export const commonSchemas = {
     }),
 };
 
-/**
- * Form field props helper
- */
 export function createFieldProps<T extends FieldValues>(
   form: ReturnType<typeof useValidatedForm<T>>,
   fieldName: Path<T>,
@@ -340,9 +265,6 @@ export function createFieldProps<T extends FieldValues>(
   };
 }
 
-/**
- * Form submission with toast notifications
- */
 export function useFormSubmissionWithToast<T = unknown>() {
   const submission = useFormSubmission<T>();
 
@@ -371,9 +293,6 @@ export function useFormSubmissionWithToast<T = unknown>() {
   };
 }
 
-/**
- * Auto-save form hook
- */
 export function useAutoSave<T extends FieldValues>(
   form: ReturnType<typeof useValidatedForm<T>>,
   saveFn: (data: T) => Promise<void>,
@@ -399,7 +318,6 @@ export function useAutoSave<T extends FieldValues>(
     [form.isDirty, form.isValid, saveFn],
   );
 
-  // Debounced auto-save
   const debouncedAutoSave = useMemo(
     () => debounce((...args: unknown[]) => autoSave(args[0] as T), delay),
     [autoSave, delay],

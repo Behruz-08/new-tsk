@@ -1,14 +1,6 @@
-/**
- * Custom hooks for notifications and toasts
- * Хуки для работы с уведомлениями и тостами
- */
-
 import { toast } from 'sonner';
 import { SUCCESS_MESSAGES, ERROR_MESSAGES, LOADING_MESSAGES } from '@/constants';
 
-/**
- * Hook for managing toast notifications
- */
 export function useNotifications() {
   const showSuccess = (message: string, options?: { duration?: number; description?: string }) => {
     toast.success(message, {
@@ -92,9 +84,6 @@ export function useNotifications() {
   };
 }
 
-/**
- * Hook for form-specific notifications
- */
 export function useFormNotifications() {
   const notifications = useNotifications();
 
@@ -122,9 +111,6 @@ export function useFormNotifications() {
   };
 }
 
-/**
- * Hook for API-specific notifications
- */
 export function useApiNotifications() {
   const notifications = useNotifications();
 

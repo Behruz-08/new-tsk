@@ -1,39 +1,19 @@
-/**
- * Create Post Page - Client-Side Rendering with form
- * Страница для создания новых постов
- */
-
 'use client';
 
 import { Navigation } from '@/components/layout/Navigation';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { PostForm } from '@/components/forms/PostForm';
-import { Post } from '@/types';
 import { Plus, FileText, Upload } from 'lucide-react';
-import { useState } from 'react';
-import { usePostsActions } from '@/store';
 import styles from './page.module.scss';
 
 export default function CreatePostPage() {
-  const [createdPost, setCreatedPost] = useState<Post | null>(null);
-  const { addPost } = usePostsActions();
-
-  const handlePostCreated = (post: Post) => {
-    setCreatedPost(post);
-    addPost(post); // Добавляем пост в Zustand store
-
-    // Show success message - no redirect needed
-    // User can manually navigate to any page they want
-  };
-
   return (
     <div className={styles.page}>
       <Navigation />
 
       <main className={styles.main}>
         <div className="container">
-          {/* Header */}
           <PageHeader
             title="Создать новый пост"
             description="Создайте новый пост с заголовком, содержимым и прикрепленным файлом. Пост будет добавлен в общий список и отображен на всех страницах."
@@ -44,7 +24,6 @@ export default function CreatePostPage() {
             }}
           />
 
-          {/* Create Post Section */}
           <Card className={styles.createSection}>
             <div className={styles.createContent}>
               <div className={styles.createInfo}>
@@ -74,12 +53,11 @@ export default function CreatePostPage() {
               </div>
 
               <div className={styles.formSection}>
-                <PostForm onSuccess={handlePostCreated} className={styles.postForm} />
+                <PostForm className={styles.postForm} />
               </div>
             </div>
           </Card>
 
-          {/* Instructions */}
           <Card className={styles.instructions}>
             <h3>Инструкции по созданию поста</h3>
             <div className={styles.instructionSteps}>
@@ -113,24 +91,6 @@ export default function CreatePostPage() {
               </div>
             </div>
           </Card>
-
-          {/* Success Message */}
-          {createdPost && (
-            <Card className={styles.successCard}>
-              <div className={styles.successContent}>
-                <div className={styles.successIcon}>
-                  <Plus size={24} />
-                </div>
-                <div className={styles.successText}>
-                  <h3>Пост успешно создан!</h3>
-                  <p>
-                    Ваш пост &quot;{createdPost.title}&quot; был добавлен в список. Перенаправление
-                    на страницу с постами...
-                  </p>
-                </div>
-              </div>
-            </Card>
-          )}
         </div>
       </main>
     </div>

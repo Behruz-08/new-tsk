@@ -1,18 +1,9 @@
-/**
- * Custom hooks for local storage management
- * Хуки для работы с локальным хранилищем
- */
-
 import { useState, useEffect, useCallback } from 'react';
 
-/**
- * Hook for managing localStorage with React state
- */
 export function useLocalStorage<T>(
   key: string,
   initialValue: T,
 ): [T, (value: T | ((val: T) => T)) => void, () => void] {
-  // Get value from localStorage or use initial value
   const [storedValue, setStoredValue] = useState<T>(() => {
     if (typeof window === 'undefined') {
       return initialValue;
@@ -27,17 +18,11 @@ export function useLocalStorage<T>(
     }
   });
 
-  // Return a wrapped version of useState's setter function that persists the new value to localStorage
   const setValue = useCallback(
     (value: T | ((val: T) => T)) => {
       try {
-        // Allow value to be a function so we have the same API as useState
         const valueToStore = value instanceof Function ? value(storedValue) : value;
-
-        // Save state
         setStoredValue(valueToStore);
-
-        // Save to localStorage
         if (typeof window !== 'undefined') {
           window.localStorage.setItem(key, JSON.stringify(valueToStore));
         }
@@ -48,7 +33,6 @@ export function useLocalStorage<T>(
     [key, storedValue],
   );
 
-  // Remove value from localStorage
   const removeValue = useCallback(() => {
     try {
       setStoredValue(initialValue);
@@ -60,7 +44,6 @@ export function useLocalStorage<T>(
     }
   }, [key, initialValue]);
 
-  // Listen for changes to this localStorage key from other tabs/windows
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -81,9 +64,6 @@ export function useLocalStorage<T>(
   return [storedValue, setValue, removeValue];
 }
 
-/**
- * Hook for managing sessionStorage with React state
- */
 export function useSessionStorage<T>(
   key: string,
   initialValue: T,
@@ -132,9 +112,6 @@ export function useSessionStorage<T>(
   return [storedValue, setValue, removeValue];
 }
 
-/**
- * Hook for managing form data persistence
- */
 export function useFormPersistence<T extends Record<string, unknown>>(
   key: string,
   initialValue: T,
@@ -171,9 +148,6 @@ export function useFormPersistence<T extends Record<string, unknown>>(
   };
 }
 
-/**
- * Hook for managing user preferences
- */
 export function useUserPreferences() {
   const [preferences, setPreferences] = useLocalStorage('user-preferences', {
     theme: 'dark' as 'light' | 'dark' | 'auto',

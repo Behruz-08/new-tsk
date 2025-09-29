@@ -1,8 +1,3 @@
-/**
- * PostCard component styles
- * Стили для карточки поста
- */
-
 @use '@/styles/variables' as *;
 @use '@/styles/mixins' as *;
 
@@ -156,7 +151,6 @@
   font-weight: 600;
 }
 
-// Responsive adjustments
 @include respond-below(md) {
   .postHeader {
     flex-direction: column;

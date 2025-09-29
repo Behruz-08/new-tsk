@@ -1,20 +1,16 @@
-/**
- * Post creation form component with validation and file upload
- */
-
 'use client';
 
 import React from 'react';
 import { useValidatedForm } from '@/hooks/useForm';
-import { postFormSchema, type PostFormData } from '@/lib/validations';
+import { postFormSchema, type PostFormData } from '@/lib/utils/validations';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useFormSubmission } from '@/hooks/useForm';
-import { formsService } from '@/lib/services';
+import { formsService } from '@/lib/data/services';
 import { Post } from '@/types';
 import { toast } from 'sonner';
 import { Upload, FileText, Edit3 } from 'lucide-react';
-import { formatFileSize } from '@/lib/utils';
+import { formatFileSize } from '@/lib/utils/utils';
 import styles from './PostForm.module.scss';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
@@ -26,9 +22,6 @@ interface PostFormProps {
   className?: string;
 }
 
-/**
- * Post creation form with title, body and file inputs, validation, and submission
- */
 export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, className }) => {
   const {
     register,
@@ -45,12 +38,9 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
 
   const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } = useFormSubmission();
   const router = useRouter();
-  const queryClient = useQueryClient(); // Initialize useQueryClient
-
-  // Watch file input for display purposes
+  const queryClient = useQueryClient();
   const selectedFile = watch('file');
 
-  // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -58,21 +48,18 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
     }
   };
 
-  // Handle form submission
   const handleFormSubmit = async (data: PostFormData) => {
     try {
-      // Call custom onSubmit if provided
       if (onSubmit) {
         onSubmit(data);
         return;
       }
 
-      // Submit to API using the new function
       const result = await submit(async () => {
         const postData = {
           title: data.title,
           body: data.body,
-          userId: 1, // Default user ID
+          userId: 1,
         };
 
         return await formsService.createPostWithFile(postData, data.file);
@@ -84,11 +71,9 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
         resetSubmission();
         onSuccess?.(result.post as Post);
 
-        // Manually update TanStack Query cache with the new post
         queryClient.setQueryData(QUERY_KEYS.POSTS.LISTS(), (oldData: Post[] | undefined) => {
           return oldData ? [result.post as Post, ...oldData] : [result.post as Post];
         });
-        // addPost(result.post as Post); // Add new post to Zustand store (removed, using TanStack Query cache directly)
         router.push('/csr');
       }
     } catch (error) {
@@ -99,7 +84,6 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className={className}>
       <div className={styles.form}>
-        {/* Title Field */}
         <Input
           {...register('title')}
           label="Заголовок поста"
@@ -110,7 +94,6 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
           disabled={isSubmitting}
         />
 
-        {/* Body Field */}
         <div className={styles.bodyField}>
           <label htmlFor="body" className={styles.label}>
             Содержимое поста
@@ -131,7 +114,6 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
           )}
         </div>
 
-        {/* File Upload Field */}
         <div className={styles.fileField}>
           <Input
             type="file"
@@ -154,7 +136,6 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
           )}
         </div>
 
-        {/* Submit Error */}
         {submitError && (
           <div className={styles.submitError} role="alert">
             <FileText size={16} />
@@ -162,7 +143,6 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
           </div>
         )}
 
-        {/* Submit Button */}
         <Button
           type="submit"
           variant="primary"
@@ -175,7 +155,6 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
           {isSubmitting ? 'Создание поста...' : 'Создать пост'}
         </Button>
 
-        {/* Success Message */}
         {submitSuccess && (
           <div className={styles.successMessage}>
             <FileText size={16} />

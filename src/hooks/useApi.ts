@@ -1,8 +1,3 @@
-/**
- * Unified API hooks with comprehensive functionality
- * Унифицированные API хуки с полной функциональностью
- */
-
 import {
   useQuery,
   useMutation,
@@ -14,13 +9,10 @@ import {
 } from '@tanstack/react-query';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
-import { ApiError } from '@/lib/api-client';
-import { debounce, retry } from '@/lib/utils';
+import { ApiError } from '@/lib/api/api-client';
+import { debounce, retry } from '@/lib/utils/utils';
 import { QUERY_KEYS, TOAST_MESSAGES } from '@/constants';
 
-/**
- * Enhanced query options with better defaults
- */
 interface EnhancedQueryOptions<TData, TError = ApiError>
   extends Omit<UseQueryOptions<TData, TError>, 'queryKey' | 'queryFn'> {
   retries?: number;
@@ -30,9 +22,6 @@ interface EnhancedQueryOptions<TData, TError = ApiError>
   successMessage?: string;
 }
 
-/**
- * Enhanced mutation options
- */
 interface EnhancedMutationOptions<TData, TVariables, TError = ApiError>
   extends Omit<UseMutationOptions<TData, TError, TVariables>, 'mutationFn'> {
   showErrorToast?: boolean;
@@ -42,9 +31,6 @@ interface EnhancedMutationOptions<TData, TVariables, TError = ApiError>
   invalidateQueries?: readonly (readonly (string | number)[])[];
 }
 
-/**
- * Generic API query hook with enhanced functionality
- */
 export function useApiQuery<TData, TError = ApiError>(
   queryKey: readonly (string | number)[],
   queryFn: () => Promise<TData>,
@@ -75,10 +61,9 @@ export function useApiQuery<TData, TError = ApiError>(
   const query = useQuery({
     queryKey,
     queryFn: enhancedQueryFn,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
     retry: (failureCount, error) => {
-      // Don't retry on 4xx errors
       if (error instanceof ApiError && error.status && error.status < 500) {
         return false;
       }
@@ -87,7 +72,6 @@ export function useApiQuery<TData, TError = ApiError>(
     ...queryOptions,
   });
 
-  // Show success toast when data is loaded
   useEffect(() => {
     if (query.isSuccess && showSuccessToast && query.data) {
       toast.success(successMessage);
@@ -97,9 +81,6 @@ export function useApiQuery<TData, TError = ApiError>(
   return query;
 }
 
-/**
- * Generic API mutation hook with enhanced functionality
- */
 export function useApiMutation<TData, TVariables, TError = ApiError>(
   mutationFn: (variables: TVariables) => Promise<TData>,
   options: EnhancedMutationOptions<TData, TVariables, TError> = {},
@@ -137,7 +118,6 @@ export function useApiMutation<TData, TVariables, TError = ApiError>(
         toast.success(successMessage);
       }
 
-      // Invalidate specified queries
       invalidateQueries.forEach((queryKey) => {
         queryClient.invalidateQueries({ queryKey });
       });
@@ -148,30 +128,24 @@ export function useApiMutation<TData, TVariables, TError = ApiError>(
   return mutation;
 }
 
-/**
- * Posts query hook
- */
 export function usePostsQuery() {
   return useApiQuery(
     QUERY_KEYS.POSTS.LISTS(),
     async () => {
-      const { postsService } = await import('@/lib/services');
+      const { postsService } = await import('@/lib/data/services');
       return postsService.getAll();
     },
     {
-      staleTime: 2 * 60 * 1000, // 2 minutes for posts
+      staleTime: 2 * 60 * 1000,
     },
   );
 }
 
-/**
- * Post by ID query hook
- */
 export function usePostQuery(id: number) {
   return useApiQuery(
     QUERY_KEYS.POSTS.DETAIL(id),
     async () => {
-      const { postsService } = await import('@/lib/services');
+      const { postsService } = await import('@/lib/data/services');
       return postsService.getById(id);
     },
     {
@@ -180,30 +154,24 @@ export function usePostQuery(id: number) {
   );
 }
 
-/**
- * Comments query hook
- */
 export function useCommentsQuery() {
   return useApiQuery(
     QUERY_KEYS.COMMENTS.LISTS(),
     async () => {
-      const { commentsService } = await import('@/lib/services');
+      const { commentsService } = await import('@/lib/data/services');
       return commentsService.getAll();
     },
     {
-      staleTime: 5 * 60 * 1000, // 5 minutes for comments
+      staleTime: 5 * 60 * 1000,
     },
   );
 }
 
-/**
- * Comments by post ID query hook
- */
 export function usePostCommentsQuery(postId: number) {
   return useApiQuery(
     QUERY_KEYS.POSTS.COMMENTS(postId),
     async () => {
-      const { commentsService } = await import('@/lib/services');
+      const { commentsService } = await import('@/lib/data/services');
       return commentsService.getByPostId(postId);
     },
     {
@@ -212,16 +180,13 @@ export function usePostCommentsQuery(postId: number) {
   );
 }
 
-/**
- * Create post mutation hook
- */
 export function useCreatePostMutation() {
   return useApiMutation(
     async (data: { title: string; body: string; userId?: number; fileUrl?: string }) => {
-      const { postsService } = await import('@/lib/services');
+      const { postsService } = await import('@/lib/data/services');
       return postsService.create({
         ...data,
-        userId: data.userId || 1, // Default to user 1 if not provided
+        userId: data.userId || 1,
       });
     },
     {
@@ -231,9 +196,6 @@ export function useCreatePostMutation() {
   );
 }
 
-/**
- * Update post mutation hook
- */
 export function useUpdatePostMutation() {
   return useApiMutation(
     async ({
@@ -243,7 +205,7 @@ export function useUpdatePostMutation() {
       id: number;
       data: Partial<{ title: string; body: string; userId: number }>;
     }) => {
-      const { postsService } = await import('@/lib/services');
+      const { postsService } = await import('@/lib/data/services');
       return postsService.update(id, data);
     },
     {
@@ -253,29 +215,10 @@ export function useUpdatePostMutation() {
   );
 }
 
-/**
- * Delete post mutation hook
- */
-export function useDeletePostMutation() {
-  return useApiMutation(
-    async (id: number) => {
-      const { postsService } = await import('@/lib/services');
-      return postsService.delete(id);
-    },
-    {
-      successMessage: TOAST_MESSAGES.SUCCESS.POST_DELETED,
-      invalidateQueries: [QUERY_KEYS.POSTS.LISTS()],
-    },
-  );
-}
-
-/**
- * Submit form mutation hook
- */
 export function useSubmitFormMutation() {
   return useApiMutation(
     async (formData: FormData) => {
-      const { formsService } = await import('@/lib/services');
+      const { formsService } = await import('@/lib/data/services');
       return formsService.submitContactForm(formData);
     },
     {
@@ -284,9 +227,6 @@ export function useSubmitFormMutation() {
   );
 }
 
-/**
- * Create post with file mutation hook
- */
 export function useCreatePostWithFileMutation() {
   return useApiMutation(
     async ({
@@ -296,7 +236,7 @@ export function useCreatePostWithFileMutation() {
       postData: { title: string; body: string; userId?: number };
       file?: File;
     }) => {
-      const { formsService } = await import('@/lib/services');
+      const { formsService } = await import('@/lib/data/services');
       return formsService.createPostWithFile(postData, file);
     },
     {
@@ -306,9 +246,6 @@ export function useCreatePostWithFileMutation() {
   );
 }
 
-/**
- * Optimistic update hook
- */
 export function useOptimisticMutation<TData, TVariables, TError = ApiError>(
   mutationFn: (variables: TVariables) => Promise<TData>,
   options: EnhancedMutationOptions<TData, TVariables, TError> & {
@@ -323,22 +260,17 @@ export function useOptimisticMutation<TData, TVariables, TError = ApiError>(
   return useApiMutation(mutationFn, {
     ...mutationOptions,
     onMutate: async (variables) => {
-      // Cancel outgoing refetches
       await queryClient.cancelQueries();
 
-      // Perform optimistic update
       optimisticUpdate(variables);
 
-      // Return context for rollback
       return { variables };
     },
     onError: (error, variables, context, meta) => {
-      // Rollback optimistic update
       if (context && typeof context === 'object' && 'variables' in context) {
         rollbackUpdate((context as { variables: TVariables }).variables);
       }
 
-      // Call original error handler
       if (mutationOptions.onError) {
         mutationOptions.onError(error, variables, context, meta);
       }
@@ -346,9 +278,6 @@ export function useOptimisticMutation<TData, TVariables, TError = ApiError>(
   });
 }
 
-/**
- * Infinite query hook for pagination
- */
 export function useInfiniteApiQuery<TData, TError = ApiError>(
   queryKey: readonly (string | number)[],
   queryFn: ({
@@ -400,9 +329,6 @@ export function useInfiniteApiQuery<TData, TError = ApiError>(
   });
 }
 
-/**
- * Real-time data hook with polling
- */
 export function useRealtimeQuery<TData, TError = ApiError>(
   queryKey: readonly (string | number)[],
   queryFn: () => Promise<TData>,
@@ -411,11 +337,7 @@ export function useRealtimeQuery<TData, TError = ApiError>(
     enabled?: boolean;
   } = {},
 ) {
-  const {
-    pollingInterval = 30000, // 30 seconds
-    enabled = true,
-    ...queryOptions
-  } = options;
+  const { pollingInterval = 30000, enabled = true, ...queryOptions } = options;
 
   return useApiQuery(queryKey, queryFn, {
     ...queryOptions,
@@ -424,9 +346,6 @@ export function useRealtimeQuery<TData, TError = ApiError>(
   });
 }
 
-/**
- * Debounced search hook
- */
 export function useDebouncedSearch<TData, TError = ApiError>(
   queryKey: readonly (string | number)[],
   searchFn: (query: string) => Promise<TData>,
@@ -440,7 +359,6 @@ export function useDebouncedSearch<TData, TError = ApiError>(
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
-  // Debounce search query
   const debouncedSetQuery = useMemo(
     () =>
       debounce((...args: unknown[]) => {
@@ -471,9 +389,6 @@ export function useDebouncedSearch<TData, TError = ApiError>(
   };
 }
 
-/**
- * Cache management hook
- */
 export function useCacheManagement() {
   const queryClient = useQueryClient();
 
@@ -518,9 +433,6 @@ export function useCacheManagement() {
   };
 }
 
-/**
- * Offline support hook
- */
 export function useOfflineSupport() {
   const [isOnline, setIsOnline] = useState(
     typeof navigator !== 'undefined' ? navigator.onLine : true,
@@ -542,9 +454,6 @@ export function useOfflineSupport() {
   return { isOnline };
 }
 
-/**
- * Background sync hook
- */
 export function useBackgroundSync<TData, TVariables>(
   mutationFn: (variables: TVariables) => Promise<TData>,
   options: {
@@ -556,7 +465,6 @@ export function useBackgroundSync<TData, TVariables>(
   const [pendingMutations, setPendingMutations] = useState<TVariables[]>([]);
   const { isOnline } = useOfflineSupport();
 
-  // Load pending mutations from localStorage
   useEffect(() => {
     const stored = localStorage.getItem(options.syncKey);
     if (stored) {
@@ -568,12 +476,10 @@ export function useBackgroundSync<TData, TVariables>(
     }
   }, [options.syncKey]);
 
-  // Save pending mutations to localStorage
   useEffect(() => {
     localStorage.setItem(options.syncKey, JSON.stringify(pendingMutations));
   }, [pendingMutations, options.syncKey]);
 
-  // Sync when online
   useEffect(() => {
     if (isOnline && pendingMutations.length > 0) {
       const syncMutations = async () => {
@@ -603,9 +509,6 @@ export function useBackgroundSync<TData, TVariables>(
   };
 }
 
-/**
- * Hook for cache invalidation
- */
 export function useCacheInvalidation() {
   const queryClient = useQueryClient();
 

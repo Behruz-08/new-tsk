@@ -1,36 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { contactFormSchema } from '@/lib/validations';
-import { saveLocalFile } from '@/lib/file-utils';
-import { errorResponse } from '@/lib/api-helpers';
+import { contactFormSchema } from '@/lib/utils/validations';
+import { errorResponse } from '@/lib/api/api-helpers';
 import { ApiResponse } from '@/types';
 import { SubmitPostResponse } from '@/types/api';
 
-/**
- * Handles POST requests for form submissions.
- * Validates form data, saves attached files locally, and posts data to JSONPlaceholder.
- * It also creates a local post for display in the application.
- * @param request - The incoming Next.js request object containing form data.
- * @returns A NextResponse with submission details or an error response.
- */
 export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<ApiResponse<SubmitPostResponse>>> {
   try {
-    // Parse form data
     const formData = await request.formData();
 
-    // Extract form fields
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const message = formData.get('message') as string;
-    const file = formData.get('file') as File | null;
+    const fileUrl = formData.get('fileUrl') as string | null;
 
-    // Validate the data
     const validationResult = contactFormSchema.safeParse({
       name,
       email,
       message,
-      file,
+      file: fileUrl,
     });
 
     if (!validationResult.success) {
@@ -41,25 +30,15 @@ export async function POST(
       );
     }
 
-    // Handle file upload
-    let filePath: string | null = null;
-    if (file && file instanceof File && file.size > 0) {
-      filePath = await saveLocalFile(file, name);
-    }
-
-    // Simulate processing time
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // Prepare data for JSONPlaceholder
     const postData = {
       title: `Сообщение от ${name}`,
-      body: `Email: ${email}\n\nСообщение: ${message}${
-        filePath ? `\n\nПрикрепленный файл: ${file?.name || 'неизвестный файл'}` : ''
-      }`,
-      userId: 1, // Using fixed userId for demonstration
+      body: `Email: ${email}\n\nСообщение: ${message}`,
+      userId: 1,
+      ...(fileUrl && { fileUrl }),
     };
 
-    // Send POST request to JSONPlaceholder API
     const jsonPlaceholderResponse = await fetch('https://jsonplaceholder.typicode.com/posts', {
       method: 'POST',
       headers: {
@@ -74,7 +53,6 @@ export async function POST(
 
     const jsonPlaceholderPost = await jsonPlaceholderResponse.json();
 
-    // Also create a local post to display in the list
     const localPostResponse = await fetch(`${request.url.replace('/submit', '/posts')}`, {
       method: 'POST',
       headers: {
@@ -91,18 +69,6 @@ export async function POST(
 
     const createdPost = localPost || jsonPlaceholderPost;
 
-    // Log the submission
-    console.log('Form submission received and posted to JSONPlaceholder:', {
-      name,
-      email,
-      message,
-      fileName: file?.name || null,
-      fileSize: file?.size || 0,
-      fileType: file?.type || null,
-      createdPostId: createdPost.id,
-      timestamp: new Date().toISOString(),
-    });
-
     return NextResponse.json(
       {
         success: true,
@@ -113,10 +79,10 @@ export async function POST(
           name,
           email,
           message,
-          fileName: file?.name || undefined,
-          fileSize: file?.size || 0,
-          fileType: file?.type || undefined,
-          filePath: filePath || undefined, // Add file path to response
+          fileUrl: fileUrl || undefined,
+          fileName: fileUrl ? fileUrl.split('/').pop() : undefined,
+          fileSize: 0,
+          fileType: fileUrl ? fileUrl.split('.').pop() : undefined,
           submittedAt: new Date().toISOString(),
         },
       },
@@ -131,10 +97,6 @@ export async function POST(
   }
 }
 
-/**
- * Handles OPTIONS requests for CORS preflight.
- * @returns A NextResponse with appropriate CORS headers.
- */
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,

@@ -1,45 +1,26 @@
-/**
- * PostCard component for displaying individual posts
- * Компонент карточки поста для отображения отдельных постов
- */
-
 'use client';
 
 import React from 'react';
 import { Card } from '@/components/ui/Card';
 import { Post } from '@/types';
 import { User, Calendar, Paperclip, FileText } from 'lucide-react';
-import { formatDate } from '@/lib/utils';
+import { formatDate } from '@/lib/utils/utils';
 import styles from './PostCard.module.scss';
 
-/**
- * Props interface for PostCard component
- * Интерфейс пропсов для компонента PostCard
- */
 interface PostCardProps {
-  /** Post data to display */
   post: Post;
-  /** Whether to show render time instead of load time */
   showRenderTime?: boolean;
-  /** Custom render time to display */
   renderTime?: Date;
-  /** Additional CSS classes */
   className?: string;
 }
 
-/**
- * PostCard component for displaying individual posts with metadata and file attachments
- * Компонент карточки поста для отображения отдельных постов с метаданными и вложениями
- * @param props - PostCard props
- * @returns JSX element
- */
 export const PostCard: React.FC<PostCardProps> = ({
   post,
   showRenderTime = false,
   renderTime,
   className,
 }) => {
-  const isLocalPost = post.createdAt; // Local posts have createdAt field
+  const isLocalPost = post.createdAt;
   const displayTime = showRenderTime && renderTime ? renderTime : new Date();
 
   return (
@@ -58,7 +39,6 @@ export const PostCard: React.FC<PostCardProps> = ({
         {post.body.length > 120 ? `${post.body.substring(0, 120)}...` : post.body}
       </p>
 
-      {/* File Attachment */}
       {post.fileUrl && (
         <div className={styles.fileAttachment}>
           <div className={styles.fileInfo}>
