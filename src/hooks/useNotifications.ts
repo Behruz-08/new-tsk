@@ -1,5 +1,6 @@
 import { toast } from 'sonner';
-import { SUCCESS_MESSAGES, ERROR_MESSAGES, LOADING_MESSAGES } from '@/constants';
+
+import { ERROR_MESSAGES } from '@/constants';
 
 export function useNotifications() {
   const showSuccess = (message: string, options?: { duration?: number; description?: string }) => {
@@ -81,33 +82,6 @@ export function useNotifications() {
     showLoading,
     dismiss,
     dismissAll,
-  };
-}
-
-export function useFormNotifications() {
-  const notifications = useNotifications();
-
-  const showFormSuccess = (message?: string) => {
-    notifications.showSuccess(message || SUCCESS_MESSAGES.FORM_SUBMITTED);
-  };
-
-  const showFormError = (message?: string) => {
-    notifications.showError(message || ERROR_MESSAGES.VALIDATION);
-  };
-
-  const showValidationError = (field: string, message: string) => {
-    notifications.showError(`${field}: ${message}`);
-  };
-
-  const showLoadingState = (message?: string) => {
-    return notifications.showLoading(message || LOADING_MESSAGES.SUBMITTING_FORM);
-  };
-
-  return {
-    showFormSuccess,
-    showFormError,
-    showValidationError,
-    showLoadingState,
   };
 }
 

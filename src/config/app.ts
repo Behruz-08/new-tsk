@@ -6,7 +6,8 @@ export const APP_CONFIG = {
   environment: process.env.NODE_ENV || 'development',
   api: {
     jsonPlaceholder: {
-      baseUrl: 'https://jsonplaceholder.typicode.com',
+      baseUrl:
+        process.env.NEXT_PUBLIC_JSONPLACEHOLDER_BASE_URL || 'https://jsonplaceholder.typicode.com',
       timeout: 10000,
       retries: 3,
     },

@@ -1,10 +1,12 @@
 'use client';
 
-import React from 'react';
-import { Card } from '@/components/ui/Card';
-import { Post } from '@/types';
 import { User, Calendar, Paperclip, FileText } from 'lucide-react';
+import React from 'react';
+
+import { Card } from '@/components/ui/Card';
 import { formatDate } from '@/lib/utils/utils';
+import type { Post } from '@/types';
+
 import styles from './PostCard.module.scss';
 
 interface PostCardProps {

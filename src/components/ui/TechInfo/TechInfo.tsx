@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Card } from '@/components/ui/Card';
+
 import styles from './TechInfo.module.scss';
 
 interface TechInfoItem {

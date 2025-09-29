@@ -1,7 +1,10 @@
-import React from 'react';
-import { Button } from '@/components/ui/Button';
-import { LucideIcon, ArrowLeft } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import React from 'react';
+
+import { Button } from '@/components/ui/Button';
+
 import styles from './PageHeader.module.scss';
 
 interface PageHeaderProps {

@@ -1,18 +1,14 @@
 import { NextResponse } from 'next/server';
-import { Post } from '@/types';
-import { LocalPost } from '@/types/api';
-import { addLocalPost, getLocalPosts } from '@/lib/data/local-posts';
+
+import { apiClient } from '@/lib/api/api-client';
 import { errorResponse } from '@/lib/api/api-helpers';
+import { addLocalPost, getLocalPosts } from '@/lib/data/local-posts';
+import type { Post } from '@/types';
+import type { LocalPost } from '@/types/api';
 
 export async function GET() {
   try {
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-
-    if (!response.ok) {
-      throw new Error(`JSONPlaceholder API error: ${response.status}`);
-    }
-
-    const jsonPlaceholderPosts: Post[] = await response.json();
+    const jsonPlaceholderPosts = await apiClient.get<Post[]>('/posts');
 
     const allPosts = [...getLocalPosts(), ...jsonPlaceholderPosts];
 

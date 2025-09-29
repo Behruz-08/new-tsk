@@ -1,4 +1,3 @@
-// Modal overlay
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -38,7 +37,6 @@
   }
 }
 
-// Modal content
 .modal-content {
   background: map-get($gradients, card);
   border-radius: border-radius(lg);
@@ -117,7 +115,6 @@
   }
 }
 
-// Modal header
 .modal-header {
   display: flex;
   align-items: center;
@@ -144,7 +141,6 @@
   }
 }
 
-// Modal body
 .modal-body {
   padding: 0 spacing(6);
   overflow-y: auto;
@@ -163,7 +159,6 @@
   }
 }
 
-// Modal footer
 .modal-footer {
   display: flex;
   align-items: center;
@@ -187,7 +182,6 @@
   }
 }
 
-// Modal close button
 .modal-close {
   @include flex-center;
   width: 32px;
@@ -224,7 +218,6 @@
   }
 }
 
-// Modal backdrop click
 .modal-backdrop {
   position: absolute;
   top: 0;
@@ -234,7 +227,6 @@
   z-index: -1;
 }
 
-// Modal animations
 @keyframes modalFadeIn {
   from {
     opacity: 0;
@@ -277,7 +269,6 @@
   }
 }
 
-// Modal variants
 .modal--alert {
   .modal-content {
     max-width: 400px;
@@ -336,7 +327,6 @@
   }
 }
 
-// Modal with image
 .modal--image {
   .modal-content {
     max-width: 90vw;
@@ -355,7 +345,6 @@
   }
 }
 
-// Responsive modal
 @media (max-width: 768px) {
   .modal-overlay {
     padding: spacing(2);

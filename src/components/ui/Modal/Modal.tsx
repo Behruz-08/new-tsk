@@ -2,8 +2,10 @@
 
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { cn } from '@/lib/utils/utils';
+
 import { useLocalModal } from '@/hooks/useModal';
+import { cn } from '@/lib/utils/utils';
+
 import styles from './Modal.module.scss';
 
 export interface ModalProps {

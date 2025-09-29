@@ -1,7 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/Button';
 import { RefreshCw } from 'lucide-react';
+
+import { Button } from '@/components/ui/Button';
 
 interface RefreshButtonProps {
   className?: string;

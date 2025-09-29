@@ -1,10 +1,5 @@
-/**
- * Futuristic Animations and Keyframes
- */
-
 @use 'sass:map';
 
-// Keyframe Animations
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -214,7 +209,6 @@
   }
 }
 
-// Animation utility classes
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out;
 }
@@ -261,7 +255,6 @@
   animation: shimmer 2s infinite;
 }
 
-// Delay classes for staggered animations
 .animate-delay-100 {
   animation-delay: 0.1s;
 }
@@ -282,7 +275,6 @@
   animation-delay: 0.5s;
 }
 
-// Hover effects
 .hover-glow {
   transition: all 0.3s ease;
 

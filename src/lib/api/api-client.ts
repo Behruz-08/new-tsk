@@ -1,8 +1,10 @@
+import { API_CONFIG as SHARED_API_CONFIG } from '@/shared/config/api';
+
 export const API_CONFIG = {
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://jsonplaceholder.typicode.com',
-  timeout: 10000,
-  retries: 3,
-  retryDelay: 1000,
+  baseUrl: SHARED_API_CONFIG.BASE_URL,
+  timeout: SHARED_API_CONFIG.TIMEOUT,
+  retries: SHARED_API_CONFIG.RETRIES,
+  retryDelay: SHARED_API_CONFIG.RETRY_DELAY,
 } as const;
 
 export class ApiError extends Error {

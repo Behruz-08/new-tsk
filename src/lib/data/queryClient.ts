@@ -1,4 +1,5 @@
 import { QueryClient } from '@tanstack/react-query';
+
 import { QUERY_KEYS } from '@/constants';
 
 const defaultQueryOptions = {
@@ -26,7 +27,10 @@ export const prefetchQueries = {
   async postsList() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.POSTS.LISTS(),
-      queryFn: () => import('./services').then(({ postsService }) => postsService.getAll()),
+      queryFn: () =>
+        import('@/features/posts/services/posts.service').then(({ postsService }) =>
+          postsService.getAll(),
+        ),
       staleTime: 5 * 60 * 1000,
     });
   },
@@ -34,7 +38,10 @@ export const prefetchQueries = {
   async postDetail(id: number) {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.POSTS.DETAIL(id),
-      queryFn: () => import('./services').then(({ postsService }) => postsService.getById(id)),
+      queryFn: () =>
+        import('@/features/posts/services/posts.service').then(({ postsService }) =>
+          postsService.getById(id),
+        ),
       staleTime: 10 * 60 * 1000,
     });
   },
@@ -43,7 +50,9 @@ export const prefetchQueries = {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.COMMENTS.BY_POST(postId),
       queryFn: () =>
-        import('./services').then(({ commentsService }) => commentsService.getByPostId(postId)),
+        import('@/features/comments/services/comments.service').then(({ commentsService }) =>
+          commentsService.getByPostId(postId),
+        ),
       staleTime: 5 * 60 * 1000,
     });
   },

@@ -1,7 +1,3 @@
-/**
- * Home page styles
- */
-
 @use '../styles/variables' as *;
 @use '../styles/mixins' as *;
 
@@ -15,7 +11,6 @@
   flex: 1;
 }
 
-// Hero Section
 .hero {
   background: map-get($gradients, hero);
   color: color(text-primary);
@@ -23,7 +18,6 @@
   position: relative;
   overflow: hidden;
 
-  // Animated background effects
   &::before {
     content: '';
     position: absolute;
@@ -40,7 +34,6 @@
     z-index: 0;
   }
 
-  // Cyber grid overlay
   &::after {
     content: '';
     position: absolute;
@@ -129,14 +122,12 @@
   }
 }
 
-// Features Section
 .features {
   padding: spacing(20) 0;
   background: color(background-secondary);
   position: relative;
   overflow: hidden;
 
-  // Subtle grid pattern
   &::before {
     content: '';
     position: absolute;
@@ -256,14 +247,12 @@
   animation: float 3s ease-in-out infinite;
 }
 
-// Tech Stack Section
 .techStack {
   padding: spacing(20) 0;
   background: color(background);
   position: relative;
   overflow: hidden;
 
-  // Animated particles
   &::before {
     content: '';
     position: absolute;
@@ -367,5 +356,3 @@
     }
   }
 }
-
-// Animations are now handled by the global animations.scss file

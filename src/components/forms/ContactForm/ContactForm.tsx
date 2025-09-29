@@ -1,15 +1,17 @@
 'use client';
 
+import { Upload, User, Mail, MessageSquare } from 'lucide-react';
 import React from 'react';
-import { useValidatedForm, useFormSubmission } from '@/hooks/useForm';
-import { useCacheInvalidation } from '@/hooks/useApi';
-import { contactFormSchema, type ContactFormData } from '@/lib/utils/validations';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { formsService } from '@/lib/data/services';
-import { toast } from 'sonner';
-import { Upload, User, Mail, MessageSquare } from 'lucide-react';
+import { formsService } from '@/features/forms/services/forms.service';
+import { useCacheInvalidation, useSubmitFormMutation } from '@/hooks/useApi';
+import { useValidatedForm } from '@/hooks/useForm';
 import { formatFileSize } from '@/lib/utils/utils';
+import { contactFormSchema, type ContactFormData } from '@/lib/utils/validations';
+
 import styles from './ContactForm.module.scss';
 
 interface ContactFormProps {
@@ -33,7 +35,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
     file: undefined,
   });
 
-  const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } = useFormSubmission();
+  const submitFormMutation = useSubmitFormMutation();
   const { invalidatePosts } = useCacheInvalidation();
 
   const uploadedFileUrl = watch('file');
@@ -91,16 +93,12 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
         formData.append('fileUrl', data.file);
       }
 
-      const result = await submit(
-        (data: unknown) => formsService.submitContactForm(data as FormData),
-        formData,
-      );
+      const result = await submitFormMutation.mutateAsync(formData);
 
       if (result) {
         console.log('ContactForm: Form submitted successfully', { result });
         toast.success('Форма успешно отправлена!');
         reset();
-        resetSubmission();
         invalidatePosts();
         console.log('ContactForm: Calling onSuccess callback');
         onSuccess?.();
@@ -121,7 +119,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           leftIcon={<User size={18} />}
           error={errors.name?.message}
           required
-          disabled={isSubmitting}
+          disabled={submitFormMutation.isPending}
         />
 
         <Input
@@ -132,7 +130,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           leftIcon={<Mail size={18} />}
           error={errors.email?.message}
           required
-          disabled={isSubmitting}
+          disabled={submitFormMutation.isPending}
         />
 
         <div className={styles.messageField}>
@@ -146,7 +144,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
             placeholder="Введите ваше сообщение"
             className={`${styles.textarea} ${errors.message ? styles.textareaError : ''}`}
             rows={4}
-            disabled={isSubmitting}
+            disabled={submitFormMutation.isPending}
           />
           {errors.message && (
             <p className={styles.errorText} role="alert">
@@ -162,7 +160,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
             onChange={handleFileChange}
             leftIcon={<Upload size={18} />}
             error={errors.file?.message}
-            disabled={isSubmitting}
+            disabled={submitFormMutation.isPending}
             accept="image/*,.pdf,.txt"
           />
 
@@ -189,10 +187,10 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           )}
         </div>
 
-        {submitError && (
+        {submitFormMutation.isError && (
           <div className={styles.submitError} role="alert">
             <MessageSquare size={16} />
-            <span>{submitError}</span>
+            <span>Ошибка отправки формы</span>
           </div>
         )}
 
@@ -201,14 +199,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
           variant="primary"
           size="lg"
           fullWidth
-          loading={isSubmitting}
-          disabled={!isValid || isSubmitting}
-          leftIcon={!isSubmitting && <MessageSquare size={18} />}
+          loading={submitFormMutation.isPending}
+          disabled={!isValid || submitFormMutation.isPending}
+          leftIcon={!submitFormMutation.isPending && <MessageSquare size={18} />}
         >
-          {isSubmitting ? 'Отправка...' : 'Отправить сообщение'}
+          {submitFormMutation.isPending ? 'Отправка...' : 'Отправить сообщение'}
         </Button>
 
-        {submitSuccess && (
+        {submitFormMutation.isSuccess && (
           <div className={styles.successMessage}>
             <MessageSquare size={16} />
             <span>Сообщение успешно отправлено!</span>

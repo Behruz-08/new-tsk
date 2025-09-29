@@ -1,5 +1,5 @@
-import { Post } from '@/types';
 import { apiClient, localApiClient } from '@/lib/api/api-client';
+import type { Post } from '@/types';
 
 export interface PostsService {
   getAll(): Promise<Post[]>;

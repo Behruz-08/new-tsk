@@ -1,3 +1,38 @@
+# Next.js Test Task (Improved for Middle+/Senior)
+
+## Архитектура
+
+- `src/features/*` — доменные модули (posts, comments, forms): `services`, `ui`, `hooks`, `index.ts`.
+- `src/shared` — общий код:
+  - `config/env.ts` — валидация окружения (zod)
+  - `config/api.ts` — единый API‑конфиг
+  - `schemas/jsonplaceholder.ts` — zod‑схемы ответов API
+- `src/lib` — инфраструктура: `api-client`, локальные данные, queryClient.
+- `src/hooks` — общие хуки: `useApi`, `useApiGet`, `useApiPost`.
+- `src/components` — переиспользуемые UI-компоненты.
+
+## Окружение
+
+Создайте `.env.local`:
+
+```
+NEXT_PUBLIC_JSONPLACEHOLDER_BASE_URL=https://jsonplaceholder.typicode.com
+```
+
+## Скрипты
+
+- `npm run dev` — разработка
+- `npm run build` — сборка
+- `npm run start` — запуск
+- `npm run lint` — проверка
+
+## Особенности
+
+- Централизованный `apiClient` с таймаутами/ретраями.
+- React Query c дефолтами и Devtools.
+- ErrorBoundary в `app/layout.tsx`.
+- Страницы SSG/SSR/ISR/CSR + модалка с формой и загрузкой файла.
+
 # Next.js Test Task - Frontend Development
 
 ## 🚀 Описание проекта

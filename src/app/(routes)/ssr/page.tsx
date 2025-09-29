@@ -1,12 +1,15 @@
+import { Database, Calendar, RefreshCw } from 'lucide-react';
+
 import { Navigation } from '@/components/layout/Navigation';
+import { PostCard } from '@/components/posts/PostCard';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { TechInfo } from '@/components/ui/TechInfo';
 import { RefreshButton } from '@/components/ui/RefreshButton';
-import { PostCard } from '@/components/posts/PostCard';
-import { Post } from '@/types';
-import { Database, Calendar, RefreshCw } from 'lucide-react';
+import { TechInfo } from '@/components/ui/TechInfo';
+import { apiClient } from '@/lib/api/api-client';
 import { formatDate } from '@/lib/utils/utils';
+import type { Post } from '@/types';
+
 import styles from './page.module.scss';
 
 export const dynamic = 'force-dynamic';
@@ -15,13 +18,7 @@ async function getPosts(): Promise<Post[]> {
   try {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-
-    if (!response.ok) {
-      throw new Error(`JSONPlaceholder API error: ${response.status}`);
-    }
-
-    const posts: Post[] = await response.json();
+    const posts = await apiClient.get<Post[]>('/posts');
     return posts.slice(0, 12);
   } catch (error) {
     console.error('Error fetching posts:', error);

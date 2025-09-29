@@ -1,11 +1,13 @@
+import { Zap, Calendar, User, Clock } from 'lucide-react';
+
 import { Navigation } from '@/components/layout/Navigation';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { TechInfo } from '@/components/ui/TechInfo';
-import { commentsService } from '@/lib/data/services';
-import { Comment } from '@/types';
-import { Zap, Calendar, User, Clock } from 'lucide-react';
+import { commentsService } from '@/features/comments';
 import { formatDate } from '@/lib/utils/utils';
+import type { Comment } from '@/types';
+
 import styles from './page.module.scss';
 
 export const revalidate = 60;

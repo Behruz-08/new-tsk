@@ -1,4 +1,4 @@
-import { LocalPost } from '@/types/api';
+import type { LocalPost } from '@/types/api';
 
 const LOCAL_STORAGE_KEY = 'localPosts';
 

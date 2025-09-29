@@ -1,4 +1,4 @@
-import { Post, Comment, User } from './index';
+import type { Post, Comment, User } from './index';
 
 export interface JsonPlaceholderEndpoints {
   posts: '/posts';

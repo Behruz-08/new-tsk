@@ -1,20 +1,21 @@
 'use client';
 
+import { useQueryClient } from '@tanstack/react-query';
+import { Upload, FileText, Edit3 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useValidatedForm } from '@/hooks/useForm';
-import { postFormSchema, type PostFormData } from '@/lib/utils/validations';
+import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { useFormSubmission } from '@/hooks/useForm';
-import { formsService } from '@/lib/data/services';
-import { Post } from '@/types';
-import { toast } from 'sonner';
-import { Upload, FileText, Edit3 } from 'lucide-react';
-import { formatFileSize } from '@/lib/utils/utils';
-import styles from './PostForm.module.scss';
-import { useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/constants';
+import { formsService } from '@/features/forms/services/forms.service';
+import { useValidatedForm, useFormSubmission } from '@/hooks/useForm';
+import { formatFileSize } from '@/lib/utils/utils';
+import { postFormSchema, type PostFormData } from '@/lib/utils/validations';
+import type { Post } from '@/types';
+
+import styles from './PostForm.module.scss';
 
 interface PostFormProps {
   onSubmit?: (data: PostFormData) => void;

@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+
 import { useModalState, useModalActions } from '@/store';
 
 export function useModal(modalId: string) {
@@ -41,18 +42,6 @@ export function useModal(modalId: string) {
     open,
     close,
     toggle,
-  };
-}
-
-export function useMultipleModals() {
-  const { openModal, closeModal, toggleModal, isModalOpen, closeAllModals } = useModalActions();
-
-  return {
-    openModal,
-    closeModal,
-    toggleModal,
-    isModalOpen,
-    closeAllModals,
   };
 }
 

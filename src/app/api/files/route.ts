@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
-import { FILE_CONFIG } from '@/constants';
-import { ApiResponse, FileUploadResponse } from '@/types/api';
+import { NextResponse } from 'next/server';
 
+import { FILE_CONFIG } from '@/constants';
 import { errorResponse } from '@/lib/api/api-helpers';
+import type { ApiResponse, FileUploadResponse } from '@/types/api';
 
 export async function GET(): Promise<NextResponse<ApiResponse<FileUploadResponse[]>>> {
   return NextResponse.json({ success: true, files: [] });

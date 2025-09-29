@@ -1,18 +1,20 @@
 'use client';
 
+import { MessageSquare, RefreshCw } from 'lucide-react';
 import React from 'react';
+
+import { ContactForm } from '@/components/forms/ContactForm';
 import { Navigation } from '@/components/layout/Navigation';
-import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { ErrorState } from '@/components/ui/ErrorState';
+import { LoadingState } from '@/components/ui/LoadingState';
 import { Modal } from '@/components/ui/Modal';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { LoadingState } from '@/components/ui/LoadingState';
-import { ErrorState } from '@/components/ui/ErrorState';
-import { PostCard } from '@/components/posts/PostCard';
-import { ContactForm } from '@/components/forms/ContactForm';
+import { useCommentsQuery } from '@/features/comments';
+import { PostCard, usePostsQuery } from '@/features/posts';
 import { useModalState, useModalActions } from '@/store';
-import { usePostsQuery, useCommentsQuery } from '@/hooks/useApi';
-import { MessageSquare, RefreshCw } from 'lucide-react';
+
 import styles from './page.module.scss';
 
 export default function CSRPage() {

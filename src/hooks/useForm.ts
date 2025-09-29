@@ -1,16 +1,9 @@
-import {
-  useForm as useReactHookForm,
-  UseFormProps,
-  FieldValues,
-  Path,
-  DefaultValues,
-  Resolver,
-} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState, useCallback } from 'react';
+import type { UseFormProps, FieldValues, Path, DefaultValues, Resolver } from 'react-hook-form';
+import { useForm as useReactHookForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useState, useCallback, useMemo } from 'react';
-import { toast } from 'sonner';
-import { debounce } from '@/lib/utils/utils';
+
 import { useApiNotifications } from '@/hooks/useNotifications';
 
 function createZodResolver<T extends FieldValues>(schema: z.ZodSchema<T>): Resolver<T> {
@@ -262,70 +255,5 @@ export function createFieldProps<T extends FieldValues>(
     ...form.register(fieldName),
     error: form.getFieldError(fieldName),
     hasError: form.hasFieldError(fieldName),
-  };
-}
-
-export function useFormSubmissionWithToast<T = unknown>() {
-  const submission = useFormSubmission<T>();
-
-  const submitWithToast = useCallback(
-    async (
-      submitFn: (data: unknown) => Promise<T>,
-      data: unknown,
-      successMessage: string = 'Данные успешно сохранены',
-    ): Promise<T | null> => {
-      try {
-        const result = await submission.submit(submitFn, data);
-        toast.success(successMessage);
-        return result;
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Произошла ошибка';
-        toast.error(errorMessage);
-        return null;
-      }
-    },
-    [submission],
-  );
-
-  return {
-    ...submission,
-    submitWithToast,
-  };
-}
-
-export function useAutoSave<T extends FieldValues>(
-  form: ReturnType<typeof useValidatedForm<T>>,
-  saveFn: (data: T) => Promise<void>,
-  delay: number = 2000,
-) {
-  const [isAutoSaving, setIsAutoSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
-
-  const autoSave = useCallback(
-    async (data: T) => {
-      if (!form.isDirty || !form.isValid) return;
-
-      setIsAutoSaving(true);
-      try {
-        await saveFn(data);
-        setLastSaved(new Date());
-      } catch (error) {
-        console.error('Auto-save failed:', error);
-      } finally {
-        setIsAutoSaving(false);
-      }
-    },
-    [form.isDirty, form.isValid, saveFn],
-  );
-
-  const debouncedAutoSave = useMemo(
-    () => debounce((...args: unknown[]) => autoSave(args[0] as T), delay),
-    [autoSave, delay],
-  );
-
-  return {
-    isAutoSaving,
-    lastSaved,
-    autoSave: debouncedAutoSave,
   };
 }

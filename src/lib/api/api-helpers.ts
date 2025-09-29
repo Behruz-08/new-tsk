@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { ApiResponse } from '@/types/api';
+
+import type { ApiResponse } from '@/types/api';
 
 export function errorResponse<T = null>(
   message: string,

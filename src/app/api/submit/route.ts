@@ -1,8 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { contactFormSchema } from '@/lib/utils/validations';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+
+import { apiClient } from '@/lib/api/api-client';
 import { errorResponse } from '@/lib/api/api-helpers';
-import { ApiResponse } from '@/types';
-import { SubmitPostResponse } from '@/types/api';
+import { contactFormSchema } from '@/lib/utils/validations';
+import type { ApiResponse } from '@/types';
+import type { SubmitPostResponse } from '@/types/api';
 
 export async function POST(
   request: NextRequest,
@@ -39,19 +42,7 @@ export async function POST(
       ...(fileUrl && { fileUrl }),
     };
 
-    const jsonPlaceholderResponse = await fetch('https://jsonplaceholder.typicode.com/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(postData),
-    });
-
-    if (!jsonPlaceholderResponse.ok) {
-      throw new Error(`JSONPlaceholder API error: ${jsonPlaceholderResponse.status}`);
-    }
-
-    const jsonPlaceholderPost = await jsonPlaceholderResponse.json();
+    const jsonPlaceholderPost = await apiClient.post('/posts', postData);
 
     const localPostResponse = await fetch(`${request.url.replace('/submit', '/posts')}`, {
       method: 'POST',

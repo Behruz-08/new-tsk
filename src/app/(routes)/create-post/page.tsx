@@ -1,10 +1,12 @@
 'use client';
 
+import { Plus, FileText, Upload } from 'lucide-react';
+
+import { PostForm } from '@/components/forms/PostForm';
 import { Navigation } from '@/components/layout/Navigation';
 import { Card } from '@/components/ui/Card';
 import { PageHeader } from '@/components/ui/PageHeader';
-import { PostForm } from '@/components/forms/PostForm';
-import { Plus, FileText, Upload } from 'lucide-react';
+
 import styles from './page.module.scss';
 
 export default function CreatePostPage() {

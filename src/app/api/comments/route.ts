@@ -1,17 +1,13 @@
 import { NextResponse } from 'next/server';
-import { Comment } from '@/types';
-import { ApiResponse } from '@/types/api';
+
+import { apiClient } from '@/lib/api/api-client';
 import { errorResponse } from '@/lib/api/api-helpers';
+import type { Comment } from '@/types';
+import type { ApiResponse } from '@/types/api';
 
 export async function GET(): Promise<NextResponse<ApiResponse<Comment>>> {
   try {
-    const response = await fetch('https://jsonplaceholder.typicode.com/comments');
-
-    if (!response.ok) {
-      throw new Error(`JSONPlaceholder API error: ${response.status}`);
-    }
-
-    const comments: Comment[] = await response.json();
+    const comments = await apiClient.get<Comment[]>('/comments');
 
     return NextResponse.json({
       success: true,

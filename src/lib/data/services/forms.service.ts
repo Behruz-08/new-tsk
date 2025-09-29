@@ -1,5 +1,5 @@
-import { FormSubmissionResult, PostCreationResult } from '@/types';
 import { localApiClient } from '@/lib/api/api-client';
+import type { FormSubmissionResult, PostCreationResult } from '@/types';
 
 export interface FormsService {
   submitContactForm(formData: FormData): Promise<FormSubmissionResult>;

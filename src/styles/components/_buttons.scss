@@ -1,8 +1,6 @@
-// Base button styles
 .btn {
   @include button-base;
 
-  // Size variants
   &--sm {
     padding: spacing(2) spacing(4);
     font-size: font-size(xs);
@@ -21,7 +19,6 @@
     border-radius: border-radius(lg);
   }
 
-  // Variant styles
   &--primary {
     @include button-primary;
   }
@@ -56,7 +53,6 @@
     }
   }
 
-  // State modifiers
   &--loading {
     position: relative;
     color: transparent;
@@ -82,12 +78,10 @@
     pointer-events: none;
   }
 
-  // Full width variant
   &--full-width {
     width: 100%;
   }
 
-  // Icon variants
   &--icon-only {
     padding: spacing(2);
     width: 40px;
@@ -107,7 +101,6 @@
   }
 }
 
-// Button group styles
 .btn-group {
   display: inline-flex;
   border-radius: border-radius(md);
@@ -135,7 +128,6 @@
   }
 }
 
-// Loading spinner animation
 @keyframes spin {
   from {
     transform: rotate(0deg);

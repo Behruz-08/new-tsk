@@ -1,8 +1,10 @@
+import { ArrowRight, Zap, Database, FileText, MessageSquare } from 'lucide-react';
+import Link from 'next/link';
+
 import { Navigation } from '@/components/layout/Navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { ArrowRight, Zap, Database, FileText, MessageSquare } from 'lucide-react';
-import Link from 'next/link';
+
 import styles from './page.module.scss';
 
 export default function HomePage() {
@@ -11,7 +13,6 @@ export default function HomePage() {
       <Navigation />
 
       <main className={styles.main}>
-        {/* Hero Section */}
         <section className={styles.hero}>
           <div className="container">
             <div className={styles.heroContent}>
@@ -38,7 +39,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Features Section */}
         <section id="features" className={styles.features}>
           <div className="container">
             <div className={styles.sectionHeader}>
@@ -102,7 +102,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Tech Stack Section */}
         <section className={styles.techStack}>
           <div className="container">
             <div className={styles.sectionHeader}>

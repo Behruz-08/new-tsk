@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+
 import { cn } from '@/lib/utils/utils';
+
 import styles from './Input.module.scss';
 
 export interface InputProps

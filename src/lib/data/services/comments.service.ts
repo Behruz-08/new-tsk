@@ -1,5 +1,5 @@
-import { Comment } from '@/types';
 import { apiClient, localApiClient } from '@/lib/api/api-client';
+import type { Comment } from '@/types';
 
 export interface CommentsService {
   getAll(): Promise<Comment[]>;

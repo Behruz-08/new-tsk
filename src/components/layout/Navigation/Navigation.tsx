@@ -1,11 +1,13 @@
 'use client';
 
-import React from 'react';
+import { MessageSquare, Home, FileText, Database, Zap, Plus } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@/lib/utils/utils';
+import React from 'react';
+
 import { Button } from '@/components/ui/Button';
-import { MessageSquare, Home, FileText, Database, Zap, Plus } from 'lucide-react';
+import { cn } from '@/lib/utils/utils';
+
 import styles from './Navigation.module.scss';
 
 const navigationItems = [
