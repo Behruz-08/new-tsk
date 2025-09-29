@@ -16,7 +16,9 @@ import { toast } from 'sonner';
 import { Upload, FileText, Edit3 } from 'lucide-react';
 import { formatFileSize } from '@/lib/utils';
 import styles from './PostForm.module.scss';
-import { usePostsStore } from '@/store';
+import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { QUERY_KEYS } from '@/constants';
 
 interface PostFormProps {
   onSubmit?: (data: PostFormData) => void;
@@ -42,8 +44,8 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
   });
 
   const { isSubmitting, submitError, submitSuccess, submit, resetSubmission } = useFormSubmission();
-
-  const addPost = usePostsStore((state) => state.addPost); // Get addPost from Zustand
+  const router = useRouter();
+  const queryClient = useQueryClient(); // Initialize useQueryClient
 
   // Watch file input for display purposes
   const selectedFile = watch('file');
@@ -81,7 +83,13 @@ export const PostForm: React.FC<PostFormProps> = ({ onSubmit, onSuccess, classNa
         reset();
         resetSubmission();
         onSuccess?.(result.post as Post);
-        addPost(result.post as Post); // Add new post to Zustand store
+
+        // Manually update TanStack Query cache with the new post
+        queryClient.setQueryData(QUERY_KEYS.POSTS.LISTS(), (oldData: Post[] | undefined) => {
+          return oldData ? [result.post as Post, ...oldData] : [result.post as Post];
+        });
+        // addPost(result.post as Post); // Add new post to Zustand store (removed, using TanStack Query cache directly)
+        router.push('/csr');
       }
     } catch (error) {
       console.error('Form submission error:', error);

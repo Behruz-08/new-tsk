@@ -208,6 +208,7 @@ export const useAppStore = create<AppState>()(
 /**
  * Legacy posts store for backward compatibility
  * Устаревший store для постов для обратной совместимости
+ * @deprecated Use usePostsQuery from @/hooks/useApi for data fetching
  */
 export const usePostsStore = create<{
   posts: Post[];
@@ -224,7 +225,8 @@ export const usePostsStore = create<{
  * Удобные хуки для конкретных частей store
  */
 
-// Posts hooks
+// Posts hooks - for UI state management only
+// Use usePostsQuery from @/hooks/useApi for data fetching
 export const usePostsState = () => {
   const posts = useAppStore((state) => state.posts);
   const loading = useAppStore((state) => state.postsLoading);
@@ -253,7 +255,8 @@ export const usePostsActions = () => {
   };
 };
 
-// Comments hooks
+// Comments hooks - for UI state management only
+// Use useCommentsQuery from @/hooks/useApi for data fetching
 export const useCommentsState = () => {
   const comments = useAppStore((state) => state.comments);
   const loading = useAppStore((state) => state.commentsLoading);
@@ -271,7 +274,8 @@ export const useCommentsActions = () => {
   return { setComments, setLoading, setError, reset };
 };
 
-// Files hooks
+// Files hooks - for UI state management only
+// Use useFileUpload from @/hooks/useFileUpload for file operations
 export const useFilesState = () => {
   const files = useAppStore((state) => state.files);
   const loading = useAppStore((state) => state.filesLoading);

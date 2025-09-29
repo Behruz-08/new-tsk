@@ -1,5 +1,6 @@
 /**
- * SCSS Mixins for reusable styles
+ * Comprehensive SCSS Mixins with CSS Variables and enhanced functionality
+ * Комплексные миксины с поддержкой CSS переменных и расширенной функциональностью
  */
 
 @use './variables' as *;
@@ -22,6 +23,30 @@
     }
   } @else {
     @warn "Breakpoint `#{$breakpoint}` not found in $breakpoints.";
+  }
+}
+
+@mixin mobile {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: 768px) and (max-width: 1023px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin large-desktop {
+  @media (min-width: 1280px) {
+    @content;
   }
 }
 
@@ -49,22 +74,44 @@
   justify-content: center;
 }
 
+@mixin flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@mixin flex-gap($gap: var(--spacing-4)) {
+  gap: $gap;
+}
+
+// Grid utilities
+@mixin grid($columns: 1, $gap: var(--spacing-4)) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: $gap;
+}
+
+@mixin grid-auto-fit($min-width: 250px, $gap: var(--spacing-4)) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
 // Button styles - Futuristic
 @mixin button-base {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: spacing(2);
-  padding: spacing(3) spacing(6);
+  gap: var(--spacing-2, spacing(2));
+  padding: var(--spacing-3, spacing(3)) var(--spacing-6, spacing(6));
   border: none;
-  border-radius: border-radius(md);
-  font-family: $font-family-sans;
-  font-size: font-size(sm);
-  font-weight: font-weight(medium);
-  line-height: line-height(none);
+  border-radius: var(--radius-md, border-radius(md));
+  font-family: var(--font-family-sans, $font-family-sans);
+  font-size: var(--font-size-sm, font-size(sm));
+  font-weight: var(--font-weight-medium, font-weight(medium));
+  line-height: var(--line-height-none, line-height(none));
   text-decoration: none;
   cursor: pointer;
-  transition: all transition(normal);
+  transition: all var(--transition-normal, transition(normal));
   user-select: none;
   white-space: nowrap;
   position: relative;
@@ -89,10 +136,9 @@
     left: 100%;
   }
 
-  &:focus {
-    outline: 2px solid color(primary);
+  &:focus-visible {
+    outline: 2px solid var(--color-primary-500, color(primary));
     outline-offset: 2px;
-    border-radius: border-radius(md);
   }
 
   &:disabled {
@@ -107,40 +153,62 @@
 
 @mixin button-primary {
   @include button-base;
-  background: map-get($gradients, button);
-  color: color(white);
-  box-shadow: map-get($shadows, glow-primary);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-500, color(primary)) 0%,
+    var(--color-secondary-500, color(secondary)) 100%
+  );
+  color: var(--color-white, color(white));
+  box-shadow: var(--shadow-glow-primary, map-get($shadows, glow-primary));
 
   &:hover:not(:disabled) {
-    background: map-get($gradients, button-hover);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-600, color(primary-dark)) 0%,
+      var(--color-secondary-600, color(secondary-dark)) 100%
+    );
     transform: translateY(-2px) scale(1.02);
-    box-shadow: map-get($shadows, glow-primary), map-get($shadows, lg);
+    box-shadow:
+      var(--shadow-glow-primary, map-get($shadows, glow-primary)),
+      var(--shadow-lg, map-get($shadows, lg));
     animation: glowPulse 2s ease-in-out infinite;
   }
 
   &:active:not(:disabled) {
-    background: map-get($gradients, button-hover);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-600, color(primary-dark)) 0%,
+      var(--color-secondary-600, color(secondary-dark)) 100%
+    );
     transform: translateY(0) scale(0.98);
   }
 }
 
 @mixin button-secondary {
   @include button-base;
-  background: color(background-glass);
-  color: color(primary);
-  border: 1px solid color(primary);
+  background: var(--color-background-glass, color(background-glass));
+  color: var(--color-primary-500, color(primary));
+  border: 1px solid var(--color-primary-500, color(primary));
   backdrop-filter: blur(10px);
 
   &:hover:not(:disabled) {
-    background: map-get($gradients, button);
-    color: color(white);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-500, color(primary)) 0%,
+      var(--color-secondary-500, color(secondary)) 100%
+    );
+    color: var(--color-white, color(white));
     transform: translateY(-2px) scale(1.02);
-    box-shadow: map-get($shadows, glow-primary);
+    box-shadow: var(--shadow-glow-primary, map-get($shadows, glow-primary));
     border-color: transparent;
   }
 
   &:active:not(:disabled) {
-    background: map-get($gradients, button-hover);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-600, color(primary-dark)) 0%,
+      var(--color-secondary-600, color(secondary-dark)) 100%
+    );
     transform: translateY(0) scale(0.98);
   }
 }
@@ -148,50 +216,60 @@
 @mixin button-outline {
   @include button-base;
   background-color: transparent;
-  color: color(primary);
-  border: 1px solid color(primary);
+  color: var(--color-primary-500, color(primary));
+  border: 1px solid var(--color-primary-500, color(primary));
 
   &:hover:not(:disabled) {
-    background-color: color(primary);
-    color: color(white);
+    background-color: var(--color-primary-500, color(primary));
+    color: var(--color-white, color(white));
+  }
+}
+
+@mixin button-ghost {
+  @include button-base;
+  background-color: transparent;
+  color: var(--color-text-primary, color(text-primary));
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-background-glass, color(background-glass));
   }
 }
 
 // Form elements
 @mixin input-base {
   width: 100%;
-  padding: spacing(3) spacing(4);
-  border: 1px solid color(border-light);
-  border-radius: border-radius(md);
-  font-family: $font-family-sans;
-  font-size: font-size(sm);
-  line-height: line-height(normal);
-  background: color(background-glass);
-  color: color(text-primary);
-  transition: all transition(normal);
+  padding: var(--spacing-3, spacing(3)) var(--spacing-4, spacing(4));
+  border: 1px solid var(--color-border, color(border-light));
+  border-radius: var(--radius-md, border-radius(md));
+  font-family: var(--font-family-sans, $font-family-sans);
+  font-size: var(--font-size-sm, font-size(sm));
+  line-height: var(--line-height-normal, line-height(normal));
+  background: var(--color-background-glass, color(background-glass));
+  color: var(--color-text-primary, color(text-primary));
+  transition: all var(--transition-normal, transition(normal));
   backdrop-filter: blur(10px);
 
   &:focus {
     outline: none;
-    border-color: color(primary);
+    border-color: var(--color-primary-500, color(primary));
     box-shadow:
       0 0 0 3px rgba(0, 212, 255, 0.2),
-      map-get($shadows, glow-primary);
+      var(--shadow-glow-primary, map-get($shadows, glow-primary));
   }
 
   &:disabled {
-    background: color(background-secondary);
-    color: color(text-tertiary);
+    background: var(--color-background-secondary, color(background-secondary));
+    color: var(--color-text-tertiary, color(text-tertiary));
     cursor: not-allowed;
     opacity: 0.6;
   }
 
   &::placeholder {
-    color: color(text-tertiary);
+    color: var(--color-text-tertiary, color(text-tertiary));
   }
 
   &.error {
-    border-color: color(error);
+    border-color: var(--color-error-500, color(error));
     box-shadow:
       0 0 0 3px rgba(255, 71, 87, 0.2),
       0 0 20px rgba(255, 71, 87, 0.3);
@@ -200,32 +278,45 @@
 
 @mixin label-base {
   display: block;
-  font-size: font-size(sm);
-  font-weight: font-weight(medium);
-  color: color(text-primary);
-  margin-bottom: spacing(2);
+  font-size: var(--font-size-sm, font-size(sm));
+  font-weight: var(--font-weight-medium, font-weight(medium));
+  color: var(--color-text-primary, color(text-primary));
+  margin-bottom: var(--spacing-2, spacing(2));
+}
+
+@mixin textarea-base {
+  @include input-base;
+  min-height: 100px;
+  resize: vertical;
 }
 
 // Card styles - Futuristic
 @mixin card-base {
-  background: map-get($gradients, card);
-  border-radius: border-radius(lg);
-  box-shadow: map-get($shadows, glow-white);
-  border: 1px solid color(border-light);
+  background: var(--color-background-glass, map-get($gradients, card));
+  border-radius: var(--radius-lg, border-radius(lg));
+  box-shadow: var(--shadow-glow-white, map-get($shadows, glow-white));
+  border: 1px solid var(--color-border, color(border-light));
   overflow: hidden;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 @mixin card-hover {
-  transition: all transition(normal);
+  transition: all var(--transition-normal, transition(normal));
   cursor: pointer;
 
   &:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: map-get($shadows, glow-primary), map-get($shadows, xl);
-    border-color: color(primary);
+    box-shadow:
+      var(--shadow-glow-primary, map-get($shadows, glow-primary)),
+      var(--shadow-xl, map-get($shadows, xl));
+    border-color: var(--color-primary-500, color(primary));
   }
+}
+
+@mixin card-interactive {
+  @include card-base;
+  @include card-hover;
 }
 
 // Modal styles
@@ -235,16 +326,16 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(color(black), 0.5);
-  z-index: z-index(overlay);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: var(--z-overlay, z-index(overlay));
   @include flex-center;
-  padding: spacing(4);
+  padding: var(--spacing-4, spacing(4));
 }
 
 @mixin modal-content {
-  background-color: color(white);
-  border-radius: border-radius(lg);
-  box-shadow: shadow(2xl);
+  background-color: var(--color-background, color(white));
+  border-radius: var(--radius-lg, border-radius(lg));
+  box-shadow: var(--shadow-2xl, shadow(2xl));
   max-width: 500px;
   width: 100%;
   max-height: 90vh;
@@ -265,7 +356,12 @@
 
 // Loading states
 @mixin loading-skeleton {
-  background: linear-gradient(90deg, color(gray-200) 25%, color(gray-100) 50%, color(gray-200) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--color-gray-200, color(gray-200)) 25%,
+    var(--color-gray-100, color(gray-100)) 50%,
+    var(--color-gray-200, color(gray-200)) 75%
+  );
   background-size: 200% 100%;
   animation: loading-shimmer 1.5s infinite;
 }
@@ -276,6 +372,24 @@
   }
   100% {
     background-position: 200% 0;
+  }
+}
+
+@mixin spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border, color(border-light));
+  border-top: 2px solid var(--color-primary-500, color(primary));
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
@@ -293,6 +407,19 @@
   overflow: hidden;
 }
 
+@mixin text-gradient(
+  $gradient: linear-gradient(
+      135deg,
+      var(--color-primary-500, color(primary)) 0%,
+      var(--color-secondary-500, color(secondary)) 100%
+    )
+) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 // Accessibility
 @mixin sr-only {
   position: absolute;
@@ -308,7 +435,104 @@
 
 @mixin focus-visible {
   &:focus-visible {
-    outline: 2px solid color(primary);
+    outline: 2px solid var(--color-primary-500, color(primary));
     outline-offset: 2px;
   }
+}
+
+// Glassmorphism
+@mixin glass {
+  background: var(--color-background-glass, color(background-glass));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border, color(border-light));
+}
+
+@mixin glass-strong {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border-medium, color(border-medium));
+}
+
+// Animations
+@mixin fade-in($duration: 0.3s) {
+  animation: fadeIn $duration ease-out;
+}
+
+@mixin slide-in-up($duration: 0.3s) {
+  animation: slideInUp $duration ease-out;
+}
+
+@mixin scale-in($duration: 0.2s) {
+  animation: scaleIn $duration cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Container
+@mixin container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-4, spacing(4));
+
+  @include tablet {
+    padding: 0 var(--spacing-6, spacing(6));
+  }
+
+  @include desktop {
+    padding: 0 var(--spacing-8, spacing(8));
+  }
+}
+
+// Section spacing
+@mixin section-spacing {
+  padding: var(--spacing-16, spacing(16)) 0;
+
+  @include mobile {
+    padding: var(--spacing-12, spacing(12)) 0;
+  }
+}
+
+// Page layout
+@mixin page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin page-content {
+  flex: 1;
+  @include container;
+  @include section-spacing;
 }

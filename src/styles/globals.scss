@@ -1,11 +1,11 @@
 /**
- * Global styles for the application
- * Основные глобальные стили приложения
+ * Comprehensive Global styles with CSS Variables and enhanced functionality
+ * Комплексные глобальные стили с CSS переменными и расширенной функциональностью
  */
 
-@use './variables' as *;
-@use './mixins' as *;
-@use './animations' as *;
+@import './css-variables';
+@import './mixins';
+@import './animations';
 
 /* CSS Reset and Base Styles */
 *,
@@ -26,16 +26,27 @@ html {
 }
 
 body {
-  font-family: $font-family-sans;
-  font-size: font-size(base);
-  font-weight: font-weight(normal);
-  line-height: line-height(normal);
-  color: color(text-primary);
-  background: map-get($gradients, dark);
+  font-family: var(
+    --font-family-sans,
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif
+  );
+  font-size: var(--font-size-base, 16px);
+  font-weight: var(--font-weight-normal, 400);
+  line-height: var(--line-height-normal, 1.5);
+  color: var(--color-text-primary, #ffffff);
+  background: var(--color-background, #0a0a0a);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition:
+    background-color var(--transition-normal, 0.3s ease),
+    color var(--transition-normal, 0.3s ease);
 }
 
 /* Futuristic background effects */
@@ -55,6 +66,15 @@ body::before {
   animation: glowRotate 20s linear infinite;
 }
 
+@keyframes glowRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* Typography */
 h1,
 h2,
@@ -62,67 +82,70 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: font-weight(semibold);
-  line-height: line-height(tight);
-  color: color(text-primary);
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: var(--line-height-tight, 1.25);
+  color: var(--color-text-primary, #ffffff);
+  margin-bottom: var(--spacing-4, 1rem);
 }
 
 h1 {
-  font-size: font-size(3xl);
+  font-size: var(--font-size-3xl, 1.875rem);
 
-  @include respond-to(md) {
-    font-size: font-size(4xl);
+  @include tablet {
+    font-size: var(--font-size-4xl, 2.25rem);
   }
 }
 
 h2 {
-  font-size: font-size(2xl);
+  font-size: var(--font-size-2xl, 1.5rem);
 
-  @include respond-to(md) {
-    font-size: font-size(3xl);
+  @include tablet {
+    font-size: var(--font-size-3xl, 1.875rem);
   }
 }
 
 h3 {
-  font-size: font-size(xl);
+  font-size: var(--font-size-xl, 1.25rem);
 
-  @include respond-to(md) {
-    font-size: font-size(2xl);
+  @include tablet {
+    font-size: var(--font-size-2xl, 1.5rem);
   }
 }
 
 h4 {
-  font-size: font-size(lg);
+  font-size: var(--font-size-lg, 1.125rem);
 
-  @include respond-to(md) {
-    font-size: font-size(xl);
+  @include tablet {
+    font-size: var(--font-size-xl, 1.25rem);
   }
 }
 
 h5 {
-  font-size: font-size(base);
+  font-size: var(--font-size-base, 1rem);
 
-  @include respond-to(md) {
-    font-size: font-size(lg);
+  @include tablet {
+    font-size: var(--font-size-lg, 1.125rem);
   }
 }
 
 h6 {
-  font-size: font-size(sm);
+  font-size: var(--font-size-sm, 0.875rem);
 
-  @include respond-to(md) {
-    font-size: font-size(base);
+  @include tablet {
+    font-size: var(--font-size-base, 1rem);
   }
 }
 
 p {
-  margin-bottom: spacing(4);
+  margin-bottom: var(--spacing-4, 1rem);
+  color: var(--color-text-secondary, #a1a1aa);
+  line-height: var(--line-height-relaxed, 1.625);
 }
 
 a {
-  color: color(primary);
+  color: var(--color-primary-500, #00d4ff);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal, 0.3s ease);
   position: relative;
 
   &::before {
@@ -132,34 +155,39 @@ a {
     left: 0;
     width: 0;
     height: 2px;
-    background: map-get($gradients, primary);
-    transition: width 0.3s ease;
+    background: linear-gradient(
+      135deg,
+      var(--color-primary-500, #00d4ff) 0%,
+      var(--color-secondary-500, #8b5cf6) 100%
+    );
+    transition: width var(--transition-normal, 0.3s ease);
   }
 
   &:hover {
-    color: color(primary-light);
+    color: var(--color-primary-400, #33ddff);
 
     &::before {
       width: 100%;
     }
   }
 
-  &:focus {
-    outline: 2px solid color(primary);
+  &:focus-visible {
+    outline: 2px solid var(--color-primary-500, #00d4ff);
     outline-offset: 2px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm, 0.25rem);
   }
 }
 
 /* Lists */
 ul,
 ol {
-  margin-bottom: spacing(4);
-  padding-left: spacing(6);
+  margin-bottom: var(--spacing-4, 1rem);
+  padding-left: var(--spacing-6, 1.5rem);
 }
 
 li {
-  margin-bottom: spacing(1);
+  margin-bottom: var(--spacing-1, 0.25rem);
+  color: var(--color-text-secondary, #a1a1aa);
 }
 
 /* Images */
@@ -167,66 +195,64 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+  border-radius: var(--radius-md, 0.375rem);
 }
 
 /* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: spacing(6);
+  margin-bottom: var(--spacing-6, 1.5rem);
+  background: var(--color-background-glass, rgba(26, 26, 26, 0.8));
+  border-radius: var(--radius-lg, 0.5rem);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
 }
 
 th,
 td {
-  padding: spacing(3);
+  padding: var(--spacing-3, 0.75rem);
   text-align: left;
-  border-bottom: 1px solid color(border-light);
+  border-bottom: 1px solid var(--color-border, #374151);
 }
 
 th {
-  font-weight: font-weight(semibold);
-  color: color(text-primary);
-  background-color: color(background-secondary);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary, #ffffff);
+  background-color: var(--color-background-secondary, #1a1a1a);
 }
 
 /* Code */
 code {
-  font-family: $font-family-mono;
+  font-family: var(--font-family-mono, 'Fira Code', 'Monaco', 'Cascadia Code', monospace);
   font-size: 0.875em;
-  background-color: color(background-secondary);
-  color: color(text-primary);
-  padding: spacing(1) spacing(2);
-  border-radius: border-radius(sm);
+  background-color: var(--color-background-secondary, #1a1a1a);
+  color: var(--color-text-primary, #ffffff);
+  padding: var(--spacing-1, 0.25rem) var(--spacing-2, 0.5rem);
+  border-radius: var(--radius-sm, 0.25rem);
+  border: 1px solid var(--color-border, #374151);
 }
 
 pre {
-  font-family: $font-family-mono;
-  background-color: color(background-secondary);
-  color: color(text-primary);
-  padding: spacing(4);
-  border-radius: border-radius(md);
+  font-family: var(--font-family-mono, 'Fira Code', 'Monaco', 'Cascadia Code', monospace);
+  background-color: var(--color-background-secondary, #1a1a1a);
+  color: var(--color-text-primary, #ffffff);
+  padding: var(--spacing-4, 1rem);
+  border-radius: var(--radius-md, 0.375rem);
   overflow-x: auto;
-  margin-bottom: spacing(4);
+  margin-bottom: var(--spacing-4, 1rem);
+  border: 1px solid var(--color-border, #374151);
 
   code {
     background-color: transparent;
     padding: 0;
+    border: none;
   }
 }
 
 /* Utilities */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 spacing(4);
-
-  @include respond-to(md) {
-    padding: 0 spacing(6);
-  }
-
-  @include respond-to(lg) {
-    padding: 0 spacing(8);
-  }
+  @include container;
 }
 
 .sr-only {
@@ -236,13 +262,13 @@ pre {
 /* Loading states */
 .loading {
   @include loading-skeleton;
-  border-radius: border-radius(md);
+  border-radius: var(--radius-md, 0.375rem);
   height: 20px;
-  margin-bottom: spacing(2);
+  margin-bottom: var(--spacing-2, 0.5rem);
 }
 
 /* Animations */
-@keyframes fade-in {
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -253,7 +279,7 @@ pre {
   }
 }
 
-@keyframes slide-up {
+@keyframes slideUp {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -274,12 +300,24 @@ pre {
   }
 }
 
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: var(--shadow-glow-primary, 0 0 20px rgba(0, 212, 255, 0.3));
+  }
+  50% {
+    box-shadow:
+      var(--shadow-glow-primary, 0 0 20px rgba(0, 212, 255, 0.3)),
+      0 0 30px rgba(0, 212, 255, 0.4);
+  }
+}
+
 .fade-in {
-  animation: fade-in 0.3s ease-out;
+  @include fade-in;
 }
 
 .slide-up {
-  animation: slide-up 0.3s ease-out;
+  @include slide-in-up;
 }
 
 .pulse {
@@ -293,27 +331,27 @@ pre {
 }
 
 ::-webkit-scrollbar-track {
-  background: color(background-secondary);
+  background: var(--color-background-secondary, #1a1a1a);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: color(border-medium);
-  border-radius: border-radius(full);
+  background: var(--color-border-medium, #4b5563);
+  border-radius: var(--radius-full, 9999px);
 
   &:hover {
-    background: color(border-dark);
+    background: var(--color-border-dark, #6b7280);
   }
 }
 
 /* Selection styles */
 ::selection {
-  background-color: color(primary);
-  color: color(white);
+  background-color: var(--color-primary-500, #00d4ff);
+  color: var(--color-white, #ffffff);
 }
 
 /* Focus styles for keyboard navigation */
 *:focus-visible {
-  outline: 2px solid color(primary);
+  outline: 2px solid var(--color-primary-500, #00d4ff);
   outline-offset: 2px;
 }
 
@@ -347,7 +385,7 @@ pre {
 
   pre,
   blockquote {
-    border: 1px solid color(border-light);
+    border: 1px solid var(--color-border, #374151);
     page-break-inside: avoid;
   }
 
@@ -370,5 +408,50 @@ pre {
   h2,
   h3 {
     page-break-after: avoid;
+  }
+}
+
+/* Dark mode specific styles */
+[data-theme='dark'] {
+  body::before {
+    background:
+      radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.08) 0%, transparent 50%);
+  }
+}
+
+/* Light mode specific styles */
+[data-theme='light'] {
+  body::before {
+    background:
+      radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.03) 0%, transparent 50%);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  body::before {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: rgba(255, 255, 255, 0.5);
+    --color-border-medium: rgba(255, 255, 255, 0.7);
+    --color-border-dark: rgba(255, 255, 255, 0.9);
   }
 }

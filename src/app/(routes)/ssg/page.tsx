@@ -16,11 +16,11 @@ export async function generateStaticParams() {
   try {
     // Получаем список постов напрямую из JSONPlaceholder для предгенерации
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    
+
     if (!response.ok) {
       throw new Error(`JSONPlaceholder API error: ${response.status}`);
     }
-    
+
     const posts: Post[] = await response.json();
 
     // Генерируем параметры для статических страниц (если нужно)
@@ -39,11 +39,11 @@ async function getPosts(): Promise<Post[]> {
     // Во время сборки обращаемся напрямую к JSONPlaceholder API
     // потому что внутренние API роуты недоступны во время build time
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    
+
     if (!response.ok) {
       throw new Error(`JSONPlaceholder API error: ${response.status}`);
     }
-    
+
     const posts: Post[] = await response.json();
     return posts.slice(0, 12); // Ограничиваем количество для демонстрации
   } catch (error) {

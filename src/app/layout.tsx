@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { Toaster } from 'sonner';
-import '../styles/globals-enhanced.scss';
+import '../styles/globals.scss';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic'],

@@ -1,32 +1,37 @@
 /**
- * Application constants
- * Централизованные константы приложения
+ * Comprehensive application constants with enhanced organization
+ * Комплексные константы приложения с улучшенной организацией
  */
 
 /**
- * API endpoints for external and local services.
- * @namespace API_ENDPOINTS
+ * API Configuration
+ */
+export const API_CONFIG = {
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'https://jsonplaceholder.typicode.com',
+  TIMEOUT: 10000,
+  RETRIES: 3,
+  RETRY_DELAY: 1000,
+} as const;
+
+/**
+ * API Endpoints
  */
 export const API_ENDPOINTS = {
-  // JSONPlaceholder endpoints
   JSONPLACEHOLDER: {
     POSTS: '/posts',
     COMMENTS: '/comments',
     USERS: '/users',
   },
-  // Local API endpoints
   LOCAL: {
     POSTS: '/api/posts',
     COMMENTS: '/api/comments',
-    SUBMIT: '/api/submit',
     FILES: '/api/files',
+    SUBMIT: '/api/submit',
   },
 } as const;
 
 /**
- * Query keys for TanStack Query to manage cached data.
- * Each key is a function that returns an array, allowing for dynamic key creation.
- * @namespace QUERY_KEYS
+ * Query Keys for TanStack Query
  */
 export const QUERY_KEYS = {
   POSTS: {
@@ -34,6 +39,7 @@ export const QUERY_KEYS = {
     LIST: (filters?: Record<string, unknown>) => ['posts', 'list', filters] as const,
     DETAILS: () => ['posts', 'detail'] as const,
     DETAIL: (id: number) => ['posts', 'detail', id] as const,
+    COMMENTS: (id: number) => ['posts', id, 'comments'] as const,
   },
   COMMENTS: {
     LISTS: () => ['comments'] as const,
@@ -48,6 +54,194 @@ export const QUERY_KEYS = {
     DETAILS: () => ['users', 'detail'] as const,
     DETAIL: (id: number) => ['users', 'detail', id] as const,
   },
+  FILES: {
+    LISTS: () => ['files'] as const,
+    DETAIL: (filename: string) => ['files', filename] as const,
+  },
+} as const;
+
+/**
+ * Form Validation Messages
+ */
+export const VALIDATION_MESSAGES = {
+  REQUIRED: 'Это поле обязательно',
+  EMAIL: 'Введите корректный email',
+  PHONE: 'Введите корректный номер телефона',
+  URL: 'Введите корректный URL',
+  MIN_LENGTH: (min: number) => `Минимум ${min} символов`,
+  MAX_LENGTH: (max: number) => `Максимум ${max} символов`,
+  MIN_VALUE: (min: number) => `Значение должно быть не менее ${min}`,
+  MAX_VALUE: (max: number) => `Значение должно быть не более ${max}`,
+  FILE_SIZE: (maxSize: number) =>
+    `Размер файла не должен превышать ${Math.round(maxSize / 1024 / 1024)}MB`,
+  FILE_TYPE: 'Неподдерживаемый тип файла',
+  PASSWORDS_MATCH: 'Пароли не совпадают',
+} as const;
+
+/**
+ * Toast Messages
+ */
+export const TOAST_MESSAGES = {
+  SUCCESS: {
+    POST_CREATED: 'Пост успешно создан!',
+    POST_UPDATED: 'Пост успешно обновлен!',
+    POST_DELETED: 'Пост успешно удален!',
+    FORM_SUBMITTED: 'Форма успешно отправлена!',
+    FILE_UPLOADED: 'Файл успешно загружен!',
+    DATA_LOADED: 'Данные успешно загружены!',
+    SETTINGS_SAVED: 'Настройки сохранены!',
+  },
+  ERROR: {
+    GENERIC: 'Произошла ошибка',
+    NETWORK: 'Ошибка сети',
+    VALIDATION: 'Ошибка валидации',
+    UNAUTHORIZED: 'Недостаточно прав',
+    FORBIDDEN: 'Доступ запрещен',
+    NOT_FOUND: 'Ресурс не найден',
+    SERVER_ERROR: 'Ошибка сервера',
+    FILE_TOO_LARGE: 'Файл слишком большой',
+    INVALID_FILE_TYPE: 'Неподдерживаемый тип файла',
+  },
+  INFO: {
+    LOADING: 'Загрузка...',
+    SAVING: 'Сохранение...',
+    UPLOADING: 'Загрузка файла...',
+  },
+} as const;
+
+/**
+ * Standardized error messages for various application scenarios.
+ * @namespace ERROR_MESSAGES
+ */
+export const ERROR_MESSAGES = {
+  NETWORK: 'Ошибка сети. Проверьте подключение к интернету.',
+  TIMEOUT: 'Время ожидания истекло. Попробуйте еще раз.',
+  VALIDATION: 'Ошибка валидации данных.',
+  UNAUTHORIZED: 'Недостаточно прав для выполнения операции.',
+  FORBIDDEN: 'Доступ запрещен.',
+  NOT_FOUND: 'Ресурс не найден.',
+  SERVER_ERROR: 'Внутренняя ошибка сервера.',
+  UNKNOWN: 'Произошла неизвестная ошибка.',
+  UPLOAD_FAILED_HTTP: 'Ошибка HTTP при загрузке файла:',
+} as const;
+
+/**
+ * Standardized success messages for various application scenarios.
+ * @namespace SUCCESS_MESSAGES
+ */
+export const SUCCESS_MESSAGES = {
+  FORM_SUBMITTED: 'Форма успешно отправлена!',
+  POST_CREATED: 'Пост успешно создан!',
+  POST_UPDATED: 'Пост успешно обновлен!',
+  POST_DELETED: 'Пост успешно удален!',
+  FILE_UPLOADED: 'Файл успешно загружен!',
+  DATA_LOADED: 'Данные успешно загружены!',
+} as const;
+
+/**
+ * Standardized loading messages for various application scenarios.
+ * @namespace LOADING_MESSAGES
+ */
+export const LOADING_MESSAGES = {
+  LOADING_POSTS: 'Загрузка постов...',
+  LOADING_COMMENTS: 'Загрузка комментариев...',
+  LOADING_USERS: 'Загрузка пользователей...',
+  SUBMITTING_FORM: 'Отправка формы...',
+  UPLOADING_FILE: 'Загрузка файла...',
+  PROCESSING: 'Обработка...',
+} as const;
+
+/**
+ * File Upload Configuration
+ */
+export const FILE_CONFIG = {
+  MAX_SIZE: 5 * 1024 * 1024, // 5MB
+  ALLOWED_TYPES: [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'application/pdf',
+    'text/plain',
+    'application/json',
+    'application/octet-stream',
+  ],
+  TYPE_LABELS: {
+    'image/jpeg': 'JPEG Image',
+    'image/jpg': 'JPEG Image',
+    'image/png': 'PNG Image',
+    'image/gif': 'GIF Image',
+    'image/webp': 'WebP Image',
+    'application/pdf': 'PDF Document',
+    'text/plain': 'Text File',
+    'application/json': 'JSON File',
+    'application/octet-stream': 'Binary File',
+  } as Record<string, string>,
+  UPLOAD_DIR: 'uploads',
+} as const;
+
+/**
+ * Pagination Configuration
+ */
+export const PAGINATION_CONFIG = {
+  DEFAULT_PAGE_SIZE: 10,
+  PAGE_SIZE_OPTIONS: [5, 10, 20, 50],
+  MAX_PAGE_SIZE: 100,
+} as const;
+
+/**
+ * Cache Configuration
+ */
+export const CACHE_CONFIG = {
+  STALE_TIME: 5 * 60 * 1000, // 5 minutes
+  GC_TIME: 10 * 60 * 1000, // 10 minutes
+  REFETCH_INTERVAL: 30 * 1000, // 30 seconds
+  RETRY_ATTEMPTS: 3,
+  RETRY_DELAY: 1000,
+} as const;
+
+/**
+ * Theme Configuration
+ */
+export const THEME_CONFIG = {
+  DEFAULT_THEME: 'dark',
+  AVAILABLE_THEMES: ['light', 'dark', 'auto'] as const,
+  STORAGE_KEY: 'theme-preference',
+} as const;
+
+/**
+ * Language Configuration
+ */
+export const LANGUAGE_CONFIG = {
+  DEFAULT_LANGUAGE: 'ru',
+  AVAILABLE_LANGUAGES: ['ru', 'en'] as const,
+  STORAGE_KEY: 'language-preference',
+} as const;
+
+/**
+ * Modal Configuration
+ */
+export const MODAL_CONFIG = {
+  ANIMATION_DURATION: 200,
+  BACKDROP_BLUR: 10,
+  Z_INDEX: 1400,
+} as const;
+
+/**
+ * Breakpoints for responsive design, used in SCSS and JavaScript.
+ * @namespace BREAKPOINTS
+ */
+export const BREAKPOINTS = {
+  SM: '640px',
+  MD: '768px',
+  LG: '1024px',
+  XL: '1280px',
+  '2XL': '1536px',
+  MOBILE: 768,
+  TABLET: 1024,
+  DESKTOP: 1280,
+  LARGE_DESKTOP: 1536,
 } as const;
 
 /**
@@ -95,15 +289,14 @@ export const ANIMATIONS = {
 } as const;
 
 /**
- * Breakpoints for responsive design, used in SCSS and JavaScript.
- * @namespace BREAKPOINTS
+ * Animation Durations
  */
-export const BREAKPOINTS = {
-  SM: '640px',
-  MD: '768px',
-  LG: '1024px',
-  XL: '1280px',
-  '2XL': '1536px',
+export const ANIMATION_DURATIONS = {
+  FAST: 150,
+  NORMAL: 250,
+  SLOW: 350,
+  BOUNCE: 500,
+  ELASTIC: 600,
 } as const;
 
 /**
@@ -111,6 +304,10 @@ export const BREAKPOINTS = {
  * @namespace Z_INDEX
  */
 export const Z_INDEX = {
+  HIDE: -1,
+  AUTO: 'auto',
+  BASE: 0,
+  DOCKED: 10,
   DROPDOWN: 1000,
   STICKY: 1020,
   FIXED: 1030,
@@ -119,78 +316,52 @@ export const Z_INDEX = {
   POPOVER: 1060,
   TOOLTIP: 1070,
   TOAST: 1080,
+  BANNER: 1200,
+  OVERLAY: 1300,
+  SKIP_LINK: 1600,
 } as const;
 
 /**
- * Standardized error messages for various application scenarios.
- * @namespace ERROR_MESSAGES
+ * Local Storage Keys
  */
-export const ERROR_MESSAGES = {
-  NETWORK: 'Ошибка сети. Проверьте подключение к интернету.',
-  TIMEOUT: 'Время ожидания истекло. Попробуйте еще раз.',
-  VALIDATION: 'Ошибка валидации данных.',
-  UNAUTHORIZED: 'Недостаточно прав для выполнения операции.',
-  FORBIDDEN: 'Доступ запрещен.',
-  NOT_FOUND: 'Ресурс не найден.',
-  SERVER_ERROR: 'Внутренняя ошибка сервера.',
-  UNKNOWN: 'Произошла неизвестная ошибка.',
-  UPLOAD_FAILED_HTTP: 'Ошибка HTTP при загрузке файла:',
+export const STORAGE_KEYS = {
+  THEME: 'theme-preference',
+  LANGUAGE: 'language-preference',
+  USER_PREFERENCES: 'user-preferences',
+  FORM_DRAFTS: 'form-drafts',
+  CACHE_VERSION: 'cache-version',
 } as const;
 
 /**
- * Standardized success messages for various application scenarios.
- * @namespace SUCCESS_MESSAGES
+ * Error Codes
  */
-export const SUCCESS_MESSAGES = {
-  FORM_SUBMITTED: 'Форма успешно отправлена!',
-  POST_CREATED: 'Пост успешно создан!',
-  POST_UPDATED: 'Пост успешно обновлен!',
-  POST_DELETED: 'Пост успешно удален!',
-  FILE_UPLOADED: 'Файл успешно загружен!',
-  DATA_LOADED: 'Данные успешно загружены!',
+export const ERROR_CODES = {
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  UNAUTHORIZED: 'UNAUTHORIZED',
+  FORBIDDEN: 'FORBIDDEN',
+  NOT_FOUND: 'NOT_FOUND',
+  SERVER_ERROR: 'SERVER_ERROR',
+  TIMEOUT: 'TIMEOUT',
+  UNKNOWN: 'UNKNOWN',
 } as const;
 
 /**
- * Standardized loading messages for various application scenarios.
- * @namespace LOADING_MESSAGES
+ * HTTP Status Codes
  */
-export const LOADING_MESSAGES = {
-  LOADING_POSTS: 'Загрузка постов...',
-  LOADING_COMMENTS: 'Загрузка комментариев...',
-  LOADING_USERS: 'Загрузка пользователей...',
-  SUBMITTING_FORM: 'Отправка формы...',
-  UPLOADING_FILE: 'Загрузка файла...',
-  PROCESSING: 'Обработка...',
-} as const;
-
-/**
- * Configuration for file uploads, including size limits and allowed types.
- * @namespace FILE_CONFIG
- */
-export const FILE_CONFIG = {
-  MAX_SIZE: 5 * 1024 * 1024, // 5MB
-  ALLOWED_TYPES: [
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-    'application/pdf',
-    'text/plain',
-    'application/json',
-    'application/octet-stream',
-  ],
-  TYPE_LABELS: {
-    'image/jpeg': 'JPEG Image',
-    'image/jpg': 'JPEG Image',
-    'image/png': 'PNG Image',
-    'image/gif': 'GIF Image',
-    'image/webp': 'WebP Image',
-    'application/pdf': 'PDF Document',
-    'text/plain': 'Text File',
-    'application/json': 'JSON File',
-    'application/octet-stream': 'Binary File',
-  } as Record<string, string>,
+export const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
+  NOT_FOUND: 404,
+  CONFLICT: 409,
+  UNPROCESSABLE_ENTITY: 422,
+  INTERNAL_SERVER_ERROR: 500,
+  BAD_GATEWAY: 502,
+  SERVICE_UNAVAILABLE: 503,
 } as const;
 
 /**
@@ -204,6 +375,17 @@ export const VALIDATION_PATTERNS = {
   ALPHANUMERIC: /^[a-zA-Z0-9]+$/,
   LETTERS_ONLY: /^[а-яА-Яa-zA-Z\s]+$/,
   NUMBERS_ONLY: /^\d+$/,
+} as const;
+
+/**
+ * Regex Patterns
+ */
+export const REGEX_PATTERNS = {
+  EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  PHONE: /^[\+]?[1-9][\d]{0,15}$/,
+  URL: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
+  PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/,
+  USERNAME: /^[a-zA-Z0-9_-]{3,20}$/,
 } as const;
 
 /**
@@ -230,4 +412,58 @@ export const THEME_COLORS = {
   TEXT_PRIMARY: '#ffffff',
   TEXT_SECONDARY: '#cbd5e1',
   TEXT_TERTIARY: '#94a3b8',
+} as const;
+
+/**
+ * Feature Flags
+ */
+export const FEATURE_FLAGS = {
+  ENABLE_WEBSOCKETS: process.env.NEXT_PUBLIC_ENABLE_WEBSOCKETS === 'true',
+  ENABLE_ANALYTICS: process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === 'true',
+  ENABLE_PWA: process.env.NEXT_PUBLIC_ENABLE_PWA === 'true',
+  ENABLE_DARK_MODE: process.env.NEXT_PUBLIC_ENABLE_DARK_MODE !== 'false',
+  ENABLE_OFFLINE_SUPPORT: process.env.NEXT_PUBLIC_ENABLE_OFFLINE_SUPPORT === 'true',
+} as const;
+
+/**
+ * Environment Configuration
+ */
+export const ENV_CONFIG = {
+  IS_DEVELOPMENT: process.env.NODE_ENV === 'development',
+  IS_PRODUCTION: process.env.NODE_ENV === 'production',
+  IS_TEST: process.env.NODE_ENV === 'test',
+  VERCEL_URL: process.env.VERCEL_URL,
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+} as const;
+
+/**
+ * Performance Configuration
+ */
+export const PERFORMANCE_CONFIG = {
+  DEBOUNCE_DELAY: 300,
+  THROTTLE_DELAY: 100,
+  LAZY_LOAD_THRESHOLD: 100,
+  VIRTUAL_SCROLL_THRESHOLD: 1000,
+  IMAGE_LAZY_LOAD_THRESHOLD: 200,
+} as const;
+
+/**
+ * Accessibility Configuration
+ */
+export const A11Y_CONFIG = {
+  FOCUS_VISIBLE_CLASS: 'focus-visible',
+  SKIP_LINK_TEXT: 'Перейти к основному содержимому',
+  ARIA_LIVE_POLITE: 'polite',
+  ARIA_LIVE_ASSERTIVE: 'assertive',
+} as const;
+
+/**
+ * SEO Configuration
+ */
+export const SEO_CONFIG = {
+  DEFAULT_TITLE: 'Next.js Test Task - Frontend Development',
+  DEFAULT_DESCRIPTION: 'Тестовое задание для демонстрации навыков разработки на Next.js',
+  DEFAULT_KEYWORDS: ['Next.js', 'React', 'TypeScript', 'Frontend', 'Development'],
+  DEFAULT_AUTHOR: 'Frontend Developer',
+  DEFAULT_IMAGE: '/images/og-image.jpg',
 } as const;

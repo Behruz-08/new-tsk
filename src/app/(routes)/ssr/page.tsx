@@ -26,11 +26,11 @@ async function getPosts(): Promise<Post[]> {
     // Для SSR также обращаемся напрямую к JSONPlaceholder API
     // чтобы избежать проблем с внутренними API роутами
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-    
+
     if (!response.ok) {
       throw new Error(`JSONPlaceholder API error: ${response.status}`);
     }
-    
+
     const posts: Post[] = await response.json();
     return posts.slice(0, 12); // Ограничиваем количество для демонстрации
   } catch (error) {

@@ -7,7 +7,7 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
-import { useModal } from '@/hooks/useModal';
+import { useLocalModal } from '@/hooks/useModal';
 import styles from './Modal.module.scss';
 
 export interface ModalProps {
@@ -36,7 +36,7 @@ export const Modal: React.FC<ModalProps> = ({
   showCloseButton = true,
   className,
 }) => {
-  const { isClosing, close } = useModal(isOpen);
+  const { isClosing, close } = useLocalModal(isOpen);
 
   // Handle close functionality
   const handleClose = React.useCallback(() => {

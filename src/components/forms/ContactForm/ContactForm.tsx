@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { useValidatedForm, useFormSubmission } from '@/hooks/useForm';
-import { useCacheInvalidation } from '@/hooks/useApiQuery';
+import { useCacheInvalidation } from '@/hooks/useApi';
 import { contactFormSchema, type ContactFormData } from '@/lib/validations';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -58,7 +58,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onSuccess, c
   const handleFormSubmit = async (data: ContactFormData) => {
     try {
       console.log('ContactForm: Starting form submission', { data });
-      
+
       // Call custom onSubmit if provided
       if (onSubmit) {
         onSubmit(data);

@@ -55,7 +55,7 @@ export const prefetchQueries = {
   async postsList() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.POSTS.LISTS(),
-      queryFn: () => import('./api').then(({ postsApi }) => postsApi.getAll()),
+      queryFn: () => import('./services').then(({ postsService }) => postsService.getAll()),
       staleTime: 5 * 60 * 1000,
     });
   },
@@ -66,7 +66,7 @@ export const prefetchQueries = {
   async postDetail(id: number) {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.POSTS.DETAIL(id),
-      queryFn: () => import('./api').then(({ postsApi }) => postsApi.getById(id)),
+      queryFn: () => import('./services').then(({ postsService }) => postsService.getById(id)),
       staleTime: 10 * 60 * 1000,
     });
   },
@@ -77,7 +77,8 @@ export const prefetchQueries = {
   async postComments(postId: number) {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.COMMENTS.BY_POST(postId),
-      queryFn: () => import('./api').then(({ commentsApi }) => commentsApi.getByPostId(postId)),
+      queryFn: () =>
+        import('./services').then(({ commentsService }) => commentsService.getByPostId(postId)),
       staleTime: 5 * 60 * 1000,
     });
   },

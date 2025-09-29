@@ -17,7 +17,7 @@ import { PostCard } from '@/components/posts/PostCard';
 import { ContactForm } from '@/components/forms/ContactForm';
 import { FileList } from '@/components/files/FileList';
 import { useModalState, useModalActions } from '@/store';
-import { usePostsQuery, useCommentsQuery } from '@/hooks/useApiQuery';
+import { usePostsQuery, useCommentsQuery } from '@/hooks/useApi';
 import { useFilesActions } from '@/store';
 import { MessageSquare, RefreshCw, File } from 'lucide-react';
 import styles from './page.module.scss';
