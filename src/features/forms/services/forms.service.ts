@@ -1,87 +1,39 @@
-import { localApiClient } from '@/lib/api/api-client';
-import type { FormSubmissionResult, PostCreationResult } from '@/types';
+import type { PostCreationResult } from '@/entities/post';
+import { submitContactFormProcess, createPostWithFileProcess } from '@/processes/form-submission';
+import type { FormSubmissionResult } from '@/shared/types/api.types';
 
-export interface FormsService {
-  submitContactForm(formData: FormData): Promise<FormSubmissionResult>;
-  createPostWithFile(
-    postData: { title: string; body: string; userId?: number },
-    file?: File,
-  ): Promise<PostCreationResult>;
-  uploadFileToBlob(fileFormData: FormData): Promise<{ url: string } | undefined>;
-}
-
-class FormsServiceImpl implements FormsService {
+export const formsService = {
   async submitContactForm(formData: FormData): Promise<FormSubmissionResult> {
-    try {
-      let fileUrl: string | undefined;
-      const file = formData.get('file') as File | null;
+    const fileUrl = formData.get('fileUrl') as string | null;
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const message = formData.get('message') as string;
 
-      if (file) {
-        const fileFormData = new FormData();
-        fileFormData.append('file', file);
-
-        const fileResponse = await localApiClient.postFormData<{ url: string }>(
-          '/api/files',
-          fileFormData,
-        );
-        fileUrl = fileResponse.url;
-        formData.set('fileUrl', fileUrl);
-        formData.delete('file');
-      }
-
-      const response = await localApiClient.postFormData<FormSubmissionResult>(
-        '/api/submit',
-        formData,
-      );
-      return response;
-    } catch (error) {
-      console.error('Failed to submit contact form:', error);
-      throw error;
-    }
-  }
+    return submitContactFormProcess({
+      name,
+      email,
+      message,
+      ...(fileUrl && { file: fileUrl }),
+    });
+  },
 
   async createPostWithFile(
     postData: { title: string; body: string; userId?: number },
     file?: File,
   ): Promise<PostCreationResult> {
-    try {
-      let fileUrl: string | undefined;
-      if (file) {
-        const fileFormData = new FormData();
-        fileFormData.append('file', file);
-
-        const fileResponse = await localApiClient.postFormData<{ url: string }>(
-          '/api/files',
-          fileFormData,
-        );
-        fileUrl = fileResponse.url;
-      }
-
-      const response = await localApiClient.post<PostCreationResult>('/api/posts', {
-        ...postData,
-        userId: postData.userId || 1,
-        ...(fileUrl && { fileUrl }),
-      });
-
-      return response;
-    } catch (error) {
-      console.error('Failed to create post with file:', error);
-      throw error;
-    }
-  }
+    return createPostWithFileProcess(postData, file);
+  },
 
   async uploadFileToBlob(fileFormData: FormData): Promise<{ url: string } | undefined> {
     try {
+      const { localApiClient } = await import('@/shared/api');
       const fileResponse = await localApiClient.postFormData<{ url: string }>(
         '/api/files',
         fileFormData,
       );
       return fileResponse;
-    } catch (error) {
-      console.error('Failed to upload file to Vercel Blob:', error);
+    } catch {
       return undefined;
     }
-  }
-}
-
-export const formsService = new FormsServiceImpl();
+  },
+} as const;

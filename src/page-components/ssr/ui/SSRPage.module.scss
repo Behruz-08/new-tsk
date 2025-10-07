@@ -1,0 +1,270 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex: 1;
+  padding: spacing(8) 0;
+}
+
+.header {
+  margin-bottom: spacing(8);
+}
+
+.headerContent {
+  @include flex-between;
+  align-items: flex-start;
+  gap: spacing(6);
+
+  @include respond-below(md) {
+    flex-direction: column;
+    gap: spacing(4);
+  }
+}
+
+.headerInfo {
+  flex: 1;
+}
+
+.title {
+  @include flex-center;
+  gap: spacing(3);
+  font-size: font-size(3xl);
+  font-weight: font-weight(bold);
+  color: color(gray-900);
+  margin-bottom: spacing(4);
+
+  @include respond-below(md) {
+    font-size: font-size(2xl);
+    flex-direction: column;
+    text-align: center;
+    gap: spacing(2);
+  }
+}
+
+.description {
+  font-size: font-size(lg);
+  color: color(gray-600);
+  line-height: line-height(relaxed);
+  margin-bottom: spacing(4);
+}
+
+.badge {
+  @include flex-center;
+  gap: spacing(2);
+  background: linear-gradient(135deg, color(info), color(info-dark));
+  color: color(white);
+  padding: spacing(2) spacing(4);
+  border-radius: border-radius(full);
+  font-size: font-size(sm);
+  font-weight: font-weight(medium);
+  width: fit-content;
+
+  .badgeIcon {
+    animation: spin 2s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.renderInfo {
+  margin-bottom: spacing(8);
+  background: linear-gradient(135deg, color(info), color(info-dark));
+  color: color(white);
+  border: none;
+}
+
+.renderContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: spacing(4);
+
+  @include respond-below(sm) {
+    flex-direction: column;
+    text-align: center;
+    gap: spacing(2);
+  }
+}
+
+.renderTime {
+  @include flex-center;
+  gap: spacing(3);
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: spacing(1);
+
+    strong {
+      font-size: font-size(sm);
+      opacity: 0.9;
+    }
+
+    span {
+      font-size: font-size(base);
+      font-weight: font-weight(medium);
+    }
+  }
+}
+
+.renderNote {
+  background: color(background-glass);
+  padding: spacing(2) spacing(3);
+  border-radius: border-radius(md);
+  font-size: font-size(sm);
+  font-weight: font-weight(medium);
+}
+
+.postsSection {
+  margin-bottom: spacing(12);
+}
+
+.sectionTitle {
+  font-size: font-size(2xl);
+  font-weight: font-weight(semibold);
+  color: color(gray-900);
+  margin-bottom: spacing(2);
+}
+
+.sectionDescription {
+  color: color(gray-600);
+  margin-bottom: spacing(8);
+}
+
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: spacing(6);
+
+  @include respond-below(md) {
+    grid-template-columns: 1fr;
+    gap: spacing(4);
+  }
+}
+
+.postCard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: spacing(4);
+  border: 2px solid color(info);
+  background: map-get($gradients, card);
+}
+
+.postHeader {
+  @include flex-between;
+  align-items: flex-start;
+  gap: spacing(3);
+}
+
+.postTitle {
+  font-size: font-size(lg);
+  font-weight: font-weight(semibold);
+  color: color(gray-900);
+  line-height: line-height(tight);
+  margin: 0;
+  flex: 1;
+}
+
+.postMeta {
+  flex-shrink: 0;
+}
+
+.postId {
+  background-color: color(info);
+  color: color(white);
+  padding: spacing(1) spacing(2);
+  border-radius: border-radius(sm);
+  font-size: font-size(xs);
+  font-weight: font-weight(medium);
+}
+
+.postBody {
+  color: color(gray-600);
+  line-height: line-height(relaxed);
+  flex: 1;
+  margin: 0;
+}
+
+.postFooter {
+  margin-top: auto;
+}
+
+.postInfo {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(2);
+
+  @include respond-to(sm) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.userInfo,
+.renderTime {
+  @include flex-center;
+  gap: spacing(1);
+  font-size: font-size(xs);
+  color: color(gray-500);
+}
+
+.techInfo {
+  background: map-get($gradients, card);
+  border: 2px solid color(info);
+  margin-bottom: spacing(8);
+
+  h3 {
+    font-size: font-size(xl);
+    font-weight: font-weight(semibold);
+    color: color(gray-900);
+    margin-bottom: spacing(4);
+  }
+}
+
+.techDetails {
+  display: flex;
+  flex-direction: column;
+  gap: spacing(3);
+}
+
+.techItem {
+  padding: spacing(3);
+  background: map-get($gradients, card);
+  border-radius: border-radius(md);
+  border: 1px solid color(gray-200);
+  font-size: font-size(sm);
+
+  strong {
+    color: color(gray-900);
+    font-weight: font-weight(semibold);
+  }
+}
+
+.refreshSection {
+  text-align: center;
+  padding: spacing(8);
+  background: map-get($gradients, card);
+  border-radius: border-radius(lg);
+  border: 2px dashed color(info);
+}
+
+.refreshNote {
+  margin-top: spacing(4);
+  color: color(gray-600);
+  font-size: font-size(sm);
+}

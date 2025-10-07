@@ -1,9 +1,9 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
-import { FILE_CONFIG } from '@/constants';
-import { errorResponse } from '@/lib/api/api-helpers';
-import type { ApiResponse, FileUploadResponse } from '@/types/api';
+import { errorResponse } from '@/shared/api';
+import { FILE_CONFIG } from '@/shared/constants';
+import type { ApiResponse, FileUploadResponse } from '@/shared/types/api.types';
 
 export async function GET(): Promise<NextResponse<ApiResponse<FileUploadResponse[]>>> {
   return NextResponse.json({ success: true, files: [] });
@@ -52,8 +52,6 @@ export async function POST(
         blobId: blob.pathname,
       });
     } catch (blobError) {
-      console.error('Vercel Blob error:', blobError);
-
       return errorResponse<FileUploadResponse>(
         'Ошибка при загрузке файла в Vercel Blob',
         500,

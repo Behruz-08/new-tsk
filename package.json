@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "type-check": "tsc --noEmit --project tsconfig.typecheck.json",
+    "pre-deploy": "npm run type-check && npm run lint && npm run build",
     "format": "prettier --write .",
     "prepare": "husky"
   },
@@ -21,6 +23,7 @@
     "next": "15.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-error-boundary": "^6.0.0",
     "react-hook-form": "^7.63.0",
     "sass": "^1.93.1",
     "sonner": "^2.0.7",
@@ -38,17 +41,17 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/testing-library__jest-dom": "^5.14.9",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "eslint-plugin-import": "^2.29.1",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
     "prettier": "3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tailwindcss": "^4",
-    "typescript": "^5",
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
-    "eslint-plugin-import": "^2.29.1",
-    "@typescript-eslint/eslint-plugin": "^8.13.0",
-    "@typescript-eslint/parser": "^8.13.0"
+    "typescript": "^5"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

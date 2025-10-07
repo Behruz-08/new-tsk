@@ -1,11 +1,9 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-import { apiClient } from '@/lib/api/api-client';
-import { errorResponse } from '@/lib/api/api-helpers';
-import { contactFormSchema } from '@/lib/utils/validations';
-import type { ApiResponse } from '@/types';
-import type { SubmitPostResponse } from '@/types/api';
+import { contactFormSchema } from '@/features/forms/model/validations';
+import { apiClient, errorResponse } from '@/shared/api';
+import type { ApiResponse, SubmitPostResponse } from '@/shared/types/api.types';
 
 export async function POST(
   request: NextRequest,

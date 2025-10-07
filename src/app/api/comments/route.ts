@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 
-import { apiClient } from '@/lib/api/api-client';
-import { errorResponse } from '@/lib/api/api-helpers';
-import type { Comment } from '@/types';
-import type { ApiResponse } from '@/types/api';
+import type { Comment } from '@/entities/comment';
+import { apiClient, errorResponse } from '@/shared/api';
+import type { ApiResponse } from '@/shared/types/api.types';
 
 export async function GET(): Promise<NextResponse<ApiResponse<Comment>>> {
   try {

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Toaster } from 'sonner';
 
-import { ErrorBoundary } from '@/components/ui/ErrorBoundary/ErrorBoundary';
-import { QueryProvider } from '@/providers/QueryProvider';
+import { QueryProvider } from '@/app/providers/QueryProvider';
+import { ErrorBoundary } from '@/shared/ui';
 import '@/styles/globals.scss';
 
 const inter = Inter({

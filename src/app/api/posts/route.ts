@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { apiClient } from '@/lib/api/api-client';
-import { errorResponse } from '@/lib/api/api-helpers';
-import { addLocalPost, getLocalPosts } from '@/lib/data/local-posts';
-import type { Post } from '@/types';
-import type { LocalPost } from '@/types/api';
+import type { Post, LocalPost } from '@/entities/post';
+import { apiClient, errorResponse, addLocalPost, getLocalPosts } from '@/shared';
 
 export async function GET() {
   try {
@@ -48,8 +45,6 @@ export async function POST(request: Request) {
     };
 
     addLocalPost(newPost);
-
-    console.log('New post created locally:', newPost);
 
     return NextResponse.json(
       {
